@@ -77,7 +77,7 @@ namespace AdminPaneli.Controllers
                 }
                 if (_context.AdminLoginGirislers.OrderBy(p => p.GirisId).First().Tarih.HasValue)
                 {
-                    DateTime? sonGiris = _context.AdminLoginGirislers.OrderBy(p=>p.GirisId).First().Tarih;
+                    DateTime? sonGiris = _context.AdminLoginGirislers.OrderBy(p => p.GirisId).First().Tarih;
                     if (sonGiris.HasValue)
                     {
                         DateTime simdikiZaman = DateTime.Now;
@@ -158,10 +158,22 @@ namespace AdminPaneli.Controllers
             {
                 if (kod == _kod.ToString())
                 {
+                    _context.AdminMailGirislers.Add(new AdminMailGirisler
+                    {
+                        AdminId = id,
+                        Basari = true,
+                        Tarih = DateTime.Now
+                    });
                     return RedirectToAction("Index", "Admin");
                 }
                 else
                 {
+                    _context.AdminMailGirislers.Add(new AdminMailGirisler
+                    {
+                        AdminId = id,
+                        Basari = true,
+                        Tarih = DateTime.Now
+                    });
                     return RedirectToAction("Login", "Home");
                 }
             }

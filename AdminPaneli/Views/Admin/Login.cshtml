@@ -8,13 +8,29 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Login</title>
+    <link href="~/css/adminlogin.css" rel="stylesheet" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <form action="@Url.Action("Login","Admin")" method="post">
-        @Html.AntiForgeryToken()
-        <input type="text" name="adminMail" required />
-        <input type="password" name="adminSifre" required />
-        <button type="submit">Bas</button>
-    </form>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <div class="container">
+        <form action="@Url.Action("Login","Admin")" method="post">
+            @Html.AntiForgeryToken()
+            <h1>Kod doğrulama</h1>
+            <div class="input-box">
+                <input type="text" name="adminMail" required placeholder="Mailinizi giriniz" />
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+            <div class="input-box">
+                <input type="password" name="adminSifre" required placeholder="Şifrenizi giriniz" />
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+            <button type="submit" class="btn">Gönder</button>
+            <div class="change-password">
+                <p>Şifrenizi Değiştirmek için </p><a href="#">Tıklayınız</a>
+            </div>
+
+        </form>
+    </div>
 </body>
 </html>

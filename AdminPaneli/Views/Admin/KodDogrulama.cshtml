@@ -8,14 +8,23 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>KodDogrulama</title>
+    <link href="~/css/koddogrulama.css" rel="stylesheet" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
 </head>
 <body>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 
-    <form action="@Url.Action("KodDogrulama","Admin")" method="post">
-        @Html.AntiForgeryToken()
-        <input type="password" name="kod" />
-        <button type="submit"></button>
-
-    </form>
+    <div class="container">
+        <h1>Kod Doğrulama</h1>
+        <form action="@Url.Action("KodDogrulama","Admin")" method="post">
+            @Html.AntiForgeryToken()
+            <div class="input-box">
+                <input type="password" name="kod"  placeholder="Mailnize gelen kodu giriniz" required />
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+            <button type="submit" class="btn">Gönder</button>
+        </form>
+    </div>
 </body>
 </html>
