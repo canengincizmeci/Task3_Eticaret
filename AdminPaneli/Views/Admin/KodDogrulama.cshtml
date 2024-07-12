@@ -1,0 +1,21 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>KodDogrulama</title>
+</head>
+<body>
+
+    <form action="@Url.Action("KodDogrulama","Admin")" method="post">
+        @Html.AntiForgeryToken()
+        <input type="password" name="kod" />
+        <button type="submit"></button>
+
+    </form>
+</body>
+</html>

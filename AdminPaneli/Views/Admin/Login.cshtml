@@ -1,0 +1,20 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+</head>
+<body>
+    <form action="@Url.Action("Login","Admin")" method="post">
+        @Html.AntiForgeryToken()
+        <input type="text" name="adminMail" required />
+        <input type="password" name="adminSifre" required />
+        <button type="submit">Bas</button>
+    </form>
+</body>
+</html>
