@@ -1,5 +1,7 @@
 ﻿@{
     Layout = null;
+
+    var mesaj = ViewBag.Mesaj as string;
 }
 
 <!DOCTYPE html>
@@ -16,7 +18,7 @@
     <div class="container">
         <form action="@Url.Action("Login","Admin")" method="post">
             @Html.AntiForgeryToken()
-            <h1>Kod doğrulama</h1>
+            <h1>Admin Giriş</h1>
             <div class="input-box">
                 <input type="text" name="adminMail" required placeholder="Mailinizi giriniz" />
                 <i class='bx bxs-lock-alt'></i>
@@ -27,10 +29,18 @@
             </div>
             <button type="submit" class="btn">Gönder</button>
             <div class="change-password">
-                <p>Şifrenizi Değiştirmek için </p><a href="#">Tıklayınız</a>
+
+
+                <p>Şifrenizi Değiştirmek için </p>
+
+                <a href="#">Tıklayınız</a>
+
+
+                <p style="color:red" id="mesaj">@mesaj</p>
             </div>
 
         </form>
     </div>
+
 </body>
 </html>
