@@ -66,6 +66,28 @@ namespace AdminPaneli.Controllers
             return random;
         }
 
+        public int SifreUnutmaKodu(string kullaniciMail)
+        {
+            Random rnd = new Random();
+            int random = rnd.Next(100000, 999999 + 1);
+            var admin = _context.Admins.Find(1);
+            string basAdminMail = admin.Mail;
+            string basAdminMailSifre = admin.MailSifre;
+            var cred = new NetworkCredential(basAdminMail, basAdminMailSifre);
+            var client = new SmtpClient("smtp.gmail.com", 587);
+            var msg = new System.Net.Mail.MailMessage();
+            msg.To.Add(kullaniciMail);
+            msg.Subject = "Şifre değişikliği";
+            msg.Body = $"Yeni şifreniz <strong>{random}</strong>  ile giriş yapınız ve sonrasında şifrenizi değiştiriniz";
+            msg.IsBodyHtml = true;
+            msg.From = new MailAddress(basAdminMail, "Doğrulama kodu", Encoding.UTF8);
+            client.Credentials = cred;
+            client.EnableSsl = true;
+            ServicePointManager.ServerCertificateValidationCallback = delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
+            client.Send(msg);
+            return random;
+        }
+
         public bool SonUcGirisKontolu(int adminId)
         {
             List<AdminLoginGirisler> sonUcGiris = _context.AdminLoginGirislers.OrderByDescending(p => p.GirisId).Where(p => p.AdminId == adminId).Take(3).ToList();
@@ -91,7 +113,13 @@ namespace AdminPaneli.Controllers
                 {
                     izin = false;
                 }
+                else
+                {
+                    _context.Admins.Find(adminId).Aktiflik = true;
+                    _context.SaveChanges();
+                    izin = true;
 
+                }
             }
 
             //Eğer son 3 giriş başarısız ve son giriş denemesi üzerinden 1 saat geçmediyse login e gerekli parametreleri gönderiyorum
@@ -110,7 +138,7 @@ namespace AdminPaneli.Controllers
 
         //Mevcut bir admin mailiyle 3 defa başarısız giriş yapılmışsa mesaj ve aktiflik parametreleriyle ViewBag aracılığyla butonu unenabled yapıp uyarı mesajı gönderen Parametre almadığında normal bir şekilde çalışan Login metodu
         [HttpGet]
-        public ActionResult Login(string mesaj = "Admin", bool aktiflik = true)
+        public ActionResult Login(string mesaj = "", bool aktiflik = true)
         {
 
             if (aktiflik == false)
@@ -302,6 +330,7 @@ namespace AdminPaneli.Controllers
                             izin = false;
                         }
 
+
                     }
                     //Eğer son 3 kod girişi başarısız ve son giriş üzerinden 1 saat geçmediyse login sayfasına uyarı mesajı ile redirect yapılır
                     if (sayac == 3 && izin == false)
@@ -318,6 +347,47 @@ namespace AdminPaneli.Controllers
                 return RedirectToAction("Login", "Home");
             }
         }
+
+        [HttpGet]
+        public ActionResult SifremiUnuttum()
+        {
+
+
+
+
+            return View();
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SifremiUnuttum(string mail)
+        {
+
+            if (_context.Admins.Any(p => p.Mail == mail))
+            {
+                var admin = _context.Admins.Where(p => p.Mail == mail).FirstOrDefault();
+
+
+
+
+                if (admin.Aktiflik == false)
+                {
+                    return RedirectToAction("Login", "Admin", new { mesaj = "Güvenliğiniz için hesabınız dondurulmuştur.Eğer hatalı bir durumla karşı karşıyasanız lütfen baş Adminle mail yoluyla iletişime geçiniz" });
+                }
+                string adminSifre = admin.AdminSifre;
+                admin.AdminSifre = SifreUnutmaKodu(mail).ToString();
+                _context.SaveChanges();
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Admin", new { mesaj = "Böyle bir mail adresi kayıtlı değil lütfen bir daha deneyiniz" });
+
+            }
+
+        }
+
+
         public IActionResult Index()
         {
             int? id = HttpContext.Session.GetInt32("adminId");
