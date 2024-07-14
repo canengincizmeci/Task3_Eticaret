@@ -7,6 +7,7 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System;
+using AdminPaneli.Models;
 
 namespace AdminPaneli.Controllers
 {
@@ -392,7 +393,64 @@ namespace AdminPaneli.Controllers
         {
             int? id = HttpContext.Session.GetInt32("adminId");
             var admin = _context.Admins.Find(id);
+            string adminAd = admin.AdminAd;
+            int tekniktenGelenMesajlar = _context.TeknikdenAdmineMesajs.Where(p => p.Aktiflik == true).Count();
+            int Sikayetler = _context.FirmadanKullaniciyaSikayets.Where(p => p.Aktiflik == true).Count() + _context.FirmadanKullaniciyaYorumCevapSikayets.Where(p => p.Aktiflik == true).Count() + _context.FirmadanTeknikElemanaSikayets.Where(p => p.Aktiflik == true).Count() + _context.FirmadanYorumSikayets.Where(p => p.Aktiflik == true).Count() + _context.KargoFirmadanTeknikElmanSikayetis.Where(p => p.Aktiflik == true).Count() + _context.KullanicidanFirmayaSikayets.Where(p => p.Aktiflik == true).Count() + _context.KullanicidanFirmayaYorumCevapSikayets.Where(p => p.Aktiflik == true).Count() + _context.KullanicidanKargoFirmasiSikayetis.Where(p => p.Aktiflik == true).Count() + _context.KullanicidanTeknikElemanaSikayets.Where(p => p.Aktiflik == true).Count() + _context.KullanicidanYorumSikayets.Where(p => p.Aktiflik == true).Count() + _context.TeknikElemandanKargoSikayetis.Where(p => p.Aktiflik == true).Count() + _context.UrunSikayets.Where(p => p.Aktiflik == true).Count();
+            int talepler = _context.Taleplers.Where(p => p.Aktiflik == true).Count();
+            int firmaBaşvuruları = _context.FirmaBasvurus.Where(p => p.Aktiflik == true).Count();
+            int kullaniciOneriler = _context.KullaniciSiteOnerilers.Where(p => p.Aktiflik == true).Count();
+            int firmaSiteOneriler = _context.FirmadanSiteOnerilers.Where(p => p.Aktiflik == true).Count();
+            int teknikElemanBasvurular = _context.TeknikElemanBasvurus.Count();
+            int sosyalSorumlulukTalep = _context.SosyalSorumlulukTalepFirmas.Where(p => p.Aktiflik == true).Count() + _context.SosyalSorumlulukTalepKullanicis.Where(p => p.Aktiflik == true).Count();
+            int kullaniciOnerileri = _context.KullaniciSiteOnerilers.Where(p => p.Aktiflik == true).Count();
+
+            AdminIndex adminIndex = new AdminIndex()
+            {
+                _adminAd = adminAd,
+                _firmaBaşvuruları = firmaBaşvuruları,
+                _firmaSiteOneriler = firmaSiteOneriler,
+                _kullaniciOneriler = kullaniciOneriler,
+                _Sikayetler = Sikayetler,
+                _sosyalSorumlulukTalep = sosyalSorumlulukTalep,
+                _talepler = talepler,
+                _teknikElemanBasvurular = teknikElemanBasvurular,
+                _tekniktenGelenMesajlar = tekniktenGelenMesajlar,
+
+            };
+            return View(adminIndex);
+        }
+        public ActionResult CikisYap()
+        {
+            HttpContext.Session.Clear();
+
+
+            return RedirectToAction("Login", "Admin");
+        }
+        [HttpGet]
+        public ActionResult SifreDegistir(string mesaj = "")
+        {
+
+
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SifreDegistir(string eskiSifre, string yeniSifre)
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            var admin = _context.Admins.Where(p => p.AdminId == id).FirstOrDefault();
+            if (admin.AdminSifre == eskiSifre)
+            {
+                admin.AdminSifre = yeniSifre;
+                _context.SaveChanges();
+            }
+            else
+            {
+                return RedirectToAction("SifreDegistir", new { mesaj = "Lütfen şifrenizi doğru giriniz" });
+            }
+
+            return RedirectToAction("Login", "Admin", new { mesaj = "Yeni şifrenizle giriş yapınız" });
+        }
+
     }
 }
