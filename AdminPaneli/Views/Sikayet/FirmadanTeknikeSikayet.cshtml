@@ -1,0 +1,33 @@
+﻿@model List<SikayetModel>
+@{
+    ViewData["Title"] = "FirmadanTeknikeSikayet";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Eleman Ad</th>
+            <th>Başlık</th>
+            <th>Şikayet</th>
+            <th>Tarih</th>
+            <th>Firma Ad</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sikayet in Model)
+        {
+            <tr>
+                <td>@sikayet.SikayetId</td>
+                <td>@sikayet.elemanAd</td>
+                <td>@sikayet.SikayetBaslik</td>
+                <td>@sikayet.SikayetMetni</td>
+                <td>@sikayet.Tarih</td>
+                <td>@sikayet.firmaAd</td>
+                <td><a href="@Url.Action("FirmaSikayetSil","Sikayet",new {sikayetId=sikayet.SikayetId})">Sil</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+

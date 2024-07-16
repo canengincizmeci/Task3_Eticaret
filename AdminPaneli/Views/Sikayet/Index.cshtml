@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h1>Index</h1>
+
+
+<style>
+
+    .anaDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: #eae2f8; /* Aynı açık lavanta rengi */
+        min-height: 70vh;
+    }
+
+    
+
+    .icDiv {
+        border: solid 1px rgba(41, 26, 65, 0.1);
+        border-radius: 8px;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        text-align: center;
+        flex: 1;
+        min-width: 200px;
+        max-width: 300px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .icDiv:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .icDiv h2 {
+            color: rgba(41, 26, 65, 1);
+        }
+
+        .icDiv p {
+            color: #555;
+        }
+
+    a {
+        text-decoration: none;
+    }
+
+</style>
+
+<link href="~/css/adminindex.css" rel="stylesheet" />
+
+
+            
+<div class="anaDiv">
+
+        <div class="icDiv">
+            <a href="@Url.Action("FirmadanTeknikeSikayet","Sikayet")">
+                <h2>Firmadan Teknike şikayetler(@ViewBag.FirmadanTeknike)</h2>
+                <p>Firmaların teknik elemanların hakkındaki <br>sikayetlerini burdan görebilirsin</p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("KullanicidanTeknikeSikayet","Sikayet")">
+                <h2>Kullanıcıdan Teknike şikayetler (@ViewBag.KullanicidanTeknike)</h2>
+                <p>Kullanıcıların teknik elemanların hakkındaki  <br> şikayetlerini burdan görebilirsin</p>
+            </a>
+
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("KargodanTeknikeSikayet","Sikayet")">
+                <h2>Kargodan Teknike Şikayet(@ViewBag.KargodanTeknike)</h2>
+                <p>Kargo Firmalarından gelen şikayetleri<br> burdan görebilirisin</p>
+            </a>
+        </div>
+  
+</div>
+

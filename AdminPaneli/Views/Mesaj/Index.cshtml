@@ -1,0 +1,101 @@
+﻿@model List<AdminMesajModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .mesaj-container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        background-color: #f9f9f9;
+    }
+
+    .mesaj-item {
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+    }
+
+    .mesaj-elemanAd {
+        font-size: 18px;
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 5px;
+    }
+
+    .mesaj {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .mesaj-tarih {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .okundu-bilgisi {
+        font-size: 14px;
+        color: #28a745;
+        margin-bottom: 5px;
+    }
+
+    .okundu-isaretle {
+        font-size: 14px;
+        color: #dc3545;
+        margin-bottom: 5px;
+        text-decoration: none;
+    }
+
+    hr {
+        margin: 10px 0;
+        border: none;
+        border-top: 1px solid #ccc;
+    }
+
+    a {
+        text-decoration: none;
+    }
+</style>
+
+<div class="container">
+    <div class="mesaj-container">
+        <h2>Mesajlar</h2>
+        @foreach (var mesaj in Model)
+        {
+            <div class="mesaj-item">
+                <div class="mesaj-elemanAd">@mesaj._elemanAd</div>
+                @if (mesaj._mesaj.Length < 50)
+                {
+                    <div class="mesaj">@mesaj._mesaj <a href="@Url.Action("MesajOku","Mesaj" ,new {mesajId=mesaj._mesajId})"> Mesajlaşmaya Git</a></div>
+                }
+                else
+                {
+                    <div class="mesaj">@mesaj._mesaj.ToString().Substring(0, 50)...<a href="@Url.Action("MesajOku","Mesaj" ,new {mesajId=mesaj._mesajId})"> Mesajlaşmaya Git</a>  </div>
+                }
+                <div class="mesaj-tarih">@mesaj._tarih</div>
+                @if (mesaj._okunduBilgisi == false)
+                {
+                    <a href="@Url.Action("MesajOku","Mesaj", new { mesajId = mesaj._mesajId })" class="okundu-isaretle">Okundu İşaretle</a>
+
+
+                }
+                else
+                {
+                    <div class="okundu-bilgisi">Okundu</div>
+                    <a href="@Url.Action("MesajOku","Mesaj" ,new {mesajId=mesaj._mesajId})">Oku</a>
+                }
+                <hr />
+            </div>
+        }
+    </div>
+</div>
+
+
