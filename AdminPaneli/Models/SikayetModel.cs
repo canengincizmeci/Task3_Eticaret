@@ -17,5 +17,6 @@
         public bool? Aktiflik { get; set; }
         public string? firmaAd { get; set; }
         public string? elemanAd { get; set; }
+        public string? kullaniciAd { get; set; }
     }
 }

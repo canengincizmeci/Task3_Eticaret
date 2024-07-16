@@ -1,0 +1,61 @@
+﻿@model SikayetModel
+@{
+    ViewData["Title"] = "KullanicidanTeknikeSikayetDetay";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+<style>
+    .complaint-detail-container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .complaint-header {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 5px;
+        color: rgba(41, 26, 65, 1);
+    }
+
+    .complaint-body {
+        margin-bottom: 20px;
+    }
+
+    .complaint-timestamp,
+    .complaint-status {
+        font-size: 0.9em;
+        color: #888;
+        margin-bottom: 5px;
+    }
+
+    .back-link {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+        .back-link:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div class="complaint-detail-container">
+    <div class="complaint-header">@Model.SikayetBaslik</div>
+    <div class="complaint-body">@Model.SikayetMetni</div>
+    <div class="complaint-timestamp">Tarih: @Model.Tarih</div>
+    <div class="complaint-status">Firma: @Model.firmaAd</div>
+    <div class="complaint-status">Eleman: @Model.elemanAd</div>
+    <a href="@Url.Action("KullanicidanTeknikeSikayetSil", "Sikayet")" class="back-link">Sil</a>
+</div>

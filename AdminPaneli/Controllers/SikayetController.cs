@@ -53,7 +53,86 @@ namespace AdminPaneli.Controllers
             }
             _context.FirmadanTeknikElemanaSikayets.Find(sikayetId).Aktiflik = false;
             _context.SaveChanges();
-            return RedirectToAction("Index", "Sikayet");
+            return RedirectToAction("FirmadanTeknikeSikayet", "Sikayet");
+        }
+        public ActionResult FirmaSikayetDetay(int sikayetId)
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
+            var sikayet = _context.FirmadanTeknikElemanaSikayets.Where(p => p.Aktiflik == true).Select(p => new SikayetModel
+            {
+                Aktiflik = p.Aktiflik,
+                elemanAd = p.TeknikEleman.ElemanAd,
+                firmaAd = p.Firma.FirmaAd,
+                FirmaId = p.FirmaId,
+                Tarih = p.Tarih,
+                SikayetBaslik = p.SikayetBaslik,
+                SikayetId = p.SikayetId,
+                SikayetMetni = p.SikayetMetni,
+                TeknikElemanId = p.TeknikElemanId
+            }).FirstOrDefault();
+            return View(sikayet);
+        }
+        public ActionResult KullanicidanTeknikeSikayetler()
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
+            var veriler = _context.KullanicidanTeknikElemanaSikayets.Where(p => p.Aktiflik == true).OrderByDescending(p => p.SikayetId).Select(p => new SikayetModel
+            {
+                kullaniciAd = p.Kullanici.KullaniciAd,
+                Aktiflik = p.Aktiflik,
+                elemanAd = p.TeknikEleman.ElemanAd,
+                SikayetBaslik = p.SikayetBaslik,
+                Tarih = p.Tarih,
+                SikayetId = p.SikayetId,
+                SikayetMetni = p.SikayetMetni,
+                TeknikElemanId = p.TeknikElemanId
+            }).ToList();
+
+
+            return View(veriler);
+        }
+
+        public ActionResult KullanicidanTeknikeSikayetDetay(int sikayetId)
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
+            var veriler = _context.KullanicidanTeknikElemanaSikayets.Where(p => p.SikayetId == sikayetId).Select(p => new SikayetModel
+            {
+                elemanAd = p.TeknikEleman.ElemanAd,
+                Aktiflik = p.Aktiflik,
+                SikayetBaslik = p.SikayetBaslik,
+                SikayetId = p.SikayetId,
+                Tarih = p.Tarih,
+                TeknikElemanId = p.TeknikElemanId,
+                SikayetMetni = p.SikayetMetni,
+                kullaniciAd = p.Kullanici.KullaniciAd
+            }).FirstOrDefault();
+            return View(veriler);
+        }
+        public ActionResult KullanicidanTeknikeSikayetSil(int sikayetId)
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
+            _context.KullanicidanTeknikElemanaSikayets.Find(sikayetId).Aktiflik = false;
+            _context.SaveChanges();
+            return RedirectToAction("KullanicidanTeknikeSikayetler", "Sikayet");
         }
     }
 }

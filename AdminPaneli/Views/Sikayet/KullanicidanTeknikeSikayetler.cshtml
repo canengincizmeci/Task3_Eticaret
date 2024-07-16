@@ -1,6 +1,6 @@
 ﻿@model List<SikayetModel>
 @{
-    ViewData["Title"] = "FirmadanTeknikeSikayet";
+    ViewData["Title"] = "KullanicidanTeknikeSikayetler";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
@@ -81,13 +81,14 @@
         {
             <tr>
                 <td>@sikayet.SikayetId</td>
-                <td>@sikayet.elemanAd</td>
+                <td>@sikayet.kullaniciAd</td>
                 <td>@sikayet.SikayetBaslik</td>
                 <td>@sikayet.SikayetMetni</td>
                 <td>@sikayet.Tarih</td>
                 <td>@sikayet.firmaAd</td>
-                <td><a href="@Url.Action("FirmaSikayetDetay","Sikayet",new {sikayetId=sikayet.SikayetId})">Oku</a></td>
+                <td><a href="@Url.Action("KullanicidanTeknikeSikayetDetay","Sikayet",new {sikayetId=sikayet.SikayetId})">Oku</a></td>
             </tr>
         }
     </tbody>
 </table>
+
