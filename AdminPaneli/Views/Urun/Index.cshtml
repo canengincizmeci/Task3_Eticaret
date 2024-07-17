@@ -1,6 +1,6 @@
-﻿@model List<SikayetModel>
+﻿@model List<UrunModel>
 @{
-    ViewData["Title"] = "KullanicidanTeknikeSikayetler";
+    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
@@ -9,7 +9,7 @@
         font-family: Arial, Helvetica, sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #eae2f8; /* Açık lavanta rengi */
+        background-color: #eae2f8;
     }
 
     .complaints-table {
@@ -57,38 +57,40 @@
             font-weight: bold;
         }
 
-
-
             .complaints-table a:hover {
                 color: rgba(41, 26, 20, 1);
             }
+
+        .complaints-table img {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
 </style>
 
 <table class="complaints-table">
     <thead>
         <tr>
             <th>ID</th>
-            <th>Eleman Ad</th>
-            <th>Başlık</th>
-            <th>Şikayet</th>
-            <th>Tarih</th>
-            <th>Firma Ad</th>
+            <th>Ürün Ad</th>
+            <th>Resim</th>
+            <th>Eklenme Tarihi</th>
             <th>Detay</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var sikayet in Model)
+        @foreach (var urun in Model)
         {
             <tr>
-                <td>@sikayet.SikayetId</td>
-                <td>@sikayet.kullaniciAd</td>
-                <td>@sikayet.SikayetBaslik</td>
-                <td>@sikayet.SikayetMetni</td>
-                <td>@sikayet.Tarih</td>
-                <td>@sikayet.firmaAd</td>
-                <td><a href="@Url.Action("KargodanTeknikeSikayetDetay","Sikayet",new {talepId=sikayet.SikayetId})">Oku</a></td>
+                <td>@urun._UrunId</td>
+                <td>@urun._UrunAd</td>
+                <td>
+                    <img src="@Url.Content("~/images/" + urun._UrunResim)"  />
+                </td>
+                <td>@urun._EklenmeTarihi</td>
+                <td><a href="@Url.Action("UrunDetay","Resim",new{urunId=urun._UrunId})">Detay</a></td>
             </tr>
         }
     </tbody>
 </table>
-

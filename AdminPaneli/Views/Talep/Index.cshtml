@@ -1,15 +1,17 @@
-﻿@model List<SikayetModel>
+﻿@model List<Talep>
 @{
-    ViewData["Title"] = "KullanicidanTeknikeSikayetler";
+    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
+
+
 
 <style>
     body {
         font-family: Arial, Helvetica, sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #eae2f8; /* Açık lavanta rengi */
+        background-color: #eae2f8; 
     }
 
     .complaints-table {
@@ -70,25 +72,22 @@
             <th>ID</th>
             <th>Eleman Ad</th>
             <th>Başlık</th>
-            <th>Şikayet</th>
+            <th>Talep</th>
             <th>Tarih</th>
-            <th>Firma Ad</th>
             <th>Detay</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var sikayet in Model)
+        @foreach (var talep in Model)
         {
             <tr>
-                <td>@sikayet.SikayetId</td>
-                <td>@sikayet.kullaniciAd</td>
-                <td>@sikayet.SikayetBaslik</td>
-                <td>@sikayet.SikayetMetni</td>
-                <td>@sikayet.Tarih</td>
-                <td>@sikayet.firmaAd</td>
-                <td><a href="@Url.Action("KargodanTeknikeSikayetDetay","Sikayet",new {talepId=sikayet.SikayetId})">Oku</a></td>
+                <td>@talep.TalepId</td>
+                <td>@talep.KullaniciAd</td>
+                <td>@talep.TalepBaslik</td>
+                <td>@talep.TalepMetni</td>
+                <td>@talep.Tarih</td>
+                <td><a href="@Url.Action("KullaniciTalepDetay","Talep",new {talepId=talep.TalepId})">Oku</a></td>
             </tr>
         }
     </tbody>
 </table>
-

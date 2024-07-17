@@ -1,8 +1,11 @@
-﻿@model SikayetModel
+﻿@model Talep
 @{
-    ViewData["Title"] = "KullanicidanTeknikeSikayetDetay";
+    ViewData["Title"] = "KullaniciTalepDetay";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
+
+
+
 
 
 <style>
@@ -52,10 +55,9 @@
 </style>
 
 <div class="complaint-detail-container">
-    <div class="complaint-header">@Model.SikayetBaslik</div>
-    <div class="complaint-body">@Model.SikayetMetni</div>
+    <div class="complaint-header">@Model.TalepBaslik</div>
+    <div class="complaint-body">@Model.TalepMetni</div>
+    <div class="complaint-status">Firma: @Model.KullaniciAd</div>
     <div class="complaint-timestamp">Tarih: @Model.Tarih</div>
-    <div class="complaint-status">Firma: @Model.firmaAd</div>
-    <div class="complaint-status">Eleman: @Model.elemanAd</div>
-    <a href="@Url.Action("KullanicidanTeknikeSikayetSil", "Sikayet",new {sikayetId=Model.SikayetId})" class="back-link">Sil</a>
+    <a href="@Url.Action("KullaniciTalepSil", "Talep",new {talepId=Model.TalepId})" class="back-link">Sil</a>
 </div>

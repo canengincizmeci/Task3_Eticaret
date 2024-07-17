@@ -7,8 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\images\resmim - Kopya.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\css\AdminLayout.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\AdminLogin.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\resmim - Kopya.jpg" />
   </ItemGroup>
 
   <ItemGroup>

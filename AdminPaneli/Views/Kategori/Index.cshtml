@@ -1,15 +1,18 @@
-﻿@model List<SikayetModel>
+﻿@using DB.Models
+@model List<Kategori>
 @{
-    ViewData["Title"] = "KullanicidanTeknikeSikayetler";
+    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
+
+
 
 <style>
     body {
         font-family: Arial, Helvetica, sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #eae2f8; /* Açık lavanta rengi */
+        background-color: #eae2f8;
     }
 
     .complaints-table {
@@ -62,33 +65,48 @@
             .complaints-table a:hover {
                 color: rgba(41, 26, 20, 1);
             }
+
+    .add-link-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+        .add-link-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: rgba(41, 26, 65, 1);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+            .add-link-container a:hover {
+                background-color: rgba(41, 26, 20, 1);
+            }
 </style>
 
 <table class="complaints-table">
     <thead>
         <tr>
             <th>ID</th>
-            <th>Eleman Ad</th>
-            <th>Başlık</th>
-            <th>Şikayet</th>
-            <th>Tarih</th>
-            <th>Firma Ad</th>
-            <th>Detay</th>
+            <th>Kategori Ad</th>
+            <th>Açıklama</th>
+            <th>Sil</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var sikayet in Model)
+        @foreach (var kategori in Model)
         {
             <tr>
-                <td>@sikayet.SikayetId</td>
-                <td>@sikayet.kullaniciAd</td>
-                <td>@sikayet.SikayetBaslik</td>
-                <td>@sikayet.SikayetMetni</td>
-                <td>@sikayet.Tarih</td>
-                <td>@sikayet.firmaAd</td>
-                <td><a href="@Url.Action("KargodanTeknikeSikayetDetay","Sikayet",new {talepId=sikayet.SikayetId})">Oku</a></td>
+                <td>@kategori.KategoriId</td>
+                <td>@kategori.KategoriAd</td>
+                <td>@kategori.KategoriAciklama</td>
+                <td><a href="@Url.Action("KategoriSil","Kategori",new {kategoriId=kategori.KategoriId})">Sil</a></td>
             </tr>
         }
     </tbody>
 </table>
-
+<div class="add-link-container">
+    <a href="@Url.Action("KategoriEkle","Kategori")">Ekle</a>
+</div>

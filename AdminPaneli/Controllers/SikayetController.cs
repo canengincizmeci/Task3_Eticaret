@@ -134,5 +134,55 @@ namespace AdminPaneli.Controllers
             _context.SaveChanges();
             return RedirectToAction("KullanicidanTeknikeSikayetler", "Sikayet");
         }
+        public ActionResult KargodanTeknikeSikayetler()
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
+            var veriler = _context.KargoFirmadanTeknikElmanSikayetis.Where(p => p.Aktiflik == true).OrderByDescending(p => p.SikayetId).Select(p => new SikayetModel
+            {
+                SikayetId = p.SikayetId,
+                Aktiflik = p.Aktiflik,
+                firmaAd = p.KargoFirma.KargoFirmaAd,
+                SikayetBaslik = p.SikayetBaslik,
+                SikayetMetni = p.SikayetMetni,
+                Tarih = p.Tarih,
+                elemanAd = p.TeknikEleman.ElemanAd
+            }).ToList();
+            return View(veriler);
+        }
+        public ActionResult KargodanTeknikeSikayetDetay(int sikayetId)
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
+            var veri = _context.KargoFirmadanTeknikElmanSikayetis.Where(p => p.SikayetId == sikayetId).OrderByDescending(p => p.SikayetId).Select(p => new SikayetModel
+            {
+                firmaAd = p.KargoFirma.KargoFirmaAd,
+                elemanAd = p.TeknikEleman.ElemanAd,
+                SikayetBaslik = p.SikayetBaslik,
+                SikayetMetni = p.SikayetMetni,
+                Tarih = p.Tarih
+            }).FirstOrDefault();
+            return View(veri);
+        }
+        public ActionResult KargodanTeknikeSikayetDetaySil(int sikayetId)
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
+            _context.KargoFirmadanTeknikElmanSikayetis.Find(sikayetId).Aktiflik = false;
+            _context.SaveChanges();
+            return RedirectToAction("KargodanTeknikeSikayetler", "Sikayet");
+        }
     }
 }
