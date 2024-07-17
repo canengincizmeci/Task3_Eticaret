@@ -1,8 +1,10 @@
-﻿@model UrunModel
+﻿@using DB.Models
+@model FirmaBasvuru
 @{
-    ViewData["Title"] = "UrunDetay";
+    ViewData["Title"] = "FirmaDetay";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
+
 
 <style>
     body {
@@ -63,20 +65,18 @@
 </style>
 
 <div class="urun-detail">
-    <img src="@Url.Content("~/images/" + Model._UrunResim)" alt="@Model._UrunAd" />
 
-    <h1>@Model._UrunAd</h1>
-    <p><strong>Kategori:</strong> @Model._KategoriAd</p>
-    <p><strong>Açıklama:</strong> @Model._Aciklama</p>
-    <p><strong>Firma:</strong> @Model._FirmaAd</p>
-    <p><strong>Fiyat:</strong> @Model._Fiyat</p>
-    <p><strong>Stok:</strong> @Model._Stok</p>
-    <p><strong>Eklenme Tarihi:</strong> @Model._EklenmeTarihi</p>
-    <p><strong>Satış Sayısı:</strong>@Model._SatisSayisi</p>
-    <p><strong>Sepete Eklenme Sayısı:</strong>@Model._SepeteEklemeSayisi</p>
-    <p><strong>Stok:</strong>@Model._Stok</p>
+
+    <h1>@Model.FirmaAd</h1>
+    <p><strong>Açıklama:</strong> @Model.FirmaAciklama</p>
+    <p><strong>Açıklama:</strong> @Model.FirmaSektor</p>
+    <p><strong>Firma:</strong> @Model.FirmaAdres</p>
+    <p><strong>Fiyat:</strong> @Model.FirmaTel</p>
+    <p><strong>Stok:</strong> @Model.Mail</p>
+    <p><strong>Eklenme Tarihi:</strong> @Model.KurulusTarihi</p>
+    <p><strong>Satış Sayısı:</strong>@Model.BasvuruTarih</p>
     <div class="button-container">
-        <a href="@Url.Action("UrunSil", "Urun",new {urunId=Model._UrunId})" class="btn">Sil</a>
-        <a href="@Url.Action("UrunBildir","Urun",new {urunId=Model._UrunId,firmaId=Model._FirmaId})" class="btn">Firmaya Bildir</a>
+        <a href="@Url.Action("FirmaBasvuruOnayla", "Firma",new {basvuruId=Model.BasvuruId})" class="btn">Onayla</a>
+        <a href="@Url.Action("FirmaBasvuruSil", "Firma",new {basvuruId=Model.BasvuruId})" class="btn">Sil</a>
     </div>
 </div>

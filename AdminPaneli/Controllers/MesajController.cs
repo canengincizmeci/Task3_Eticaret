@@ -145,5 +145,6 @@ namespace AdminPaneli.Controllers
             return RedirectToAction("Index", "Mesaj");
             //return RedirectToAction("MesajOku", "Mesaj", new { mesajId = mesajId });
         }
+       
     }
 }

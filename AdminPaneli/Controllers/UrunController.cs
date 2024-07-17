@@ -16,6 +16,12 @@ namespace AdminPaneli.Controllers
         }
         public IActionResult Index()
         {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
             var liste = _context.Uruns.Where(p => p.Aktiflik == true).OrderByDescending(p => p.UrunId).Select(p => new UrunModel
             {
                 _UrunId = p.UrunId,
@@ -30,6 +36,12 @@ namespace AdminPaneli.Controllers
         }
         public ActionResult UrunDetay(int urunId)
         {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
             var resim = _context.Uruns.Where(p => p.UrunId == urunId).Select(p => new UrunModel
             {
                 _UrunId = p.UrunId,
@@ -48,6 +60,58 @@ namespace AdminPaneli.Controllers
                 _Stok = p.Stok
             }).FirstOrDefault();
             return View(resim);
+        }
+        [HttpGet]
+        public ActionResult UrunBildir(int urunId, int firmaId)
+        {
+            ViewBag.UrunId = urunId;
+            ViewBag.FirmaId = firmaId;
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UrunBildir(int urunId, int firmaId, string mesaj)
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
+            _context.Mesajlasmas.Add(new Mesajlasma
+            {
+                Tarih = DateTime.Now
+            });
+            _context.SaveChanges();
+
+            int _mesajlasmaId = _context.Mesajlasmas.OrderByDescending(p => p.MesajlasmaId).First().MesajlasmaId;
+            string mesajBaslik = urunId.ToString() + " id 'li ürün";
+            _context.AdmindenFirmayaMesajs.Add(new AdmindenFirmayaMesaj
+            {
+                AdminId = id,
+                FirmaId = firmaId,
+                Mesaj = mesaj,
+                MesajBaslik = mesajBaslik,
+                Tarih = DateTime.Now,
+                OkunduBilgisi = false,
+                MesajlasmaId = _mesajlasmaId
+            });
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Urun");
+
+        }
+        public ActionResult UrunSil(int urunId)
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
+            _context.Uruns.Find(urunId).Aktiflik = false;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Urun");
         }
     }
 }
