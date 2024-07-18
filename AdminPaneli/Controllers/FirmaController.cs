@@ -1,4 +1,5 @@
-﻿using DB.Models;
+﻿using AdminPaneli.Models;
+using DB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
@@ -195,6 +196,85 @@ namespace AdminPaneli.Controllers
             });
             _context.SaveChanges();
             return RedirectToAction("FirmaListesi", "Firma");
+        }
+        public ActionResult FirmaOneriler()
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            var oneriler = _context.FirmadanSiteOnerilers.Where(p => p.Aktiflik == true).OrderByDescending(p => p.OneriId).Select(p => new FirmaOneriModel
+            {
+                _Aktiflik = p.Aktiflik,
+                _FirmaAd = p.Firma.FirmaAd,
+                _FirmaId = p.FirmaId,
+                _OneriBaslik = p.OneriBaslik,
+                _OneriId = p.OneriId,
+                _OneriMetin = p.OneriMetin,
+                _Tarih = p.Tarih
+            }).ToList();
+            return View(oneriler);
+        }
+        [HttpGet]
+        public ActionResult FirmaOneriyeCevapVer(int oneriId)
+        {
+            ViewBag.OneriId = oneriId;
+
+
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult FirmaOneriyeCevapVer(int oneriId, string mesaj, string mesajBaslik)
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            _context.Mesajlasmas.Add(new Mesajlasma
+            {
+                Tarih = DateTime.Now
+            });
+            _context.SaveChanges();
+            int mesajlasmaId = _context.Mesajlasmas.OrderByDescending(p => p.MesajlasmaId).First().MesajlasmaId;
+            var firma = (from o in _context.FirmadanSiteOnerilers
+                         join f in _context.Firmas on o.FirmaId equals f.FirmaId
+                         where o.OneriId == oneriId
+                         select new FirmaOneriModel
+                         {
+                             _Aktiflik = f.Aktiflik,
+                             _FirmaAd = f.FirmaAd,
+                             _FirmaId = f.FirmaId,
+                             _OneriBaslik = o.OneriBaslik,
+                             _OneriId = o.OneriId,
+                             _OneriMetin = o.OneriMetin,
+                             _Tarih = o.Tarih
+                         }).FirstOrDefault();
+            _context.AdmindenFirmayaMesajs.Add(new AdmindenFirmayaMesaj
+            {
+                AdminId = id,
+                FirmaId = firma._FirmaId,
+                Mesaj = mesaj,
+                Tarih = DateTime.Now,
+                MesajlasmaId = mesajlasmaId,
+                OkunduBilgisi = false,
+                MesajBaslik = mesajBaslik
+            });
+            _context.SaveChanges();
+            return RedirectToAction("FirmaOneriler", "Firma");
+        }
+        public ActionResult FirmaOneriSil(int oneriId)
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            _context.FirmadanSiteOnerilers.Find(oneriId).Aktiflik = false;
+            _context.SaveChanges();
+            return RedirectToAction("FirmaOneriler", "Firma");
         }
     }
 }
