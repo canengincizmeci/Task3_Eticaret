@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "FirmaEkle";
+﻿
+@{
+    ViewData["Title"] = "KargoFirmaEkle";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
@@ -56,17 +57,21 @@
             }
 </style>
 
+
+    
 <div class="container">
-    <form action="@Url.Action("FirmaEkle","Firma")" method="post">
+    <form action="@Url.Action("KargoFirmaEkle","KargoFirma")" method="post">
         @Html.AntiForgeryToken()
         <label>Firma Ad:</label>
-        <input type="text" name="firmaAd" required />
+        <input type="text" name="KargoFirmaAd" required />
         <label>Firma Adres:</label>
-        <textarea rows="5" name="firmaAdres" required></textarea>
+        <textarea rows="5" name="FirmaMerkezAdres" required></textarea>
         <label>Mail:</label>
-        <input type="text" name="mail" required />
+        <input type="text" name="KargoFirmaEmail" required />
         <label>Telefon:</label>
-        <input type="text" name="tel" required />
+        <input type="text" name="KargoFirmaTel" required />
+        <label>Ülke:</label>
+        <input type="text" name="Ulke" required />
         <button type="submit">Ekle</button>
     </form>
 </div>

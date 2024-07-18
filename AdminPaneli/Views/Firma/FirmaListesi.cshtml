@@ -111,7 +111,7 @@
                 <td>@firma.TelefonNumarasi</td>
                 <td>@firma.CoinMiktari</td>
                 <td><a href="@Url.Action("FirmaSil","Firma",new {firmaId=firma.FirmaId})">Sil</a></td>
-                <td><a href="@Url.Action("FirmayaMesaj","Firma")">Mesaj Gönder</a></td>
+                <td><a href="@Url.Action("FirmayaMesaj","Firma",new {firmaId=firma.FirmaId})">Mesaj Gönder</a></td>
             </tr>
         }
     </tbody>

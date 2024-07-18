@@ -1,9 +1,11 @@
 ﻿@using DB.Models
-@model List<FirmaBasvuru>
+@model List<KargoFirma>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
+
+
 
 <style>
     body {
@@ -83,7 +85,7 @@
                 background-color: rgba(41, 26, 20, 1);
             }
 </style>
-<h1>Firma Başvurular</h1>
+
 <table class="complaints-table">
     <thead>
         <tr>
@@ -97,22 +99,21 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var firma in Model)
+        @foreach (var kargoFirma in Model)
         {
             <tr>
-                <td>@firma.BasvuruId</td>
-                <td>@firma.FirmaAd</td>
-                <td>@firma.FirmaAciklama</td>
-                <td>@firma.FirmaSektor</td>
-                <td>@firma.FirmaAdres</td>
-                <td>@firma.BasvuruTarih</td>
-                <td><a href="@Url.Action("FirmaDetay","Firma",new {basvuruId=firma.BasvuruId})">Başvuru Detay</a></td>
+                <td>@kargoFirma.KargoFirmaId</td>
+                <td>@kargoFirma.KargoFirmaAd</td>
+                <td>@kargoFirma.FirmaMerkezAdres</td>
+                <td>@kargoFirma.KargoFirmaEmail</td>
+                <td>@kargoFirma.KargoFirmaTel</td>
+                <td>@kargoFirma.Ulke</td>
+                <td><a href="@Url.Action("KargoFirmaDetay","KargoFirma",new {kargoFirmaId=kargoFirma.KargoFirmaId})">Başvuru Detay</a></td>
             </tr>
         }
     </tbody>
 </table>
 
 <div class="add-link-container">
-    <a href="@Url.Action("FirmaEkle","Firma")">Firma Ekle</a>
-    <a href="@Url.Action("FirmaListesi","Firma")">Firma Listesi</a>
+    <a href="@Url.Action("KargoFirmaEkle","KargoFirma")">Kargo Firması Ekle</a>
 </div>
