@@ -145,6 +145,66 @@ namespace AdminPaneli.Controllers
             return RedirectToAction("Index", "Mesaj");
             //return RedirectToAction("MesajOku", "Mesaj", new { mesajId = mesajId });
         }
-       
+        public ActionResult MesajGonderilecekKisiler()
+        {
+
+
+
+
+
+            return View();
+        }
+        public ActionResult KullanicilarListesi()
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
+            var liste = _context.Kullanicis.Where(p => p.Aktiflik == true).OrderByDescending(p => p.KullaniciId).Select(p => new Kullanici
+            {
+                KullaniciId = p.KullaniciId,
+                Adres = p.Adres,
+                Aktiflik = p.Aktiflik,
+                CoinMiktari = p.CoinMiktari,
+                KayitTarihi = p.KayitTarihi,
+                KullaniciAd = p.KullaniciAd,
+                KullaniciResim = p.KullaniciResim,
+                Mail = p.Mail,
+                YorumSayisi = p.YorumSayisi,
+                YorumCevapSayisi = p.YorumCevapSayisi,
+                SosyalSorumlulukKatilimSayisi = 0,
+                ReferansOlmaSayisi = p.ReferansOlmaSayisi,
+                ReferansKullaniciAd = p.ReferansKullaniciAd
+            }).ToList();
+
+
+            return View(liste);
+        }
+        public ActionResult KargoFirmalarListesi()
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+
+            }
+            var liste = _context.KargoFirmas.Where(p => p.Aktiflik == true).OrderByDescending(p => p.KargoFirmaId).Select(p => new KargoFirma
+            {
+                FirmaMerkezAdres = p.FirmaMerkezAdres,
+                KargoFirmaId = p.KargoFirmaId,
+                KargoFirmaAd = p.KargoFirmaAd,
+                KargoFirmaEmail = p.KargoFirmaEmail,
+                KargoFirmaTel = p.KargoFirmaTel,
+                Ulke = p.Ulke
+            }).ToList();
+
+
+
+            return View(liste);
+        }
+
+
     }
 }

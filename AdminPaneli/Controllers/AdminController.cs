@@ -242,6 +242,7 @@ namespace AdminPaneli.Controllers
                         Tarih = DateTime.Now,
                         Basari = true
                     });
+                    _context.SaveChanges();
                     //Adminin ıd değeri session ile saklanıyor
                     HttpContext.Session.SetInt32("adminId", admin.AdminId);
 
@@ -297,6 +298,7 @@ namespace AdminPaneli.Controllers
                         Basari = true,
                         Tarih = DateTime.Now
                     });
+                    _context.SaveChanges();
                     //Sonrasında admin için olan index sayfasına redirect ediyorum
                     return RedirectToAction("Index", "Admin");
                 }

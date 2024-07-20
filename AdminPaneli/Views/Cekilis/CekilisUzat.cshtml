@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "CekilisUzat";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: rgba(41, 26, 65, 1);
+        }
+
+        .container input[type="text"],
+        .container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .container button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(41, 26, 65, 1);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .container button:hover {
+                background-color: rgba(41, 26, 20, 1);
+            }
+</style>
+
+
+<div class="container">
+    <form action="@Url.Action("CekilisUzat","Cekilis")" method="post">
+        @Html.AntiForgeryToken()
+        <p>Ad: @ViewBag.Ad</p>
+        <p>Başlangıç: @ViewBag.Baslangic</p>
+        <p>Eski Bitiş: @ViewBag.EskiBitis</p>
+        <input type="hidden" value="@ViewBag.Id" name="cekilisId" />
+        <label>Bitiş Tarihi:</label>
+        <input type="date" name="tarih" required />
+        <button type="submit">Uzat</button>
+    </form>
+</div>

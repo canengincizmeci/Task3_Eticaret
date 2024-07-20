@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+
+<style>
+
+    .anaDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: #eae2f8; /* Aynı açık lavanta rengi */
+        min-height: 70vh;
+    }
+
+    .ayiriciDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    .icDiv {
+        border: solid 1px rgba(41, 26, 65, 0.1);
+        border-radius: 8px;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        text-align: center;
+        flex: 1;
+        min-width: 200px;
+        max-width: 300px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .icDiv:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .icDiv h2 {
+            color: rgba(41, 26, 65, 1);
+        }
+
+        .icDiv p {
+            color: #555;
+        }
+
+    a {
+        text-decoration: none;
+    }
+
+</style>
+
+<link href="~/css/adminindex.css" rel="stylesheet" />
+
+<div class="anaDiv">
+
+    <div class="icDiv">
+        <a href="@Url.Action("KategoriKampanyalar","Kampanya")">
+            <h2>Kategori Kampanyalar</h2>
+            <p>Kategoriler hakkında kampanyalar</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("UrunKampanyalar","Kampanya")">
+            <h2>Ürün Kampanyalar </h2>
+            <p>Ürün özelinde kampanylar</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("FirmaKampanyalar","Kampanya")">
+            <h2>Firma Kampanyalar</h2>
+            <p>Firmalara özel kampanyalar</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("GenelKampanyalar","Kampanya")">
+            <h2>Genel kampanyalar</h2>
+            <p>Genel kampanya bilgileri</p>
+        </a>
+    </div>
+
+</div>

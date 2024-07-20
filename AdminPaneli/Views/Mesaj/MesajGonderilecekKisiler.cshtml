@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "MesajGonderilecekKisiler";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+
+<style>
+
+    .anaDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: #eae2f8; /* Aynı açık lavanta rengi */
+        min-height: 70vh;
+    }
+
+
+    .icDiv {
+        border: solid 1px rgba(41, 26, 65, 0.1);
+        border-radius: 8px;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        text-align: center;
+        flex: 1;
+        min-width: 200px;
+        max-width: 300px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .icDiv:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .icDiv h2 {
+            color: rgba(41, 26, 65, 1);
+        }
+
+        .icDiv p {
+            color: #555;
+        }
+
+    a {
+        text-decoration: none;
+    }
+
+</style>
+
+<link href="~/css/adminindex.css" rel="stylesheet" />
+
+<div class="anaDiv">
+    <div class="icDiv">
+        <a href="@Url.Action("TeknikElemanlar","TeknikEleman")">
+            <h2>Teknik Elemana Mesaj Gönder</h2>
+            <p>Teknik elemanlar için arama <br> yapıp listeleyebilirsin</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("FirmaListesi","Firma")">
+            <h2>Mağazalara Mesaj Gönder</h2>
+            <p>Satış mağazaları için arama<br> yapıp listeleyebilirsin</p>
+        </a>
+
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("KullanicilarListesi","Mesaj")">
+            <h2>Kullanıcılara Mesaj Gönder</h2>
+            <p>Kullanıcıları arama yapıp listeleyip <br> mesaj gönderebilirsin</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("KargoFirmalarListesi","Mesaj")">
+            <h2>Kargo Firmalarına Mesaj Gönder</h2>
+            <p>Kargo firmalarına mesaj gönderebilirsin </p>
+        </a>
+    </div>
+</div>
+
+
