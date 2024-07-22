@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .email-container {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .body {
+            padding: 20px;
+            text-align: left;
+        }
+
+        .code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Kayıt Onay Kodu</h1>
+        </div>
+        <div class="body">
+            <p>Lütfen aşağıdaki kodu girerek hesabınıza giriş yapınız:</p>
+            <div class="code">{{KOD}}</div>
+            <p>Eğer siz giriş yapmadıysanız hemen şifrenizi değiştirip başadminle mail yoluyla iletişime geçiniz.</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 Şirket Adı. Tüm hakları saklıdır.</p>
+        </div>
+    </div>
+</body>
+</html>
