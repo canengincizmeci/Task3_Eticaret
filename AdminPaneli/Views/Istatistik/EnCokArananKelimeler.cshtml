@@ -1,7 +1,7 @@
 ﻿@using DB.Models
-@model List<GenelKampanyalar>
+@model List<EnCokArananKelimeler>
 @{
-    ViewData["Title"] = "GenelKampanyalar";
+    ViewData["Title"] = "EnCokArananKelimeler";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
@@ -88,40 +88,22 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Kampanya Başlık</th>
-            <th>Açıklama</th>
-            <th>İndirim Miktarı</th>
-            <th>Başlangıç Tarihi</th>
-            <th>Bitiş Tarihi</th>
-            <th>Detay</th>
+            <th>Kelime</th>
+            <th>Arama Sayısı</th>
+            <th>Sil</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var kampanya in Model)
+        @foreach (var kelime in Model)
         {
             <tr>
-                <td>@kampanya.KampanyaId</td>
-                <td>@kampanya.KampanyaBaslik</td>
-                @if (kampanya.KampanyaAciklama.ToString().Length > 50)
-                {
-                    <td>@kampanya.KampanyaAciklama.ToString().Substring(0, 50)...</td>
-                }
-                else
-                {
-                    <td>@kampanya.KampanyaAciklama</td>
-                }
-                <td>@kampanya.IndirimMiktari</td>
-                <td>@kampanya.BaslangicTarihi</td>
-                <td>@kampanya.BitisTarihi</td>
-                <td><a href="@Url.Action("GenelKampanyaDetay","Kampanya",new {kampanyaId =kampanya.KampanyaId})">Detay</a></td>
+                <td>@kelime.AramaId</td>
+                <td>@kelime.Kelime</td>
+                <td>@kelime.AranmaSayisi</td>
+                <td><a href="@Url.Action("EnCokArananKelimelerSilVeYasakla","Istatistik",new {aramaId=kelime.AramaId})">Sil ve Yasakla</a></td>
             </tr>
         }
     </tbody>
 </table>
-
-<div class="add-link-container">
-    <a href="@Url.Action("GenelKampanyaEkle","Kampanya")">Ekle</a>
-</div>
-
 
 

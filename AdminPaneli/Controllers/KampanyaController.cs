@@ -457,12 +457,52 @@ namespace AdminPaneli.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult GenelKampanyaEkle()
+        public ActionResult GenelKampanyaEkle(GenelKampanyalar _kampanya)
         {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            _context.GenelKampanyalars.Add(new DB.Models.GenelKampanyalar
+            {
+                Aktiflik = true,
+                BaslangicTarihi = _kampanya.BaslangicTarihi,
+                BitisTarihi = _kampanya.BitisTarihi,
+                IndirimMiktari = _kampanya.IndirimMiktari,
+                KampanyaAciklama = _kampanya.KampanyaAciklama,
+                KampanyaBaslik = _kampanya.KampanyaBaslik
+            });
+            _context.SaveChanges();
+            return RedirectToAction("GenelKampanyalar", "Kampanya");
+        }
+        [HttpGet]
+        public ActionResult GenelKampanyaUzat(int kampanyaId)
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            var kampanya = _context.GenelKampanyalars.Find(kampanyaId);
+            ViewBag.BaslangicTarih = kampanya.BaslangicTarihi;
+            ViewBag.Id = kampanya.KampanyaId;
+            ViewBag.Ad = kampanya.KampanyaBaslik;
+            ViewBag.EskiBitis = kampanya.BitisTarihi;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult GenelKampanyaUzat(int kampanyaId, DateTime tarih)
+        {
+            int? id = HttpContext.Session.GetInt32("adminId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            _context.GenelKampanyalars.Find(kampanyaId).BitisTarihi = tarih;
+            _context.SaveChanges();
 
-
-
-            return RedirectToAction("GenelKampanyalar","Kampanya");
+            return RedirectToAction("GenelKampanyalar", "Kampanya");
         }
     }
 }
