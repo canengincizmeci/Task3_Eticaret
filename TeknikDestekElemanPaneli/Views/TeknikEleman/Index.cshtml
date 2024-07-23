@@ -1,4 +1,5 @@
-﻿@{
+﻿@model TeknikElemanIndexModel
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
@@ -11,7 +12,7 @@
         justify-content: center;
         align-items: center;
         padding: 20px;
-        background-color: #eae2f8; 
+        background-color: rgba(200, 255, 200, 1);
         min-height: 70vh;
     }
 
@@ -42,8 +43,8 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .icDiv h2 {
-            color: rgba(41, 26, 65, 1);
+        .icDiv h1 {
+            color: green;
         }
 
         .icDiv p {
@@ -61,70 +62,71 @@
 <div class="anaDiv">
     <div class="ayiriciDiv">
         <div class="icDiv">
-            <a href="@Url.Action("Index","Mesaj")">
+            <a href="@Url.Action("Index","Iade")">
+                <h1>İade Talepleri(@Model._iadeTalepSayisi)</h1>
+                <p>Gelen iade talepleri burdan <br> görebilir ve süreci <br />yönetebilirsin </p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("Index","Iade")">
+                <h1>Yolda İade Talepleri(@Model._yoldaIadeTalepSayisi)</h1>
+                <p>Kargo yoldayken <br> istenen iadeler </p>
+            </a>
+        </div>
 
-                <h2>Mesajlar (@Model._tekniktenGelenMesajlar)</h2>
+        <div class="icDiv">
+            <a href="@Url.Action("Index","Mesaj")">
+                <h1>Gelen Mesajlar(@Model._mesajSayisi)</h1>
                 <p>Ve mesaj işlemlerini <br> burdan yönetebilirsin</p>
             </a>
         </div>
         <div class="icDiv">
             <a href="@Url.Action("Index","Sikayet")">
-                <h2>Şikayetler (@Model._Sikayetler)</h2>
+                <h1>Gelen Şikayetler(@Model._sikayetSayisi)</h1>
                 <p>Gelen Şikayetleri burdan <br> görebilir ve gerekli işlemleri <br> yapabilirsin</p>
             </a>
 
         </div>
         <div class="icDiv">
-            <a href="@Url.Action("Index","Talep")">
-                <h2>Talepler (@Model._talepler)</h2>
-                <p>Gelen talepleri burdan <br> görebilir ve geri dönüş <br> yapabilirsin</p>
-            </a>
-        </div>
-        <div class="icDiv">
-            <a href="@Url.Action("Index","Kategori")">
-                <h2>Kategoriler</h2>
-                <p>Kategori ekleme,silme ve  <br> güncelleme yapabilirisin</p>
+            <a href="@Url.Action("Index","Satis")">
+                <h1>Satış Reddleri(@Model._satisRedSayisi)</h1>
+                <p>Şatış redleri <br> ve sebepleri görüntüle</p>
             </a>
         </div>
         <div class="icDiv">
             <a href="@Url.Action("Index","Urun")">
-                <h2>Ürün Yönetimi</h2>
-                <p>Gelen talepleri burdan <br> görebilir ve geri dönüş <br> yapabilirsin</p>
+                <h1>Ürün Yönetimi</h1>
+                <p>Ürünleri yönetmek  için tıkla</p>
             </a>
         </div>
         <div class="icDiv">
             <a href="@Url.Action("Index","Firma")">
-                <h2>Firma Başvuruları (@Model._firmaBaşvuruları)</h2>
+                <h1>Firma Yönetimi</h1>
                 <p>Firma işlemlerini burdan <br> yönetebilirsin</p>
-            </a>
-        </div>
-        <div class="icDiv">
-            <a href="@Url.Action("Index","KargoFirma")">
-                <h2>Kargo Firma Yönetimi </h2>
-                <p>Kargo firmalarını <br> yönetmek için tıklayınız</p>
             </a>
         </div>
     </div>
     <div class="ayiriciDiv">
+        <div class="icDiv">
+            <a href="@Url.Action("Index","KargoFirma")">
+                <h1>Kargo Firma Yönetimi </h1>
+                <p>Kargo firmalarını <br> yönetmek için tıklayınız</p>
+            </a>
+        </div>
 
         <div class="icDiv">
-            <a href="@Url.Action("FirmaOneriler","Firma")">
-                <h2>Firmalardan gelen <br> Öneriler(@Model._firmaSiteOneriler)</h2>
-                <p>Ve diğer kargo <br> firma işlemleri</p>
+            <a href="@Url.Action("Index","SıkcaSorulanlar")">
+                <h1>Sıkça Sorulanlar</h1>
+                <p>Kullancılara sunmak için sık sorunlar<br> kısmına ekleme yapabilirsin </p>
             </a>
         </div>
         <div class="icDiv">
             <a href="@Url.Action("Index","Kullanici")">
-                <h2>Kullanıcı Yönetimi</h2>
+                <h1>Kullanıcı Yönetimi</h1>
                 <p>Önerileri okumak için <br> tıklayınız</p>
             </a>
         </div>
-        <div class="icDiv">
-            <a href="@Url.Action("Index","TeknikEleman")">
-                <h2>Teknik Eleman <br> Başvuruları(@Model._teknikElemanBasvurular)</h2>
-                <p>Ve diğer teknik eleman <br> işlemleri</p>
-            </a>
-        </div>
+
     </div>
 </div>
 

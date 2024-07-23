@@ -1,0 +1,92 @@
+﻿@using DB.Models
+@model List<Firma>
+@{
+    ViewData["Title"] = "FirmaYarismaKazananlar";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+    }
+
+    .complaints-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        font-size: 1em;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-width: 600px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        background-color: white;
+    }
+
+        .complaints-table thead tr {
+            background-color: rgba(41, 26, 65, 1);
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .complaints-table th,
+        .complaints-table td {
+            padding: 12px 15px;
+        }
+
+        .complaints-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+            .complaints-table tbody tr:nth-of-type(even) {
+                background-color: #f3f3f3;
+            }
+
+            .complaints-table tbody tr:last-of-type {
+                border-bottom: 2px solid rgba(41, 26, 65, 1);
+            }
+
+            .complaints-table tbody tr:hover {
+                background-color: #f1f1f1;
+            }
+
+        .complaints-table a {
+            color: rgba(41, 26, 65, 1);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+
+
+            .complaints-table a:hover {
+                color: rgba(41, 26, 20, 1);
+            }
+
+</style>
+
+<table class="complaints-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ad</th>
+            <th>Mail</th>
+            <th>Adres</th>
+            <th>Detay</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var firma in Model)
+        {
+            <tr>
+                <td>@firma.FirmaId</td>
+                <td>@firma.FirmaAd</td>
+                <td>@firma.Mail</td>
+                <td>@firma.FirmaAdres</td>
+                <td><a href="@Url.Action("FirmaDetay","Firma",new {firmaId =firma.FirmaId})">Detay</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+

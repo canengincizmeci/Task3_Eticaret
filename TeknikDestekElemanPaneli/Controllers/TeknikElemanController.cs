@@ -5,6 +5,7 @@ using System.Net.Security;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using TeknikDestekElemanPaneli.Models;
 
 namespace TeknikDestekElemanPaneli.Controllers
 {
@@ -112,17 +113,38 @@ namespace TeknikDestekElemanPaneli.Controllers
         }
         public ActionResult Index()
         {
-            int? id = HttpContext.Session.GetInt32("TeknikElemanId");
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
             if (!id.HasValue)
             {
-                return RedirectToAction("Login", "Admin");
+                return RedirectToAction("Login", "TeknikEleman");
             }
+            int iadeTalepSayisi = _context.IadeTaleps.Where(p => p.Aktiflik == true).Count();
+            int yoldaIadeTalepSayisi = _context.YoldaIadeTalebis.Where(p => p.Onay == false).Count();
+            int satisRedSayisi = _context.SatisReds.Count();
+            int sikayetSayisi = _context.FirmadanKullaniciyaSikayets.Where(p => p.Aktiflik == true).Count() + _context.FirmadanKullaniciyaYorumCevapSikayets.Where(p => p.Aktiflik == true).Count() + _context.FirmadanYorumSikayets.Where(p => p.Aktiflik == true).Count() + _context.KullanicidanFirmayaSikayets.Where(p => p.Aktiflik == true).Count() + _context.KullanicidanFirmayaYorumCevapSikayets.Where(p => p.Aktiflik == true).Count() + _context.KullanicidanKargoFirmasiSikayetis.Where(p => p.Aktiflik == true).Count() + _context.KullanicidanYorumSikayets.Where(p => p.Aktiflik == true).Count() + _context.UrunSikayets.Where(p => p.Aktiflik == true).Count();
+            int mesajSayisi = _context.AdmindenTeknikDestegeMesajs.Where(p => p.OkunduBilgisi == false).Count() + _context.KullanicidanTeknikDestegeMesajs.Where(p => p.OkunduBilgisi == false).Count() + _context.FirmadanTeknikElemanaMesajs.Where(p => p.OkunduBilgisi == false).Count() + _context.KargodanTeknikElemanaMesajs.Where(p => p.OkunduBilgisi == false).Count() + _context.TeknikElemanlarArasıMesajs.Where(p => (p.AlıcıEleman == id && p.OkunduBilgisi == false)).Count();
+
+            //admibde teknik desteğe mesaj , kullanıcdan teknik desteğe mesaj , teknik elemanlar arası ,firmadan tekniğe, kargodan teknik elemana mesaj, 
 
 
+            TeknikElemanIndexModel model = new TeknikElemanIndexModel()
+            {
+                _iadeTalepSayisi = iadeTalepSayisi,
+                _yoldaIadeTalepSayisi = yoldaIadeTalepSayisi,
+                _satisRedSayisi = satisRedSayisi,
+                _sikayetSayisi = sikayetSayisi,
+                _mesajSayisi = mesajSayisi
+            };
+            
+            return View(model);
+        }
+        public ActionResult CikisYap()
+        {
+
+            HttpContext.Session.Clear();
 
 
-
-            return View();
+            return RedirectToAction("Login", "TeknikEleman");
         }
     }
 }

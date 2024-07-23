@@ -1,0 +1,77 @@
+﻿@using DB.Models
+@model FirmaYarismalar
+@{
+    ViewData["Title"] = "FirmaYarismaDetay";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+    }
+
+    .urun-detail {
+        background-color: #ffffff;
+        padding: 20px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        max-width: 600px;
+        margin: 20px auto;
+        text-align: center;
+    }
+
+        .urun-detail img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .urun-detail h1 {
+            font-size: 24px;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+
+        .urun-detail p {
+            margin: 5px 0;
+        }
+
+        .urun-detail .button-container {
+            margin-top: 20px;
+        }
+
+        .urun-detail .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            .urun-detail .btn:hover {
+                background-color: #0056b3;
+            }
+</style>
+
+<div class="urun-detail">
+    <h1>@Model.YarismaBaslik</h1>
+    <p><strong>Açıklama:</strong> @Model.YarismaAciklama</p>
+    <p><strong>Başlangıç Tarihi:</strong> @Model.BaslangicTarih</p>
+    <p><strong>Bitiş Tarihi:</strong> @Model.BitisTarih</p>
+    <div class="button-container">
+        <a href="@Url.Action("FirmaYarismaKazananlar", "Yarisma",new {yarismaId=Model.FirmayarismaId})" class="btn">Bitir</a>
+        <a href="@Url.Action("FirmaYarismaTarihUzat","Yarisma",new {yarismaId=Model.FirmayarismaId})" class="btn">Uzat</a>
+        <a href="@Url.Action("FirmaYarismaKatilanlar","Yarisma",new {yarismaId=Model.FirmayarismaId})" class="btn">Katılanlar</a>
+    </div>
+</div>
+
