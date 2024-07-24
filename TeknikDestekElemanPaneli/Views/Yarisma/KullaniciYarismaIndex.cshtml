@@ -1,10 +1,9 @@
 ﻿@using DB.Models
-@model List<FirmaYarismalar>
+@model List<KullaniciYarismalar>
 @{
-    ViewData["Title"] = "FirmaYarismaIndex";
+    ViewData["Title"] = "KullaniciYarismaIndex";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-
 
 <style>
     body {
@@ -97,10 +96,11 @@
         </tr>
     </thead>
     <tbody>
+
         @foreach (var yarisma in Model)
         {
             <tr>
-                <td>@yarisma.FirmayarismaId</td>
+                <td>@yarisma.KullaniciYarismaId</td>
                 <td>@yarisma.YarismaBaslik</td>
                 @if (yarisma.YarismaAciklama.ToString().Length > 50)
                 {
@@ -112,13 +112,15 @@
                 }
                 <td>@yarisma.BaslangicTarih</td>
                 <td>@yarisma.BitisTarih</td>
-                <td><a href="@Url.Action("FirmaYarismaDetay","Yarisma",new {yarismaId =yarisma.FirmayarismaId})">Detay</a></td>
+                <td><a href="@Url.Action("KullaniciYarismaDetay","Yarisma",new {yarismaId =yarisma.KullaniciYarismaId})">Detay</a></td>
             </tr>
         }
     </tbody>
 </table>
 
 <div class="add-link-container">
-    <a href="@Url.Action("FirmaYarismaEkle","Yarisma")">Ekle</a>
+    <a href="@Url.Action("KullaniciYarismaEkle","Yarisma")">Ekle</a>
 </div>
+
+
 

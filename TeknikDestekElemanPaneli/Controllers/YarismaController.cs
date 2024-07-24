@@ -1,5 +1,6 @@
 ﻿using DB.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using TeknikDestekElemanPaneli.Models;
 
@@ -89,7 +90,7 @@ namespace TeknikDestekElemanPaneli.Controllers
                 _context.SaveChanges();
             }
 
-            
+
 
             return View(model);
         }
@@ -109,6 +110,227 @@ namespace TeknikDestekElemanPaneli.Controllers
 
 
             return View(katilanlar);
+        }
+        [HttpGet]
+        public ActionResult FirmaYarismaEkle()
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+
+
+
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult FirmaYarismaEkle(FirmaYarismalar _yarisma)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            _context.FirmaYarismalars.Add(new FirmaYarismalar
+            {
+                Aktiflik = true,
+                BaslangicTarih = _yarisma.BaslangicTarih,
+                BitisTarih = _yarisma.BitisTarih,
+                YarismaAciklama = _yarisma.YarismaAciklama,
+                YarismaBaslik = _yarisma.YarismaBaslik
+            });
+            _context.SaveChanges();
+
+
+
+            return RedirectToAction("FirmaYarismaIndex", "Yarisma");
+        }
+        [HttpGet]
+        public ActionResult FirmaYarismaTarihUzat(int yarismaId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            var yarisma = _context.FirmaYarismalars.Find(yarismaId);
+            ViewBag.Ad = yarisma.YarismaBaslik;
+            ViewBag.Baslangic = yarisma.BaslangicTarih;
+            ViewBag.Bitis = yarisma.BitisTarih;
+            ViewBag.Id = yarisma.FirmayarismaId;
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult FirmaYarismaTarihUzat(int yarismaId, DateTime tarih)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            var yarisma = _context.FirmaYarismalars.Find(yarismaId);
+            yarisma.BitisTarih = tarih;
+            _context.SaveChanges();
+            return RedirectToAction("FirmaYarismaIndex", "Yarisma");
+        }
+        public ActionResult KullaniciYarismaIndex()
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            var yarismalar = _context.KullaniciYarismalars.Where(p => p.Aktiflik == true).OrderByDescending(p => p.KullaniciYarismaId).Select(p => new KullaniciYarismalar
+            {
+                Aktiflik = p.Aktiflik,
+                KullaniciYarismaId = p.KullaniciYarismaId,
+                BaslangicTarih = p.BaslangicTarih,
+                BitisTarih = p.BitisTarih,
+                YarismaAciklama = p.YarismaAciklama,
+                YarismaBaslik = p.YarismaBaslik
+            }).ToList();
+            return View(yarismalar);
+        }
+        public ActionResult KullaniciYarismaDetay(int yarismaId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            var yarisma = _context.KullaniciYarismalars.Where(p => p.KullaniciYarismaId == yarismaId).Select(p => new KullaniciYarismalar
+            {
+                Aktiflik = p.Aktiflik,
+                KullaniciYarismaId = p.KullaniciYarismaId,
+                BaslangicTarih = p.BaslangicTarih,
+                BitisTarih = p.BitisTarih,
+                YarismaAciklama = p.YarismaAciklama,
+                YarismaBaslik = p.YarismaBaslik
+            }).FirstOrDefault();
+
+
+            return View(yarisma);
+        }
+        [HttpGet]
+        public ActionResult KullaniciYarismaTarihUzat(int yarismaId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            var yarisma = _context.KullaniciYarismalars.Find(yarismaId);
+            ViewBag.Ad = yarisma.YarismaBaslik;
+            ViewBag.Baslangic = yarisma.BaslangicTarih;
+            ViewBag.Bitis = yarisma.BitisTarih;
+            ViewBag.Id = yarisma.KullaniciYarismaId;
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult KullaniciYarismaTarihUzat(int yarismaId, DateTime tarih)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            var yarisma = _context.KullaniciYarismalars.Find(yarismaId);
+            yarisma.BitisTarih = tarih;
+            _context.SaveChanges();
+            return RedirectToAction("KullaniciYarismaIndex", "Yarisma");
+        }
+        public ActionResult KullaniciYarismaKatilanlar(int yarismaId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            var kullanicilar = _context.KullaniciYarismaKatilanlars.Where(p => p.KullaniciYarismaId == yarismaId).OrderByDescending(p => p.KatilimId).Select(p => new KullaniciYarismaKatilanlarModel
+            {
+                _kullaniciAd = p.Kullanici.KullaniciAd,
+                _kullaniciId = p.Kullanici.KullaniciId,
+                _kullaniciMail = p.Kullanici.Mail
+            }).ToList();
+
+
+            return View(kullanicilar);
+        }
+        public ActionResult KullaniciYarismaKazananlar(int yarismaId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+
+            var kazananIdler = _context.Satislars.GroupBy(p => p.Kullanici.KullaniciId).Select(p => new { KullaniciId = p.Key, ToplamSatis = p.Sum(l => l.Siparis.Toplamfiyat) }).Join(_context.KullaniciYarismaKatilanlars, satis => satis.KullaniciId, katilan => katilan.Kullanici.KullaniciId, (satis, katilan) => new
+            {
+                satis.KullaniciId,
+                satis.ToplamSatis,
+                katilan.KullaniciYarismaId
+            }).Where(m => m.KullaniciYarismaId == yarismaId).OrderByDescending(k => k.ToplamSatis).Take(3).Select(k => k.KullaniciId).ToList();
+
+
+            var model = _context.Kullanicis.Where(p => (p.Aktiflik == true && kazananIdler.Contains(p.KullaniciId))).Select(p => new Kullanici
+            {
+                KullaniciId = p.KullaniciId,
+                KullaniciAd = p.KullaniciAd,
+                Aktiflik = p.Aktiflik,
+                Mail = p.Mail
+
+            }).ToList();
+
+            foreach (var item in model)
+            {
+                _context.KullaniciYarismaKazananlars.Add(new KullaniciYarismaKazananlar
+                {
+                    KullaniciId = item.KullaniciId,
+                    KazanmaTarih = DateTime.Now,
+                    KullaniciYarismaId = yarismaId
+                });
+                _context.SaveChanges();
+            }
+
+
+
+            return View(model);
+        }
+        [HttpGet]
+        public ActionResult KullaniciYarismaEkle()
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult KullaniciYarismaEkle(KullaniciYarismalar _yarisma)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+
+            _context.KullaniciYarismalars.Add(new KullaniciYarismalar
+            {
+                Aktiflik = true,
+                BaslangicTarih = _yarisma.BaslangicTarih,
+                BitisTarih = _yarisma.BitisTarih,
+                YarismaAciklama = _yarisma.YarismaAciklama,
+                YarismaBaslik = _yarisma.YarismaBaslik
+            });
+            _context.SaveChanges();
+            return RedirectToAction("KullaniciYarismaIndex", "Yarisma");
         }
     }
 }

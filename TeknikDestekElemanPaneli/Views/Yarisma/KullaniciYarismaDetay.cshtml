@@ -1,7 +1,7 @@
 ﻿@using DB.Models
-@model FirmaYarismalar
+@model KullaniciYarismalar
 @{
-    ViewData["Title"] = "FirmaYarismaDetay";
+    ViewData["Title"] = "KullaniciYarismaDetay";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -69,9 +69,9 @@
     <p><strong>Başlangıç Tarihi:</strong> @Model.BaslangicTarih</p>
     <p><strong>Bitiş Tarihi:</strong> @Model.BitisTarih</p>
     <div class="button-container">
-        <a href="@Url.Action("FirmaYarismaKazananlar", "Yarisma",new {yarismaId=Model.FirmayarismaId})" class="btn">Bitir</a>
-        <a href="@Url.Action("FirmaYarismaTarihUzat","Yarisma",new {yarismaId=Model.FirmayarismaId})" class="btn">Uzat</a>
-        <a href="@Url.Action("FirmaYarismaKatilanlar","Yarisma",new {yarismaId=Model.FirmayarismaId})" class="btn">Katılanlar</a>
+        <a href="@Url.Action("KullaniciYarismaKazananlar", "Yarisma",new {yarismaId=Model.KullaniciYarismaId})" class="btn">Bitir</a>
+        <a href="@Url.Action("KullaniciYarismaTarihUzat","Yarisma",new {yarismaId=Model.KullaniciYarismaId})" class="btn">Uzat</a>
+        <a href="@Url.Action("KullaniciYarismaKatilanlar","Yarisma",new {yarismaId=Model.KullaniciYarismaId})" class="btn">Katılanlar</a>
     </div>
 </div>
 
