@@ -1,0 +1,97 @@
+﻿@model KullaniciGelenMesajModel
+@{
+    ViewData["Title"] = "MesajIndex";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<style>
+
+    .anaDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: rgba(200, 255, 200, 1);
+        min-height: 70vh;
+    }
+
+    .ayiriciDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    .icDiv {
+        border: solid 1px rgba(41, 26, 65, 0.1);
+        border-radius: 8px;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        text-align: center;
+        flex: 1;
+        min-width: 200px;
+        max-width: 300px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .icDiv:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .icDiv h1 {
+            color: green;
+        }
+
+        .icDiv p {
+            color: #555;
+        }
+
+    a {
+        text-decoration: none;
+    }
+
+</style>
+
+
+
+<div class="anaDiv">
+    <div class="icDiv">
+        <a href="@Url.Action("AdminGelenMesajlar","Mesaj")">
+            <h1>Admin Mesajlar(@Model._admindenGelenMesajSayisi)</h1>
+            <p>Adminden gelen mesajları görüntüleyip cevap verebilirsin</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("KullaniciGelenMesajlar","Mesaj")">
+            <h1>Kullanıcı Mesajlar(@Model._kullanicidanGelenMesajSayisi)</h1>
+            <p>Kullanıcıdan gelen mesajları görüntüleyip cevap verebilirsin</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("SaticiFirmaGelenMesajlar","Mesaj")">
+            <h1>Satıcı Firma Mesajlar(@Model._firmadanGelenMesajSayisi)</h1>
+            <p>Satıcı Firmalardan gelen mesajları görüntüleyip cevap verebilirsin</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("KargoGelenMesajlar","Mesaj")">
+            <h1>Kargo Firma Mesajlar(@Model._kargodanGelenMesajSayisi)</h1>
+            <p>Kargo firmalarından gelen mesajları görüntüleyip cevap verebilirsin</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("TeknikElemanGelenMesajlar","Mesaj")">
+            <h1>Teknik Eleman Mesajlar(@Model._teknikElemandanGelenMesajSayisi)</h1>
+            <p>Diğer teknik elemanlardan gelen mesajları görüntüleyip cevap verebilirsin</p>
+        </a>
+    </div>
+
+</div>
+
+
