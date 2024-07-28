@@ -15,7 +15,7 @@ public partial class TeknikElemanlarArasıMesaj
 
     public int? GonderenEleman { get; set; }
 
-    public int? AlıcıEleman { get; set; }
+    public int? AlıcıEleman { get; set; }  
 
     public DateTime? Tarih { get; set; }
 

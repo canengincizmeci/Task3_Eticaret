@@ -1449,6 +1449,7 @@ public partial class Task3RealEcommerceContext : DbContext
             entity.Property(e => e.MesajBaslik)
                 .HasMaxLength(20)
                 .HasColumnName("mesajBaslik");
+            entity.Property(e => e.MesajlasmaId).HasColumnName("mesajlasmaId");
             entity.Property(e => e.OkunduBilgisi).HasColumnName("okunduBilgisi");
             entity.Property(e => e.Tarih)
                 .HasColumnType("datetime")
@@ -1458,6 +1459,10 @@ public partial class Task3RealEcommerceContext : DbContext
             entity.HasOne(d => d.KargoFirma).WithMany(p => p.KargodanTeknikElemanaMesajs)
                 .HasForeignKey(d => d.KargoFirmaId)
                 .HasConstraintName("FK__KargodanT__kargo__1B5E0D89");
+
+            entity.HasOne(d => d.Mesajlasma).WithMany(p => p.KargodanTeknikElemanaMesajs)
+                .HasForeignKey(d => d.MesajlasmaId)
+                .HasConstraintName("FK_Orders_Customers");
 
             entity.HasOne(d => d.TeknikEleman).WithMany(p => p.KargodanTeknikElemanaMesajs)
                 .HasForeignKey(d => d.TeknikElemanId)

@@ -1,4 +1,5 @@
 ﻿using DB.Models;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -318,7 +319,7 @@ namespace TeknikDestekElemanPaneli.Controllers
             {
                 return RedirectToAction("Login", "TeknikEleman");
             }
-            _context.KullanicidanTeknikDestegeMesajs.Find(mesajId).Aktiflik = false;
+            _context.KullanicidanTeknikDestegeMesajs.Find(mesajId).OkunduBilgisi = true;
             _context.SaveChanges();
 
 
@@ -525,6 +526,334 @@ namespace TeknikDestekElemanPaneli.Controllers
             return RedirectToAction("SaticidanGelenMesajlasmaDetay", "Mesaj", new { mesajId = mesajId });
 
         }
+        public ActionResult KargoFirmadanGelenMesajlar()
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            var model = _context.KargodanTeknikElemanaMesajs.Include(p => p.KargoFirma).Include(p => p.TeknikEleman).Include(p => p.Mesajlasma).GroupBy(p => p.MesajlasmaId).Select(p => p.OrderByDescending(p => p.MesajId).FirstOrDefault()).ToList().Select(p => new KargodanTeknikeMesajModel
+            {
+                MesajId = p.MesajId,
+                MesajlasmaId = p.MesajlasmaId,
+                Aktiflik = p.Aktiflik,
+                KargoFirmaId = p.KargoFirmaId,
+                Mesaj = p.Mesaj,
+                MesajBaslik = p.MesajBaslik,
+                OkunduBilgisi = p.OkunduBilgisi,
+                Tarih = p.Tarih,
+                TeknikElemanId = p.TeknikElemanId
+            }).ToList();
 
+
+            return View(model);
+        }
+        public ActionResult KargoFirmaGelenMesajlasmaDetay(int mesajId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            var mesaj = _context.KargodanTeknikElemanaMesajs.Find(mesajId);
+
+            var gelenler = _context.KargodanTeknikElemanaMesajs.Where(p => (p.TeknikElemanId == id && p.MesajlasmaId == mesaj.MesajlasmaId && p.KargoFirmaId == mesaj.KargoFirmaId)).OrderByDescending(p => p.MesajId).Select(p => new KargodanTeknikeMesajModel
+            {
+                MesajId = p.MesajId,
+                KargoFirmaId = p.KargoFirmaId,
+                Aktiflik = p.Aktiflik,
+                KargoFirmaAd = p.KargoFirma.KargoFirmaAd,
+                Mesaj = p.Mesaj,
+                MesajBaslik = p.MesajBaslik,
+                MesajlasmaId = p.MesajlasmaId,
+                OkunduBilgisi = p.OkunduBilgisi,
+                Tarih = p.Tarih,
+                TeknikElemanAd = p.TeknikEleman.ElemanAd,
+                TeknikElemanId = p.TeknikElemanId,
+                Role = false
+            }).ToList();
+            var gidenler = _context.TeknikDenKargoyaMesajs.Where(p => (p.MesajlasmaId == mesaj.MesajlasmaId && p.TeknikElemanId == id && p.KargoFirmaId == mesaj.KargoFirmaId)).OrderByDescending(p => p.MesajId).Select(p => new KargodanTeknikeMesajModel
+            {
+                MesajId = p.MesajId,
+                KargoFirmaId = p.KargoFirmaId,
+                Aktiflik = p.Aktiflik,
+                KargoFirmaAd = p.KargoFirma.KargoFirmaAd,
+                Mesaj = p.Mesaj,
+                MesajBaslik = p.MesajBaslik,
+                MesajlasmaId = p.MesajlasmaId,
+                OkunduBilgisi = p.OkunduBilgisi,
+                Role = true,
+                Tarih = p.Tarih,
+                TeknikElemanAd = p.TeknikEleman.ElemanAd,
+                TeknikElemanId = p.TeknikElemanId
+            }).ToList();
+            gelenler.AddRange(gidenler);
+            List<KargodanTeknikeMesajModel> model = new List<KargodanTeknikeMesajModel>();
+            model = gelenler.OrderByDescending(p => p.Tarih).ToList();
+            ViewBag.KargoFirmaId = mesaj.KargoFirmaId;
+            ViewBag.MesajId = mesajId;
+            ViewBag.MesajlamaId = mesaj.MesajlasmaId;
+            return View(gelenler);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult TeknikdenKargoyaCevap(TeknikDenKargoyaMesaj _mesaj)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            _context.TeknikDenKargoyaMesajs.Add(new TeknikDenKargoyaMesaj
+            {
+                Aktiflik = true,
+                KargoFirmaId = _mesaj.KargoFirmaId,
+                Mesaj = _mesaj.Mesaj,
+                MesajlasmaId = _mesaj.MesajlasmaId,
+                MesajBaslik = _mesaj.MesajBaslik,
+                OkunduBilgisi = false,
+                Tarih = DateTime.Now,
+                TeknikElemanId = id
+            });
+            _context.SaveChanges();
+            return RedirectToAction("KargoFirmaGelenMesajlasmaDetay", "Mesaj", new { mesajId = _mesaj.MesajId });
+        }
+        public ActionResult KargodanGelenMesajDetay(int mesajId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+
+            var model = _context.KargodanTeknikElemanaMesajs.Where(p => p.MesajId == mesajId).Select(p => new KargodanTeknikeMesajModel
+            {
+                KargoFirmaId = p.KargoFirmaId,
+                MesajId = p.MesajId,
+                Aktiflik = p.Aktiflik,
+                KargoFirmaAd = p.KargoFirma.KargoFirmaAd,
+                Mesaj = p.Mesaj,
+                MesajBaslik = p.MesajBaslik,
+                MesajlasmaId = p.MesajlasmaId,
+                OkunduBilgisi = p.OkunduBilgisi,
+                Role = p.OkunduBilgisi,
+                Tarih = p.Tarih,
+                TeknikElemanAd = p.TeknikEleman.ElemanAd,
+                TeknikElemanId = p.TeknikElemanId
+            }).FirstOrDefault();
+            return View(model);
+        }
+        public ActionResult KargoFirmadanGelenSonMesajOku(int mesajId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            _context.KargodanTeknikElemanaMesajs.Find(mesajId).OkunduBilgisi = true;
+            _context.SaveChanges();
+            return RedirectToAction("KargoFirmadanGelenMesajlar", "Mesaj");
+        }
+        public ActionResult KargoFirmadanGelenMesajOkunduIsaretle(int mesajId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            _context.KargodanTeknikElemanaMesajs.Find(mesajId).OkunduBilgisi = true;
+            _context.SaveChanges();
+            return RedirectToAction("KargodanGelenMesajDetay", "Mesaj", new { mesajId = mesajId });
+        }
+        public ActionResult TekniklerArasiMesaj()
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+
+            var model = _context.TeknikElemanlarArasıMesajs.Include(p => p.GonderenElemanNavigation).Include(p => p.AlıcıElemanNavigation).Include(p => p.Mesajlasma).Where(p => p.AlıcıEleman == id).GroupBy(p => p.MesajlasmaId).Select(p => p.OrderByDescending(p => p.MesajId).FirstOrDefault()).ToList().Select(p => new TekniklerArasiMesajModel
+            {
+                MesajId = p.MesajId,
+                Aktiflik = p.Aktiflik,
+                AlıcıEleman = p.AlıcıEleman,
+                GonderenEleman = p.GonderenEleman,
+                GonderenElemanAd = p.GonderenElemanNavigation.ElemanAd,
+                Mesaj = p.Mesaj,
+                MesajBaslik = p.MesajBaslik,
+                MesajlasmaId = p.MesajlasmaId,
+                OkunduBilgisi = p.OkunduBilgisi,
+                Tarih = p.Tarih
+            }).ToList();
+
+
+            return View(model);
+        }
+        public ActionResult TeknikdenGelenMesajlasmaDetay(int mesajId, bool rol = false)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            if (!rol)
+            {
+
+                var mesaj = _context.TeknikElemanlarArasıMesajs.Find(mesajId);
+
+                var gelenler = _context.TeknikElemanlarArasıMesajs.Where(p => (p.AlıcıEleman == id && p.GonderenEleman == mesaj.GonderenEleman && p.MesajlasmaId == mesaj.MesajlasmaId)).OrderByDescending(p => p.MesajlasmaId).Select(p => new TekniklerArasiMesajModel
+                {
+                    Aktiflik = p.Aktiflik,
+                    MesajlasmaId = p.MesajlasmaId,
+                    GonderenEleman = p.GonderenEleman,
+                    AlıcıEleman = p.AlıcıEleman,
+                    GonderenElemanAd = p.GonderenElemanNavigation.ElemanAd,
+                    Mesaj = p.Mesaj,
+                    MesajBaslik = p.MesajBaslik,
+                    MesajId = p.MesajId,
+                    OkunduBilgisi = p.OkunduBilgisi,
+                    Tarih = p.Tarih,
+                    Role = false
+                }).ToList();
+
+                var gidenler = _context.TeknikElemanlarArasıMesajs.Where(p => (p.AlıcıEleman == mesaj.GonderenEleman && p.GonderenEleman == id && p.MesajlasmaId == mesaj.MesajlasmaId)).OrderByDescending(p => p.MesajlasmaId).Select(p => new TekniklerArasiMesajModel
+                {
+                    MesajlasmaId = p.MesajlasmaId,
+                    GonderenEleman = p.GonderenEleman,
+                    Aktiflik = p.Aktiflik,
+                    AlıcıEleman = p.AlıcıEleman,
+                    GonderenElemanAd = p.GonderenElemanNavigation.ElemanAd,
+                    Mesaj = p.Mesaj,
+                    MesajBaslik = p.MesajBaslik,
+                    MesajId = p.MesajId,
+                    OkunduBilgisi = p.OkunduBilgisi,
+                    Role = true,
+                    Tarih = p.Tarih
+                }).ToList();
+                gelenler.AddRange(gidenler);
+                List<TekniklerArasiMesajModel> model = new List<TekniklerArasiMesajModel>();
+                model = gelenler.OrderByDescending(p => p.Tarih).ToList();
+                ViewBag.AliciId = mesaj.GonderenEleman;
+                ViewBag.MesajlamaId = mesaj.MesajlasmaId;
+                ViewBag.MesajId = mesaj.MesajId;
+                return View(model);
+
+            }
+            else
+            {
+                var mesaj = _context.TeknikElemanlarArasıMesajs.Find(mesajId);
+
+                var gelenler = _context.TeknikElemanlarArasıMesajs.Where(p => (p.AlıcıEleman == id && p.GonderenEleman == mesaj.AlıcıEleman && p.MesajlasmaId == mesaj.MesajlasmaId)).OrderByDescending(p => p.MesajlasmaId).Select(p => new TekniklerArasiMesajModel
+                {
+                    Aktiflik = p.Aktiflik,
+                    MesajlasmaId = p.MesajlasmaId,
+                    GonderenEleman = p.GonderenEleman,
+                    AlıcıEleman = p.AlıcıEleman,
+                    GonderenElemanAd = p.GonderenElemanNavigation.ElemanAd,
+                    Mesaj = p.Mesaj,
+                    MesajBaslik = p.MesajBaslik,
+                    MesajId = p.MesajId,
+                    OkunduBilgisi = p.OkunduBilgisi,
+                    Tarih = p.Tarih,
+                    Role = false
+                }).ToList();
+
+                var gidenler = _context.TeknikElemanlarArasıMesajs.Where(p => (p.AlıcıEleman == mesaj.AlıcıEleman && p.GonderenEleman == id && p.MesajlasmaId == mesaj.MesajlasmaId)).OrderByDescending(p => p.MesajlasmaId).Select(p => new TekniklerArasiMesajModel
+                {
+                    MesajlasmaId = p.MesajlasmaId,
+                    GonderenEleman = p.GonderenEleman,
+                    Aktiflik = p.Aktiflik,
+                    AlıcıEleman = p.AlıcıEleman,
+                    GonderenElemanAd = p.GonderenElemanNavigation.ElemanAd,
+                    Mesaj = p.Mesaj,
+                    MesajBaslik = p.MesajBaslik,
+                    MesajId = p.MesajId,
+                    OkunduBilgisi = p.OkunduBilgisi,
+                    Role = true,
+                    Tarih = p.Tarih
+                }).ToList();
+                gelenler.AddRange(gidenler);
+                List<TekniklerArasiMesajModel> model = new List<TekniklerArasiMesajModel>();
+                model = gelenler.OrderByDescending(p => p.Tarih).ToList();
+                ViewBag.AliciId = mesaj.AlıcıEleman;
+                ViewBag.MesajlamaId = mesaj.MesajlasmaId;
+                ViewBag.MesajId = mesaj.MesajId;
+
+                return View(model);
+
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult TeknikdenTeknikeCevap(TeknikElemanlarArasıMesaj _mesaj)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            _context.TeknikElemanlarArasıMesajs.Add(new TeknikElemanlarArasıMesaj
+            {
+                Aktiflik = true,
+                AlıcıEleman = _mesaj.AlıcıEleman,
+                GonderenEleman = id,
+                Mesaj = _mesaj.Mesaj,
+                MesajBaslik = _mesaj.MesajBaslik,
+                MesajlasmaId = _mesaj.MesajlasmaId,
+                OkunduBilgisi = false,
+                Tarih = DateTime.Now
+            });
+            _context.SaveChanges();
+            int sonMesajId = _context.TeknikElemanlarArasıMesajs.OrderByDescending(p => p.MesajId).FirstOrDefault().MesajId;
+
+            return RedirectToAction("TeknikdenGelenMesajlasmaDetay", "Mesaj", new { mesajId = sonMesajId, rol = true });
+        }
+        public ActionResult TeknikdenGelenMesajDetay(int mesajId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            var mesaj = _context.TeknikElemanlarArasıMesajs.Where(p => p.MesajId == mesajId).Select(p => new TekniklerArasiMesajModel
+            {
+                Aktiflik = p.Aktiflik,
+                MesajId = p.MesajId,
+                AlıcıEleman = p.AlıcıEleman,
+                GonderenEleman = p.GonderenEleman,
+                GonderenElemanAd = p.GonderenElemanNavigation.ElemanAd,
+                Mesaj = p.Mesaj,
+                MesajBaslik = p.MesajBaslik,
+                MesajlasmaId = p.MesajlasmaId,
+                OkunduBilgisi = p.OkunduBilgisi,
+                Role = false,
+                Tarih = p.Tarih
+            }).FirstOrDefault();
+            return View(mesaj);
+        }
+        public ActionResult TeknikdenGelenMesajOkunduIsaretle(int mesajId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            _context.TeknikElemanlarArasıMesajs.Find(mesajId).OkunduBilgisi = true;
+            _context.SaveChanges();
+            return RedirectToAction("TeknikdenGelenMesajDetay", "Mesaj", new { mesajId = mesajId });
+        }
+        public ActionResult TeknikdenGelenSonMesajOku(int mesajId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikElemanId");
+            }
+            _context.TeknikElemanlarArasıMesajs.Find(mesajId).OkunduBilgisi = true;
+            _context.SaveChanges();
+            return RedirectToAction("TekniklerArasiMesaj", "Mesaj");
+        }
     }
 }

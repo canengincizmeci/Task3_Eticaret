@@ -21,7 +21,11 @@ public partial class KargodanTeknikElemanaMesaj
 
     public bool? OkunduBilgisi { get; set; }
 
+    public int? MesajlasmaId { get; set; }
+
     public virtual KargoFirma? KargoFirma { get; set; }
+
+    public virtual Mesajlasma? Mesajlasma { get; set; }
 
     public virtual TeknikElemanlar? TeknikEleman { get; set; }
 }

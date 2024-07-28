@@ -19,6 +19,8 @@ public partial class Mesajlasma
 
     public virtual ICollection<FirmadanTeknikElemanaMesaj> FirmadanTeknikElemanaMesajs { get; set; } = new List<FirmadanTeknikElemanaMesaj>();
 
+    public virtual ICollection<KargodanTeknikElemanaMesaj> KargodanTeknikElemanaMesajs { get; set; } = new List<KargodanTeknikElemanaMesaj>();
+
     public virtual ICollection<KullanicidanTeknikDestegeMesaj> KullanicidanTeknikDestegeMesajs { get; set; } = new List<KullanicidanTeknikDestegeMesaj>();
 
     public virtual ICollection<KullanicilarArasiMesaj> KullanicilarArasiMesajs { get; set; } = new List<KullanicilarArasiMesaj>();

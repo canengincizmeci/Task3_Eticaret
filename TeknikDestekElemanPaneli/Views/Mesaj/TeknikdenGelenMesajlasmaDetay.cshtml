@@ -1,0 +1,165 @@
+﻿@model List<TekniklerArasiMesajModel>
+@{
+    ViewData["Title"] = "TeknikdenGelenMesajlasmaDetay";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<style>
+    .message-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .message-card {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-card-admin {
+        background-color: #d1ecf1;
+        border: 1px solid #bee5eb;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-card p {
+        margin: 5px 0;
+    }
+
+    .message-card .message-header {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .message-card .message-timestamp {
+        color: #888;
+        font-size: 0.9em;
+    }
+
+    .message-card .message-status {
+        color: #444;
+    }
+
+    .view-message-link {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 10px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+        .view-message-link:hover {
+            background-color: #0056b3;
+        }
+
+    .reply-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f1f1f1;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+        .reply-form label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .reply-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        .reply-form button {
+            align-self: flex-end;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .reply-form button:hover {
+                background-color: #218838;
+            }
+</style>
+
+<div class="message-container">
+    @foreach (var item in Model)
+    {
+        if (item.Role == true)
+        {
+            <div class="message-card-admin">
+                <div class="message-header">Sen:</div>
+                <div class="message-body">@item.Mesaj</div>
+                <div class="message-timestamp">@item.Tarih</div>
+                <div class="message-status">
+                    @if (item.OkunduBilgisi == false)
+                    {
+                        <span>Okunmadı</span>
+                    }
+                    else
+                    {
+                        <span>Okundu</span>
+                    }
+                </div>
+                @* <a href="@Url.Action("KullanicidanGelenMesajDetay", "Mesaj", new { mesajId = item._MesajId })" class="view-message-link">Mesajı Görüntüle</a> *@
+            </div>
+        }
+        else
+        {
+
+            <div class="message-card">
+                <div class="message-header">@item.GonderenElemanAd</div>
+                <div class="message-body">@item.Mesaj</div>
+                <div class="message-timestamp">@item.Tarih</div>
+                <div class="message-status">
+                    @if (item.OkunduBilgisi == false)
+                    {
+                        <span>Okunmadı</span>
+                    }
+                    else
+                    {
+                        <span>Okundu</span>
+                    }
+                </div>
+                <a href="@Url.Action("TeknikdenGelenMesajDetay", "Mesaj", new { mesajId = item.MesajId})" class="view-message-link">Mesajı Görüntüle</a>
+            </div>
+        }
+    }
+
+    <form class="reply-form" action="@Url.Action("TeknikdenTeknikeCevap","Mesaj")" method="post">
+        @Html.AntiForgeryToken()
+        
+        <input type="hidden" name="AlıcıEleman" value="@ViewBag.AliciId" />
+        <input type="hidden" name="MesajId" value="@ViewBag.MesajId" />
+        <input type="hidden" name="MesajlasmaId" value="@ViewBag.MesajlamaId" />
+        <label for="baslik">Mesaj Başlık</label>
+        <input type="text" name="MesajBaslik" id="baslik" />
+        <label for="mesaj">Mesajlaşma içinde cevap ver</label>
+        <textarea id="mesaj" name="Mesaj" rows="5"></textarea>
+        <button type="submit">Gönder</button>
+    </form>
+</div>
+
+

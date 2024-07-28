@@ -1,0 +1,81 @@
+﻿@model TekniklerArasiMesajModel
+@{
+    ViewData["Title"] = "TeknikdenGelenMesajDetay";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .message-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-header {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 5px;
+    }
+
+    .message-body {
+        margin-bottom: 20px;
+    }
+
+    .message-timestamp,
+    .message-status {
+        font-size: 0.9em;
+        color: #888;
+        margin-bottom: 5px;
+    }
+
+        .message-status span {
+            color: #444;
+            font-weight: bold;
+        }
+
+    .back-link {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+        .back-link:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+@if (Model.GonderenEleman.HasValue)
+{
+    <div class="message-container">
+        <div class="message-header">@Model.GonderenElemanAd:</div>
+        <div class="message-body">@Model.Mesaj </div>
+        <div class="message-timestamp">Tarih: @Model.Tarih</div>
+        <div class="message-status">
+            @if (Model.OkunduBilgisi.HasValue && Model.OkunduBilgisi == false)
+            {
+
+                <a href="@Url.Action("TeknikdenGelenMesajOkunduIsaretle","Mesaj",new {mesajId=Model.MesajId})" class="back-link">Okundu İşaretle</a>
+
+            }
+
+            else
+            {
+                <span>Okundu</span>
+            }
+
+        </div>
+    </div>
+}
+
+
+
