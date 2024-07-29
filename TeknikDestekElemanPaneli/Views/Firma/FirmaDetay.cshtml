@@ -1,0 +1,83 @@
+﻿@model FirmaDetayModel
+@{
+    ViewData["Title"] = "FirmaDetay";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+    }
+
+    .urun-detail {
+        background-color: #ffffff;
+        padding: 20px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        max-width: 600px;
+        margin: 20px auto;
+        text-align: center;
+    }
+
+        .urun-detail img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .urun-detail h1 {
+            font-size: 24px;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+
+        .urun-detail p {
+            margin: 5px 0;
+        }
+
+        .urun-detail .button-container {
+            margin-top: 20px;
+        }
+
+        .urun-detail .btn {
+            padding: 10px 20px;
+            background-color: rgb(69, 133, 69);
+            color: #ffffff;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            .urun-detail .btn:hover {
+                background-color: rgb(39, 71, 39);
+            }
+</style>
+
+<div class="urun-detail">
+    <h1>@Model.FirmaAd</h1>
+    <p><strong>Adres:</strong> @Model.FirmaAdres</p>
+    <p><strong>Mail:</strong> @Model.Mail</p>
+    <p><strong>Telefon:</strong> @Model.TelefonNumarasi</p>
+    <p><strong>Ürün Sayısı:</strong> @Model.UrunSayisi</p>
+    <p><strong>Puan:</strong> @Model.Puan</p>
+    <p><strong>Coin Miktarı:</strong> @Model.CoinMiktari</p>
+    <p><strong>Satış Sayısı:</strong> @Model.SatisSayisi</p>
+    <p><strong>Satış Reddetme Sayısı:</strong> @Model.SatisReddetmeSayisi</p>
+    <p><strong>Sosyal Sorumluluk Katılım Sayısı:</strong> @Model.SosyalSorumlulukKatılımSayisi</p>
+    <p><strong>Şikayet Etme Sayısı:</strong> @Model.SikayetEtmeSayisi</p>
+    <p><strong>Şikayet Edilme Sayısı:</strong> @Model.SikayetEdilmeSayisi</p>
+    <div class="button-container">
+        <a href="@Url.Action("FirmaSil", "Firma",new {firmaId=Model.FirmaId})" class="btn">Sil</a>
+        <a href="@Url.Action("FirmayaMesajGonder","Mesaj",new {firmaId=Model.FirmaId})" class="btn">Mesaj Gönder</a>
+        <a href="@Url.Action("FirmayaGelenSikayetler","Sikayet",new {firmaId=Model.FirmaId})" class="btn">Hakkındaki Şikayetler</a>
+    </div>
+</div>
