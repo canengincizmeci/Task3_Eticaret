@@ -1,0 +1,100 @@
+﻿@using DB.Models
+@model Kullanici
+@{
+    ViewData["Title"] = "KullaniciDetay";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+    }
+
+    .urun-detail {
+        background-color: #ffffff;
+        padding: 20px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        max-width: 600px;
+        margin: 20px auto;
+        text-align: center;
+    }
+
+        .urun-detail img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .urun-detail h1 {
+            font-size: 24px;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+
+        .urun-detail p {
+            margin: 5px 0;
+        }
+
+    .button-container {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+        .button-container .btn {
+            padding: 10px 20px;
+            background-color: rgb(69, 133, 69);
+            color: #ffffff;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            flex: 1 1 calc(33.333% - 20px);
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+            .button-container .btn:hover {
+                background-color: rgb(39, 71, 39);
+            }
+</style>
+
+
+
+<div class="urun-detail">
+    <img src="@Url.Content("~/images/" + Model.KullaniciResim)" />
+    <h1>@Model.KullaniciAd</h1>
+    <p><strong>Yaptığı Yorum Sayısı:</strong> @Model.YorumSayisi</p>
+    <p><strong>Adres:</strong> @Model.Adres</p>
+    <p><strong>Coin Miktarı:</strong> @Model.CoinMiktari</p>
+    <p><strong>Kayıt Tarihi:</strong> @Model.KayitTarihi</p>
+    <p><strong>Mail:</strong> @Model.Mail</p>
+    <p><strong>Referans:</strong> @Model.ReferansKullaniciAd</p>
+    <p><strong>ReferansMail:</strong>@Model.ReferansMail</p>
+    <p><strong>Referans Olma Sayısı:</strong>@Model.ReferansOlmaSayisi</p>
+    <p><strong>Sosyal Sorumluluk Katılım sayısı:</strong>@Model.SosyalSorumlulukKatilimSayisi</p>
+    <p><strong>Yorum cevap sayısı:</strong>@Model.YorumCevapSayisi</p>
+    <p><strong>Yorum sayısı:</strong>@Model.YorumSayisi</p>
+    <div class="button-container">
+        <a href="@Url.Action("KullaniciSil", "Kullanici",new {kullaniciId=Model.KullaniciId})" class="btn">Sil</a>
+        <a href="@Url.Action("KullaniciGelenSikayetler", "Sikayet",new {kullaniciId=Model.KullaniciId})" class="btn">Gelen Şikayetler</a>
+        <a href="@Url.Action("KullaniciYorumlar", "Yorum",new {kullaniciId=Model.KullaniciId})" class="btn">Yaptığı Yorumlar</a>
+        <a href="@Url.Action("KullaniciYorumCevaplar", "Yorum",new {kullaniciId=Model.KullaniciId})" class="btn">Verdiği Yorum Cevaplar</a>
+        <a href="@Url.Action("KullaniciMesajGonder","Mesaj",new {kullaniciId=Model.KullaniciId})" class="btn">Mesaj Gönder</a>
+        <a href="@Url.Action("KullaniciGecmisSiparisler","Siparis",new {kullaniciId=Model.KullaniciId})" class="btn">Geçmiş Siparişler</a>
+
+    </div>
+</div>
+

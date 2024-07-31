@@ -896,5 +896,50 @@ namespace TeknikDestekElemanPaneli.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index", "Firma");
         }
+        [HttpGet]
+        public ActionResult KullaniciMesajGonder(int kullaniciId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            ViewBag.KullaniciId = kullaniciId;
+
+
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult KullaniciMesajGonder(TeknikdenKullaniciyaMesaj _mesaj)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+
+            }
+            _context.Mesajlasmas.Add(new Mesajlasma
+            {
+                Tarih = DateTime.Now
+            });
+            _context.SaveChanges();
+            int? mesajlasmaId = _context.Mesajlasmas.OrderByDescending(p => p.MesajlasmaId).FirstOrDefault().MesajlasmaId;
+            _context.TeknikdenKullaniciyaMesajs.Add(new TeknikdenKullaniciyaMesaj
+            {
+                TeknikId = id,
+                Tarih = DateTime.Now,
+                OkunduBilgisi = false,
+                Aktiflik = true,
+                KullaniciId = _mesaj.KullaniciId,
+                Mesaj = _mesaj.Mesaj,
+                MesajBaslik = _mesaj.MesajBaslik,
+                MesajlasmaId = mesajlasmaId
+            });
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Kullanici");
+        }
+
+
     }
 }

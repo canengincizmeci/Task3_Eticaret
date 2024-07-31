@@ -1,8 +1,10 @@
-﻿@model FirmayaGelenSikayetlerModel
+﻿@using DB.Models
+@model List<KullaniciYorumCevap>
 @{
-    ViewData["Title"] = "FirmayaGelenSikayetler";
+    ViewData["Title"] = "KullaniciYorumCevaplar";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+
 
 <style>
     body {
@@ -64,58 +66,28 @@
             }
 
 </style>
-<h1>Yorum Cevap Şikayetleri</h1>
-<table class="complaints-table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Şikayetci</th>
-            <th>Firma</th>
-            <th>Şikayet Metni</th>
-            <th>Yorum</th>
-            <th>Detay</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var yorumSikayet in Model.kullanicidanFirmayaYorumSikayetler)
-        {
-            <tr>
-                <td>@yorumSikayet.KullaniciYorumCevapSikayetId</td>
-                <td>@yorumSikayet.KullaniciAd</td>
-                <td>@yorumSikayet.FirmaAd</td>
-                <td>@yorumSikayet.SikayetMetni</td>
-                <td>@yorumSikayet.Yorum</td>
-                <td><a href="@Url.Action("KullanicidanFirmayaYorumCevapSikayetDetay","Sikayet",new {sikayetId =yorumSikayet.KullaniciYorumCevapSikayetId})">Detay</a></td>
-            </tr>
-        }
-    </tbody>
-</table>
 
-<h1>Genel Şikayetler</h1>
+
 <table class="complaints-table">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Şikayetci</th>
-            <th>Firma</th>
-            <th>Şikayet Başlık</th>
-            <th>Şikayet</th>
+            <th>Id</th>
+            <th>Cevap</th>
+            <th>Tarih</th>
             <th>Bildir</th>
+            <th>Sil</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var firmaSikayet in Model.kullanicidanFirmayaSikayetler)
+        @foreach (var cevap in Model)
         {
             <tr>
-                <td>@firmaSikayet.SikayetId</td>
-                <td>@firmaSikayet.KullaniciAd</td>
-                <td>@firmaSikayet.FirmaAd</td>
-                <td>@firmaSikayet.SikayetBaslik</td>
-                <td>@firmaSikayet.SikayetMetni</td>
-                <td><a href="@Url.Action("FirmayaMesajGonder","Mesaj",new {firmaId =firmaSikayet.FirmaId})">Bildir</a></td>
+                <td>@cevap.CevapId</td>
+                <td>@cevap.Cevap</td>
+                <td>@cevap.Tarih</td>
+                <td><a href="@Url.Action("KullaniciMesajGonder","Mesaj",new {kullaniciId =cevap.KullaniciId})">Bildir</a></td>
+                <td><a href="@Url.Action("KullaniciYorumSil","Yorum",new {yorumId =cevap.YorumId})">Sil</a></td>
             </tr>
         }
     </tbody>
 </table>
-
-

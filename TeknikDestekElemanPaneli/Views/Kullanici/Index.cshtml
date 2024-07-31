@@ -1,8 +1,10 @@
-﻿@model FirmayaGelenSikayetlerModel
+﻿@using DB.Models
+@model List<Kullanici>
 @{
-    ViewData["Title"] = "FirmayaGelenSikayetler";
+    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+
 
 <style>
     body {
@@ -63,59 +65,43 @@
                 color: rgb(69, 133, 69);
             }
 
+        .complaints-table img {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
 </style>
-<h1>Yorum Cevap Şikayetleri</h1>
+
 <table class="complaints-table">
     <thead>
         <tr>
             <th>ID</th>
-            <th>Şikayetci</th>
-            <th>Firma</th>
-            <th>Şikayet Metni</th>
-            <th>Yorum</th>
+            <th>Ad</th>
+            <th>Resim</th>
+            <th>Adres</th>
+            <th>Mail</th>
+            <th>Kayıt Tarihi</th>
             <th>Detay</th>
+
         </tr>
     </thead>
     <tbody>
-        @foreach (var yorumSikayet in Model.kullanicidanFirmayaYorumSikayetler)
+        @foreach (var kullanici in Model)
         {
             <tr>
-                <td>@yorumSikayet.KullaniciYorumCevapSikayetId</td>
-                <td>@yorumSikayet.KullaniciAd</td>
-                <td>@yorumSikayet.FirmaAd</td>
-                <td>@yorumSikayet.SikayetMetni</td>
-                <td>@yorumSikayet.Yorum</td>
-                <td><a href="@Url.Action("KullanicidanFirmayaYorumCevapSikayetDetay","Sikayet",new {sikayetId =yorumSikayet.KullaniciYorumCevapSikayetId})">Detay</a></td>
+                <td>@kullanici.KullaniciId</td>
+                <td>@kullanici.KullaniciAd</td>
+                <td>
+                    <img src="@Url.Content("~/images/" + kullanici.KullaniciResim)" />
+                </td>
+                <td>@kullanici.Adres</td>
+                <td>@kullanici.Mail</td>
+                <td>@kullanici.KayitTarihi</td>
+                <td><a href="@Url.Action("KullaniciDetay","Kullanici",new {kullaniciId=kullanici.KullaniciId})">Detay</a></td>
             </tr>
         }
     </tbody>
 </table>
-
-<h1>Genel Şikayetler</h1>
-<table class="complaints-table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Şikayetci</th>
-            <th>Firma</th>
-            <th>Şikayet Başlık</th>
-            <th>Şikayet</th>
-            <th>Bildir</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var firmaSikayet in Model.kullanicidanFirmayaSikayetler)
-        {
-            <tr>
-                <td>@firmaSikayet.SikayetId</td>
-                <td>@firmaSikayet.KullaniciAd</td>
-                <td>@firmaSikayet.FirmaAd</td>
-                <td>@firmaSikayet.SikayetBaslik</td>
-                <td>@firmaSikayet.SikayetMetni</td>
-                <td><a href="@Url.Action("FirmayaMesajGonder","Mesaj",new {firmaId =firmaSikayet.FirmaId})">Bildir</a></td>
-            </tr>
-        }
-    </tbody>
-</table>
-
 

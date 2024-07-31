@@ -93,7 +93,7 @@ namespace TeknikDestekElemanPaneli.Controllers
                 FirmaAd = p.Firma.FirmaAd,
                 KategoriAd = p.Kategori.KategoriAd
             }).ToList();
-            
+
             HttpContext.Session.SetString("Filtre", JsonConvert.SerializeObject(_model));
 
             return RedirectToAction("Index", "Urun", new { type = true });
@@ -125,5 +125,43 @@ namespace TeknikDestekElemanPaneli.Controllers
             HttpContext.Session.SetString("Filtre", JsonConvert.SerializeObject(_model));
             return RedirectToAction("Index", "Urun", new { type = true });
         }
+        public ActionResult UrunDetay(int urunId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            var urun = _context.Uruns.Where(p => p.UrunId == urunId).Select(p => new UrunModel
+            {
+                Aciklama = p.Aciklama,
+                UrunId = p.UrunId,
+                FirmaId = p.FirmaId,
+                Aktiflik = p.Aktiflik,
+                EklenmeTarihi = p.EklenmeTarihi,
+                Fiyat = p.Fiyat,
+                FirmaAd = p.Firma.FirmaAd,
+                KategoriAd = p.Kategori.KategoriAd,
+                KategoriId = p.KategoriId,
+                SatisSayisi = p.SatisSayisi,
+                SepeteEklemeSayisi = p.SepeteEklemeSayisi,
+                Stok = p.Stok,
+                UrunAd = p.UrunAd,
+                UrunResim = p.UrunResim
+            }).FirstOrDefault();
+            return View(urun);
+        }
+        public ActionResult UrunSil(int urunId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            _context.Uruns.Find(urunId).Aktiflik = false;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Urun");
+        }
+        
     }
 }
