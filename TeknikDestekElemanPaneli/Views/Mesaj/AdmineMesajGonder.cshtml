@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewData["Title"] = "AdmineMesajGonder";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: rgb(69, 133, 69);
+        }
+
+        .container input[type="text"],
+        .container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .container button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: rgb(69, 133, 69);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .container button:hover {
+                background-color: rgb(39, 71, 39);
+            }
+</style>
+
+<div class="container">
+    <form action="@Url.Action("AdmineMesajGonder","Mesaj")" method="post">
+        @Html.AntiForgeryToken()
+        <label>Mesaj Başlık:</label>
+        <input type="text" name="MesajBaslik" required />
+        <label>Mesaj:</label>
+        <textarea rows="5" name="Mesaj" required></textarea>
+
+        
+
+        <button type="submit">Ekle</button>
+    </form>
+</div>
+

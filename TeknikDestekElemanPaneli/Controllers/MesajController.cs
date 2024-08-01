@@ -1,6 +1,7 @@
 ﻿using DB.Models;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json.Linq;
@@ -939,7 +940,94 @@ namespace TeknikDestekElemanPaneli.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index", "Kullanici");
         }
+        [HttpGet]
+        public ActionResult KargoFirmaMesajGonder(int kargoFirmaId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+
+            }
+            ViewBag.KargoFirmaId = kargoFirmaId;
+
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult KargoFirmaMesajGonder(TeknikDenKargoyaMesaj _mesaj)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+
+            }
+            _context.Mesajlasmas.Add(new Mesajlasma
+            {
+                Tarih = DateTime.Now
+            });
+            _context.SaveChanges();
+            int? mesajlasmaId = _context.Mesajlasmas.OrderByDescending(p => p.MesajlasmaId).FirstOrDefault().MesajlasmaId;
+            _context.TeknikDenKargoyaMesajs.Add(new TeknikDenKargoyaMesaj
+            {
+                Aktiflik = true,
+                KargoFirmaId = _mesaj.KargoFirmaId,
+                Mesaj = _mesaj.Mesaj,
+                MesajBaslik = _mesaj.MesajBaslik,
+                MesajlasmaId = mesajlasmaId,
+                OkunduBilgisi = false,
+                Tarih = DateTime.Now,
+                TeknikElemanId = id
+            });
+            _context.SaveChanges();
+            return RedirectToAction("Index", "KargoFirma");
+        }
+        [HttpGet]
+        public ActionResult AdmineMesajGonder()
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+
+            }
 
 
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AdmineMesajGonder(TeknikdenAdmineMesaj _mesaj)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+
+            }
+            _context.Mesajlasmas.Add(new Mesajlasma
+            {
+
+                Tarih = DateTime.Now
+
+            });
+            _context.SaveChanges();
+            int? mesajlasmaId = _context.Mesajlasmas.OrderByDescending(p => p.MesajlasmaId).FirstOrDefault().MesajlasmaId;
+            _context.TeknikdenAdmineMesajs.Add(new TeknikdenAdmineMesaj
+            {
+                AdminId = 1,
+                Aktiflik = true,
+                Mesaj = _mesaj.Mesaj,
+                MesajBaslik = _mesaj.MesajBaslik,
+                MesajlasmaId = mesajlasmaId,
+                OkunduBilgisi = false,
+                Tarih = DateTime.Now,
+                TeknikId = id
+            });
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "TeknikEleman");
+        }
     }
 }

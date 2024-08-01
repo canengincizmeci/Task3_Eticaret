@@ -62,33 +62,27 @@
 <div class="anaDiv">
     <div class="ayiriciDiv">
         <div class="icDiv">
-            <a href="@Url.Action("Index","Iade")">
+            <a href="@Url.Action("IadeTalepler","Iade")">
                 <h1>İade Talepleri(@Model._iadeTalepSayisi)</h1>
                 <p>Gelen iade talepleri burdan <br> görebilir ve süreci <br />yönetebilirsin </p>
             </a>
         </div>
         <div class="icDiv">
-            <a href="@Url.Action("Index","Iade")">
+            <a href="@Url.Action("YoldaIadeTalepler","Iade")">
                 <h1>Yolda İade Talepleri(@Model._yoldaIadeTalepSayisi)</h1>
                 <p>Kargo yoldayken <br> istenen iadeler </p>
             </a>
         </div>
 
         <div class="icDiv">
-            <a href="@Url.Action("Index","Mesaj")">
+            <a href="@Url.Action("MesajIndex","Mesaj")">
                 <h1>Gelen Mesajlar(@Model._mesajSayisi)</h1>
                 <p>Ve mesaj işlemlerini <br> burdan yönetebilirsin</p>
             </a>
         </div>
+        
         <div class="icDiv">
-            <a href="@Url.Action("Index","Sikayet")">
-                <h1>Gelen Şikayetler(@Model._sikayetSayisi)</h1>
-                <p>Gelen Şikayetleri burdan <br> görebilir ve gerekli işlemleri <br> yapabilirsin</p>
-            </a>
-
-        </div>
-        <div class="icDiv">
-            <a href="@Url.Action("Index","Satis")">
+            <a href="@Url.Action("Index","SatisRed")">
                 <h1>Satış Reddleri(@Model._satisRedSayisi)</h1>
                 <p>Şatış redleri <br> ve sebepleri görüntüle</p>
             </a>

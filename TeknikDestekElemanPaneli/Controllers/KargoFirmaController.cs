@@ -1,5 +1,6 @@
 ﻿using DB.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace TeknikDestekElemanPaneli.Controllers
 {
@@ -48,7 +49,18 @@ namespace TeknikDestekElemanPaneli.Controllers
                 KargoFirmaEmail = p.KargoFirmaEmail
             }).FirstOrDefault();
 
-            return View();
+            return View(model);
+        }
+        public ActionResult KargoFirmaSil(int kargoFirmaId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+            _context.KargoFirmas.Find(kargoFirmaId).Aktiflik = false;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "KargoFirma");
         }
     }
 }

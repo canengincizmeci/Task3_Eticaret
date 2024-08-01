@@ -1,0 +1,96 @@
+﻿@model List<YoldaIadeTalebiModel>
+@{
+    ViewData["Title"] = "YoldaIadeTalepler";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+    }
+
+    .complaints-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        font-size: 1em;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-width: 600px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        background-color: white;
+    }
+
+        .complaints-table thead tr {
+            background-color: rgb(69, 133, 69);
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .complaints-table th,
+        .complaints-table td {
+            padding: 12px 15px;
+        }
+
+        .complaints-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+            .complaints-table tbody tr:nth-of-type(even) {
+                background-color: #f3f3f3;
+            }
+
+            .complaints-table tbody tr:last-of-type {
+                border-bottom: 2px solid rgb(69, 133, 69);
+            }
+
+            .complaints-table tbody tr:hover {
+                background-color: #f1f1f1;
+            }
+
+        .complaints-table a {
+            color: rgb(69, 133, 69);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+
+
+            .complaints-table a:hover {
+                color: rgb(69, 133, 69);
+            }
+
+</style>
+
+
+
+<table class="complaints-table">
+    <thead>
+        <tr>
+            <th>Kullanıcı Ad</th>
+            <th>Kargo Firma Ad</th>
+            <th>Tarih</th>
+            <th>Açıklama</th>
+            <th>Onayla</th>
+            <th>Bildir</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var talep in Model)
+        {
+            <tr>
+                <td>@talep.KullaniciAd</td>
+                <td>@talep.KargoFirmaAd</td>
+                <td>@talep.Tarih</td>
+                <td>@talep.IadeAciklama</td>
+                <td><a href="@Url.Action("YoldaIadeTalepOnayla","Iade",new {yoldaIadeTalepId =talep.YoldaIadeTalebiId})">Onayla</a></td>
+                <td><a href="@Url.Action("KullaniciMesajGonder","Mesaj",new {kullaniciId =talep.KullaniciId})">Kullanıcıya Bildir</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

@@ -133,5 +133,42 @@ namespace TeknikDestekElemanPaneli.Controllers
             };
             return View(model);
         }
+        public ActionResult KargoFirmaGelenSikayetler(int kargoFirmaId)
+        {
+            int? id = HttpContext.Session.GetInt32("teknikElemanId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "TeknikEleman");
+            }
+
+            KargoFirmasinaSikayetlerModel model = new KargoFirmasinaSikayetlerModel()
+            {
+                kullanicidanKargoyaSikayetler = _context.KullanicidanKargoFirmasiSikayetis.Where(p => (p.Aktiflik == true && p.KargoFirmaId == kargoFirmaId)).OrderByDescending(p => p.SikayetId).Select(p => new KullanicidanKargoFirmasiSikayetlerModel
+                {
+                    Aktiflik = p.Aktiflik,
+                    SikayetId = p.SikayetId,
+                    KargoFirmaId = p.KargoFirmaId,
+                    KargoFirmaAd = p.KargoFirma.KargoFirmaAd,
+                    KullaniciAd = p.Kullanici.KullaniciAd,
+                    KullaniciId = p.KullaniciId,
+                    SikayetBaslik = p.SikayetBaslik,
+                    SikayetMetni = p.SikayetMetni,
+                    Tarih = p.Tarih
+                }).ToList(),
+                teknikElemandanKargoyaSikayetler = _context.TeknikElemandanKargoSikayetis.Where(p => (p.Aktiflik == true && p.KargoFirmaId == kargoFirmaId)).OrderByDescending(p => p.SikayetId).Select(p => new TeknikElemandanKargoFirmasinaSikayetlerModel
+                {
+                    Tarih = p.Tarih,
+                    SikayetMetni = p.SikayetMetni,
+                    SikayetBaslik = p.SikayetBaslik,
+                    KargoFirmaId = p.KargoFirmaId,
+                    Aktiflik = p.Aktiflik,
+                    KargoFirmasiAd = p.KargoFirma.KargoFirmaAd,
+                    SikayetId = p.SikayetId,
+                    TeknikElemanAd = p.TeknikEleman.ElemanAd,
+                    TeknikElemanId = p.TeknikElemanId
+                }).ToList()
+            };
+            return View(model);
+        }
     }
 }
