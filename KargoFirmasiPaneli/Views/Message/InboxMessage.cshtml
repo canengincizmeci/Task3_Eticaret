@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "InboxMessage";
+    Layout = "~/Views/Shared/ShippingCompanyLayout.cshtml";
+}
+
+
+<div class="anaDiv">
+    <div class="icDiv">
+        <a href="@Url.Action("NotificationFromAdmin","Message")">
+            <h1>Adminden Bilgilendirme(@ViewBag.NotificationFromAdmin)</h1>
+            <p>Adminden gelen bilgilendirmeleri okuyabilirsin</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("MessageFromSupport","Message")">
+            <h1>Teknikden Mesajlar(@ViewBag.MessageFromSupport)</h1>
+            <p>Teknikden gelen mesajları görüntüle</p>
+        </a>
+    </div>
+</div>
+

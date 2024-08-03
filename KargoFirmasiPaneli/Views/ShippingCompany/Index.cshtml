@@ -1,0 +1,112 @@
+﻿@model ShippingCompanyIndexModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/ShippingCompanyLayout.cshtml";
+}
+
+
+<style>
+
+    .anaDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: rgb(176, 223, 245);
+        min-height: 70vh;
+    }
+
+    .ayiriciDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    .icDiv {
+        border: solid 1px rgba(41, 26, 65, 0.1);
+        border-radius: 8px;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        text-align: center;
+        flex: 1;
+        min-width: 200px;
+        max-width: 300px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .icDiv:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .icDiv h1 {
+            color: rgb(38, 147, 151);
+        }
+
+        .icDiv p {
+            color: #555;
+        }
+
+    a {
+        text-decoration: none;
+    }
+
+</style>
+
+
+
+<div class="anaDiv">
+    <div class="ayiriciDiv">
+        <div class="icDiv">
+            <a href="@Url.Action("InTransitReturnRequests","Shipping")">
+                <h1>Yolda İade Talepleri(@Model.returnRequestsInTransitCount)</h1>
+                <p>Kargo yoldayken <br> istenen iadeler </p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("InboxMessage","Message")">
+                <h1>Gelen Mesajlar(@Model.receivedMessagesCount)</h1>
+                <p>Gelen mesajları görüntüle</p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("RequestedShipments","Shipping")">
+                <h1>İadeler(@Model.requestedShipmentsCount)</h1>
+                <p>İade alacağın adreslerin bilgilerini öğren</p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("BranchList","Company")">
+                <h1>Şube Yönetimi</h1>
+                <p>Şubelerini burdan yönetebilirsin </p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("CompanyIndex","Company")">
+                <h1>Firma Yönetimi</h1>
+                <p>Firmanın işlemlerini burdan <br> yönetebilirsin</p>
+            </a>
+        </div>
+    </div>
+    <div class="ayiriciDiv">
+        <div class="icDiv">
+            <a href="@Url.Action("ShipmentsInTransit","Shipping")">
+                <h1>Yoldaki Kargolar</h1>
+                <p>Kargo firmalarını <br> yönetmek için tıklayınız</p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("DispatchedShipment","Shipping")">
+                <h1>Gönderilmiş Kargolar</h1>
+                <p>Teslimat geçmişini burdan takip edebilirsin </p>
+            </a>
+        </div>
+
+
+    </div>
+</div>
