@@ -76,12 +76,19 @@
         </div>
         <div class="icDiv">
             <a href="@Url.Action("RequestedShipments","Shipping")">
-                <h1>İadeler(@Model.requestedShipmentsCount)</h1>
-                <p>İade alacağın adreslerin bilgilerini öğren</p>
+                <h1>İstenen Kargolar(@Model.requestedShipmentsCount)</h1>
+                <p>İstenen kargoların bilgilerini öğren</p>
             </a>
         </div>
         <div class="icDiv">
             <a href="@Url.Action("BranchList","Company")">
+                <h1>Şube Yönetimi</h1>
+                <p>Şubelerini burdan yönetebilirsin </p>
+            </a>
+        </div>
+         
+         <div class="icDiv">
+            <a href="@Url.Action("Returns","Shipping")">
                 <h1>Şube Yönetimi</h1>
                 <p>Şubelerini burdan yönetebilirsin </p>
             </a>
