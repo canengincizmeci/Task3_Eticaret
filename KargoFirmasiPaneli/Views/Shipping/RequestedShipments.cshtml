@@ -64,13 +64,47 @@
         }
 
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".dispatch-shipment").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            if (confirm("Kargoyu yola çıkartmak ister misiniz")) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Kargo başarıyla yola çıkarıldı");
+                            location.reload();
+                        }
+                        else {
+                            alert(response.message || "Bir hata oluştu")
+
+                        }
+                    },
+                    error: function () {
+                        alert("Bir hata oluştu");
+                    }
+                })
+            }
+        })
+    })
+</script>
+
+
+
 <table class="complaints-table">
     <thead>
         <tr>
             <th>Id</th>
-            <th>Şehir</th>
-            <th>Eklenme Tarihi</th>
-            <th>Sil</th>
+            <th>Satıcı Firma</th>
+            <th>Ürünler</th>
+            <th>Kullanıcıdan Alınacak Adres</th>
+            <th>Firmaya Teslim Edilecek Adres</th>
+            <th>Talep Tarihi</th>
+            <th>Yola Çıkart</th>
         </tr>
     </thead>
     <tbody>
@@ -79,11 +113,17 @@
             <tr>
                 <td>@request.RequestedShipmentId</td>
                 <td>@request.SellerCompanyName</td>
-                @for (int i = 0; i < request.ProductsId.Count; i++)
-                {
-                    <td>@request.ProductsName[i]</td>
-                }
-                <td><a href="@Url.Action("DispatchShipment","Shipping",new {shipmentId=request.RequestedShipmentId})" >Yola Çıkart</a></td>
+                <td>
+                    @for (int i = 0; i < request.ProductsId.Count; i++)
+                    {
+                       
+                        @($"{request.ProductsName[i]},")
+                    }
+                </td>
+                <td>@request.ShippingAdress</td>
+                <td>@request.SellerCompanyAdres</td>
+                <td>@request.Date</td>
+                <td><a class="dispatch-shipment" href="@Url.Action("DispatchShipment","Shipping",new {shipmentId=request.RequestedShipmentId})">Yola Çıkart</a></td>
             </tr>
         }
     </tbody>
