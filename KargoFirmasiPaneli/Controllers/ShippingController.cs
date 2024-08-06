@@ -123,5 +123,144 @@ namespace KargoFirmasiPaneli.Controllers
 
             return Json(new { success = true });
         }
+        public async Task<ActionResult> DispatchedShipment()
+        {
+            int? id = HttpContext.Session.GetInt32("shippingCompanyId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "ShippingCompany");
+            }
+
+            var dispatchedShipments = await _context.GonderilenKargolars.OrderByDescending(p => p.IstenenKargoId).Select(p => new DispatchedShipmentsModel
+            {
+                RecipientId = p.AliciId,
+                RequestedShipmentId = p.IstenenKargoId,
+                SalerCompanyId = p.FirmaId,
+                DestinationAdressId = p.GidisAdresiId,
+                DispatchedShipmentId = p.GonderilenKargoId,
+                DeliveryDate = p.GonderimTarihi,
+                ReturnRequest = p.IadeTalebi,
+                ShipmentCompanyId = p.KargoFirmaId,
+                ShipmentCompanyBrachId = p.KargoFirmaSubeId,
+                DestinationAdressName = p.GidisAdresi.Adres,
+                Date = p.TahminiTeslimTarihi,
+                RecipientName = p.Alici.KullaniciAd,
+                SalerCompanyName = p.Firma.FirmaAd,
+                ShipmentDate = p.Tarih
+            }).ToListAsync();
+
+            return View(dispatchedShipments);
+        }
+
+        public async Task<ActionResult> ReturnsRequests()
+        {
+            int? id = HttpContext.Session.GetInt32("shippingCompanyId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "ShippingCompany");
+            }
+            var requests = await _context.IadeTaleps.Where(p => p.Onay == false).Select(p => new ReturnRequestsModel
+            {
+                ActivityStatus = p.Aktiflik,
+                Approval = p.Onay,
+                Date = p.Tarih,
+                PaymnetId = p.OdemeId,
+                Reason = p.Sebep,
+                UserId = p.KullaniciId,
+                RequestId = p.TalepId,
+                CompanyIds = p.Odeme.Siparis.SiparisKalemlers.Select(l => l.Urun.Firma.FirmaId).Distinct().ToList(),
+                CompanyNames = p.Odeme.Siparis.SiparisKalemlers.Select(k => k.Urun.Firma.FirmaAd).Distinct().ToList(),
+                Adress = p.Odeme.Siparis.GonderiAdresi,
+                ProductsId = p.Odeme.Siparis.SiparisKalemlers.Select(n => n.Urun.UrunId).Distinct().ToList(),
+                ProductsName = p.Odeme.Siparis.SiparisKalemlers.Select(b => b.Urun.UrunAd).Distinct().ToList()
+            }).ToListAsync();
+            return View(requests);
+        }
+        [HttpPost]
+        public async Task<ActionResult> ShipAndCompleteReturn(int requestsId)
+        {
+            int? id = HttpContext.Session.GetInt32("shippingCompanyId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "ShippingCompany");
+            }
+            var request = await _context.IadeTaleps.FindAsync(requestsId);
+            if (request == null)
+            {
+                return Json(new { success = false });
+            }
+            request.Onay = true;
+            await _context.SaveChangesAsync();
+            await _context.KargoBildirimlers.AddAsync(new KargoBildirimler
+            {
+                Aktiflik = true,
+                KargoBildirim = "İade yola çıktı",
+                KargoBildirimBaslik = "İade Tamamlandı",
+                KargoFirmaId = id,
+                KullaniciId = request.KullaniciId,
+                OkunduBilgisi = false,
+                Tarih = DateTime.Now
+            });
+            await _context.SaveChangesAsync();
+            return Json(new { success = true });
+        }
+        public async Task<ActionResult> ReturnRequestsInTransit()
+        {
+            int? id = HttpContext.Session.GetInt32("shippingCompanyId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "ShippingCompany");
+            }
+            var modal = await _context.YoldaIadeTalebis.Where(p => p.Onay == false).OrderByDescending(p => p.YoldaIadeTalebiId).Select(p => new ReturnRequestsModel
+            {
+                Approval = p.Onay,
+                RequestId = p.YoldaIadeTalebiId,
+                CompanyIds = p.GonderilenKargo.IstenenKargo.Satis.Siparis.SiparisKalemlers.Select(l => l.Urun.Firma.FirmaId).ToList(),
+                CompanyNames = p.GonderilenKargo.IstenenKargo.Satis.Siparis.SiparisKalemlers.Select(k => k.Urun.Firma.FirmaAd).ToList(),
+                ProductsId = p.GonderilenKargo.IstenenKargo.Satis.Siparis.SiparisKalemlers.Select(n => n.Urun.UrunId).ToList(),
+                ProductsName = p.GonderilenKargo.IstenenKargo.Satis.Siparis.SiparisKalemlers.Select(i => i.Urun.UrunAd).ToList(),
+                Reason = p.IadeAciklama,
+                UserId = p.KullaniciId,
+                Date = p.Tarih,
+                Adress = p.Firma.FirmaAdres,
+                CompanyAdress = p.GonderilenKargo.IstenenKargo.Satis.Siparis.SiparisKalemlers.Select(h => h.Urun.Firma.FirmaAdres).ToList()
+            }).ToListAsync();
+            return View(modal);
+        }
+        [HttpPost]
+        public async Task<ActionResult> StartReturnRequestInTransit(int requestId, int userId)
+        {
+            int? id = HttpContext.Session.GetInt32("shippingCompanyId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "ShippingCompany");
+            }
+            var request = await _context.YoldaIadeTalebis.FindAsync(requestId);
+            if (request != null)
+            {
+
+                await _context.KargoBildirimlers.AddAsync(new KargoBildirimler
+                {
+                    Aktiflik = true,
+                    KargoBildirimBaslik = "Yolda iade başladı",
+                    KargoBildirim = "Yolda iade talebiyle işlem başlatılmıştır",
+                    KargoFirmaId = id,
+                    Tarih = DateTime.Now,
+                    OkunduBilgisi = false,
+                    KullaniciId = userId
+                });
+
+                request.Onay = true;
+
+
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+        }
     }
 }

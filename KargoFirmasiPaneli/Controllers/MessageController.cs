@@ -246,5 +246,38 @@ namespace KargoFirmasiPaneli.Controllers
             _context.SaveChanges();
             return RedirectToAction("MessageDetailsFromSupport", "Message", new { messageId = messageId, Role = false });
         }
+        [HttpGet]
+        public ActionResult ComplaintAboutSupport(int supportId)
+        {
+            int? id = HttpContext.Session.GetInt32("shippingCompanyId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "ShippingCompany");
+            }
+            ViewBag.SupportId = supportId;
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ComplaintAboutSupport(KargoFirmadanTeknikElmanSikayeti complaint)
+        {
+            int? id = HttpContext.Session.GetInt32("shippingCompanyId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "ShippingCompany");
+            }
+            await _context.KargoFirmadanTeknikElmanSikayetis.AddAsync(new KargoFirmadanTeknikElmanSikayeti
+            {
+                Aktiflik = true,
+                KargoFirmaId = id,
+                SikayetBaslik = complaint.SikayetBaslik,
+                SikayetMetni = complaint.SikayetMetni,
+                TeknikElemanId = complaint.TeknikElemanId,
+                Tarih = DateTime.Now
+            });
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "ShippingCompany");
+        }
+
     }
 }

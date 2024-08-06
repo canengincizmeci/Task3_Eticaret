@@ -91,7 +91,7 @@
         .reply-form button {
             align-self: flex-end;
             padding: 10px 20px;
-            background-color: #28a745;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 4px;
@@ -100,7 +100,26 @@
         }
 
             .reply-form button:hover {
-                background-color: #218838;
+                background-color: #0056b3;
+            }
+
+    .add-link-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+        .add-link-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+            .add-link-container a:hover {
+                background-color: #0056b3;
             }
 </style>
 
@@ -164,4 +183,6 @@
         <button type="submit">Gönder</button>
     </form>
 </div>
-
+<div class="add-link-container">
+    <a href="@Url.Action("ComplaintAboutSupport","Message",new {supportId=Model.supportId})">Şikayet Et</a>
+</div>

@@ -180,7 +180,7 @@
         $("#branchForm").submit(function (e) {
             e.preventDefault();
 
-            // form değişkenini tanımlayın
+
             var form = $(this);
             var url = form.attr('action');
             var data = form.serialize();
@@ -228,7 +228,7 @@
                 <td>@branch.KargoFirmaSubeId</td>
                 <td>@branch.Adress</td>
                 <td>@branch.EklenmeTarihi</td>
-                <td><a href="@Url.Action("DeleteBranch","Company",new {branchId=branch.KargoFirmaSubeId})" class="deleteBranch">Sil</a></td>
+                <td><a href="@Url.Action("DeleteBranch","ShippingCompany",new {branchId=branch.KargoFirmaSubeId})" class="deleteBranch">Sil</a></td>
             </tr>
         }
     </tbody>
@@ -244,8 +244,8 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Şube Ekle</h2>
-        <form id="branchForm" method="post" action="@Url.Action("AddBranch", "Company")">
- 
+        <form id="branchForm" method="post" action="@Url.Action("AddBranch", "ShippingCompany")">
+
 
             <label for="citySelect">Şehir Seç:</label>
             <select id="citySelect" name="adress">

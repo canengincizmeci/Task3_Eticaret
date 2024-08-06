@@ -63,7 +63,7 @@
 <div class="anaDiv">
     <div class="ayiriciDiv">
         <div class="icDiv">
-            <a href="@Url.Action("InTransitReturnRequests","Shipping")">
+            <a href="@Url.Action("ReturnRequestsInTransit","Shipping")">
                 <h1>Yolda İade Talepleri(@Model.returnRequestsInTransitCount)</h1>
                 <p>Kargo yoldayken <br> istenen iadeler </p>
             </a>
@@ -81,20 +81,20 @@
             </a>
         </div>
         <div class="icDiv">
-            <a href="@Url.Action("BranchList","Company")">
+            <a href="@Url.Action("BranchList","ShippingCompany")">
                 <h1>Şube Yönetimi</h1>
                 <p>Şubelerini burdan yönetebilirsin </p>
             </a>
         </div>
 
         <div class="icDiv">
-            <a href="@Url.Action("Returns","Shipping")">
+            <a href="@Url.Action("ReturnsRequests","Shipping")">
                 <h1>İadeler</h1>
                 <p>Alman gereken iadeler</p>
             </a>
         </div>
         <div class="icDiv">
-            <a href="@Url.Action("CompanyIndex","Company")">
+            <a href="@Url.Action("ShippingCompanyInfo","ShippingCompany")">
                 <h1>Firma Yönetimi</h1>
                 <p>Firmanın işlemlerini burdan <br> yönetebilirsin</p>
             </a>

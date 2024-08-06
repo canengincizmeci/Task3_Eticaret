@@ -1,0 +1,148 @@
+﻿@model List<ReturnRequestsModel>
+@{
+    ViewData["Title"] = "ReturnRequestsInTransit";
+    Layout = "~/Views/Shared/ShippingCompanyLayout.cshtml";
+}
+
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+    }
+
+    .complaints-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        font-size: 1em;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-width: 600px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        background-color: white;
+    }
+
+        .complaints-table thead tr {
+            background-color: rgb(38, 147, 151);
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .complaints-table th,
+        .complaints-table td {
+            padding: 12px 15px;
+        }
+
+    ß .complaints-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .complaints-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+
+    .complaints-table tbody tr:last-of-type {
+        border-bottom: 2px solid rgb(38, 147, 151);
+    }
+
+    .complaints-table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .complaints-table a {
+        color: rgb(38, 147, 151);
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+
+
+        .complaints-table a:hover {
+            color: rgb(19, 75, 77);
+        }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".start-request").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            var data = $(this).data("request");
+            var userData = $(this).data("user");
+            if (confirm("İadeyi başlatmak istiyor musunuz")) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { requestId: data, userId: userData },
+                    success: function (response) {
+                        if (response.success) {
+                            alert("İşlem Başlatıldı");
+                            location.reload();
+                        }
+                        else {
+                            alert(response.message || "Bir hata oluştu");
+
+                        }
+                    },
+                    error: function () {
+                        alert("Bir hata oluştu");
+                    }
+                });
+            }
+        });
+    });
+
+
+
+</script>
+
+<table class="complaints-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Ürünler</th>
+            <th>Satıcı Firma</th>
+            <th>Firma Adresler</th>
+            <th>Sebep</th>
+            <th>Teslim Tarihi</th>
+            <th>Şubeye Geri Dönüş İçin Bırak</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model)
+        {
+            <tr>
+                <td>@request.RequestId</td>
+                <td>
+                    @for (int i = 0; i < request.ProductsName.Count; i++)
+                    {
+
+                        @($"{request.ProductsName[i]},")
+                    }
+                </td>
+                <td>
+                    @for (int i = 0; i < request.CompanyNames.Count; i++)
+                    {
+
+                        @($"{request.CompanyNames[i]},")
+                    }
+                </td>
+                <td>
+                    @for (int i = 0; i < request.CompanyAdress.Count; i++)
+                    {
+
+                        @($"{request.CompanyAdress[i]},")
+                    }
+                </td>
+                <td>@request.Reason</td>
+                <td>@request.Date</td>
+                <td><a class="start-request" data-request="@request.RequestId" data-user="@request.UserId" href="@Url.Action("StartReturnRequestInTransit","Shipping")">Başlat</a></td>
+
+            </tr>
+        }
+    </tbody>
+</table>
