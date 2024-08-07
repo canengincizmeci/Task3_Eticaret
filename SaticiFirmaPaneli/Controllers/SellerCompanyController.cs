@@ -7,6 +7,8 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Diagnostics;
 
 namespace SaticiFirmaPaneli.Controllers
 {
@@ -92,6 +94,28 @@ namespace SaticiFirmaPaneli.Controllers
                 return RedirectToAction("Index", "SellerCompany");
             else
                 return RedirectToAction("Login", "SellerCompany");
+        }
+        public async Task<ActionResult> Index()
+        {
+
+            HttpContext.Session.SetInt32("sellerCompanyId", 1);
+            int? id = HttpContext.Session.GetInt32("sellerCompanyId");
+            if (!id.HasValue)
+                return RedirectToAction("Login", "SellerCompany");
+
+
+            //var stopwatch = Stopwatch.StartNew();
+
+            ViewBag.NewMessages = (await _context.AdmindenFirmayaMesajs.Where(p => p.OkunduBilgisi == false).CountAsync()) + (await _context.TeknikdenFirmayaMesajs.Where(p => (p.Aktiflik == true && p.OkunduBilgisi == false)).CountAsync());
+            ViewBag.OrdersCount = (await _context.Siparislers.Where(p => (p.Onay == false && p.SiparisKalemlers.Any(l => l.Urun.FirmaId == id))).CountAsync());
+            ViewBag.Comments = (await _context.Yorumlars.Where(p => (p.Urun.FirmaId == id && p.Aktiflik == true)).CountAsync()) + (await _context.KullaniciYorumCevaps.Where(p => (p.Aktiflik == true && p.Yorum.Urun.FirmaId == id)).CountAsync());
+            ViewBag.Returns = (await _context.Iadelers.Where(p => (p.IadeTalep.Odeme.Siparis.SiparisKalemlers.Any(p => p.Urun.Firma.FirmaId == id))).CountAsync());
+            ViewBag.Competition = await _context.FirmaYarismalars.Where(p => p.Aktiflik == true).CountAsync();
+            ViewBag.SocialResponsibilityTask = await _context.SosyalSorumlulukGorevis.Where(p => p.Aktiflik == true).CountAsync();
+
+            //stopwatch.Stop();
+            //ViewBag.ExecutionTime = stopwatch.ElapsedMilliseconds;
+            return View();
         }
 
     }

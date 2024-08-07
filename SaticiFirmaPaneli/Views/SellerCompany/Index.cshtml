@@ -1,0 +1,127 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+<style>
+
+    .anaDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: rgb(176, 223, 245);
+        min-height: 70vh;
+    }
+
+    .ayiriciDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    .icDiv {
+        border: solid 1px rgba(41, 26, 65, 0.1);
+        border-radius: 8px;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        text-align: center;
+        flex: 1;
+        min-width: 200px;
+        max-width: 300px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .icDiv:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .icDiv h1 {
+            color: rgb(38, 147, 151);
+        }
+
+        .icDiv p {
+            color: #555;
+        }
+
+    a {
+        text-decoration: none;
+    }
+
+</style>
+
+
+
+<div class="anaDiv">
+    <div class="ayiriciDiv">
+        <div class="icDiv">
+            <a href="@Url.Action("Inbox","Message")">
+                <h1>Gelen Mesajlar(@ViewBag.NewMessages)</h1>
+                <p>Admin ve Teknikden Gelen Mesajlar</p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("Orders","Order")">
+                <h1>Siparişler</h1>
+                <p>Gelen siparişleri görüntüle</p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("Returns","Return")">
+                <h1>İadeler</h1>
+                <p>İstenen kargoların bilgilerini öğren</p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("Competitions","Competition")">
+                <h1>Yarışmalar</h1>
+                <p>Yarışmalar için buraya tıklayabilirsin</p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("FavoritedProducts","Product")">
+                <h1>Favorilere Alınan Ürünlerim</h1>
+                <p>Hangi ürünlerinin kaç defa favorilere alındığını burdan görebilirsin</p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("Products","Product")">
+                <h1>Ürünlerim</h1>
+                <p>Tüm ürünlerini burdan görebilir ekleyebilir ,silebilir ve güncelleyebilirsin</p>
+            </a>
+        </div>
+    </div>
+    <div class="ayiriciDiv">
+        <div class="icDiv">
+            <a href="@Url.Action("SocialResponsibilityTasks","SocialReponsibilityTask")">
+                <h1>Sosyal Sorumluluk Görevleri</h1>
+                <p>Katılmak istediğiniz geçerlilikte olan yarışmaları görebilir ve isterseniz katılabilirsiniz</p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("CommentsAndReplies","Comment")">
+                <h1>Yorum ve Yorum Cevaplar</h1>
+                <p>Ürünlerinize yapılan yorumları görebilir cevaplayabilir şikayet edebilirsiniz</p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("Statics","Statics")">
+                <h1>İstatistikler</h1>
+                <p>Satışların,ürünlerin ve firman hakkındaki istatistikleri görmek için tıklayabilirisin </p>
+            </a>
+        </div>
+        <div class="icDiv">
+            <a href="@Url.Action("RequestedCampaigns","Campaign")">
+                <h1>Sitemiz tarafından yapmanızı istedğimiz kampanylar</h1>
+                <p>Sitemiz tarafından önerilen ve kazanırsanız size avantajlar sağlayacak yarışmaları görebilirsiniz</p>
+            </a>
+        </div>
+    </div>
+</div>
+
