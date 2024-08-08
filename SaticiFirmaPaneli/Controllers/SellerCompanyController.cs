@@ -9,6 +9,7 @@ using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Diagnostics;
+using SaticiFirmaPaneli.Models;
 
 namespace SaticiFirmaPaneli.Controllers
 {
@@ -106,16 +107,28 @@ namespace SaticiFirmaPaneli.Controllers
 
             //var stopwatch = Stopwatch.StartNew();
 
-            ViewBag.NewMessages = (await _context.AdmindenFirmayaMesajs.Where(p => p.OkunduBilgisi == false).CountAsync()) + (await _context.TeknikdenFirmayaMesajs.Where(p => (p.Aktiflik == true && p.OkunduBilgisi == false)).CountAsync());
-            ViewBag.OrdersCount = (await _context.Siparislers.Where(p => (p.Onay == false && p.SiparisKalemlers.Any(l => l.Urun.FirmaId == id))).CountAsync());
-            ViewBag.Comments = (await _context.Yorumlars.Where(p => (p.Urun.FirmaId == id && p.Aktiflik == true)).CountAsync()) + (await _context.KullaniciYorumCevaps.Where(p => (p.Aktiflik == true && p.Yorum.Urun.FirmaId == id)).CountAsync());
-            ViewBag.Returns = (await _context.Iadelers.Where(p => (p.IadeTalep.Odeme.Siparis.SiparisKalemlers.Any(p => p.Urun.Firma.FirmaId == id))).CountAsync());
-            ViewBag.Competition = await _context.FirmaYarismalars.Where(p => p.Aktiflik == true).CountAsync();
-            ViewBag.SocialResponsibilityTask = await _context.SosyalSorumlulukGorevis.Where(p => p.Aktiflik == true).CountAsync();
+
+
+
+
+
+            SellerCompanyIndexModel modal = new SellerCompanyIndexModel()
+            {
+                newMessagesCount = (await _context.AdmindenFirmayaMesajs.Where(p => p.OkunduBilgisi == false).CountAsync()) + (await _context.TeknikdenFirmayaMesajs.Where(p => (p.Aktiflik == true && p.OkunduBilgisi == false)).CountAsync()),
+                commentsCount = (await _context.Yorumlars.Where(p => (p.Urun.FirmaId == id && p.Aktiflik == true)).CountAsync()) + (await _context.KullaniciYorumCevaps.Where(p => (p.Aktiflik == true && p.Yorum.Urun.FirmaId == id)).CountAsync()),
+                currentCompetitionCount = await _context.FirmaYarismalars.Where(p => p.Aktiflik == true).CountAsync(),
+                newOrdersCount = (await _context.Siparislers.Where(p => (p.Onay == false && p.SiparisKalemlers.Any(l => l.Urun.FirmaId == id))).CountAsync()),
+                socialResponsibiltyTasksCount = await _context.SosyalSorumlulukGorevis.Where(p => p.Aktiflik == true).CountAsync(),
+                newReturnsCount = (await _context.Iadelers.Where(p => (p.IadeTalep.Odeme.Siparis.SiparisKalemlers.Any(p => p.Urun.Firma.FirmaId == id))).CountAsync()),
+                productsCount = await _context.Uruns.Where(p => p.Aktiflik == true).CountAsync(),
+                requestedCampaignsCount = (await _context.KategoriKampanyalars.Where(p => p.Aktiflik == true).CountAsync()) + (await _context.UrunKampanyalars.Where(p => p.Aktiflik == true).CountAsync()) + (await _context.FirmaKampanyalars.Where(p => (p.Aktiflik == true && p.FirmaId == id)).CountAsync()) + (await _context.GenelKampanyalars.Where(p => p.Aktiflik == true).CountAsync()),
+                favoritedProductsCount = await _context.Favorilers.Where(p => (p.Aktiflik == true && p.Urun.FirmaId == id)).CountAsync()
+            };
+
 
             //stopwatch.Stop();
             //ViewBag.ExecutionTime = stopwatch.ElapsedMilliseconds;
-            return View();
+            return View(modal);
         }
 
     }

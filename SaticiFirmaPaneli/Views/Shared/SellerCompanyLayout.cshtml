@@ -1,20 +1,24 @@
-﻿<!DOCTYPE html>
+﻿﻿
+<!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: rgba(220, 255, 220, 1);
+            background-color: #333;
+            color: #e0e0e0;
         }
 
         nav {
             overflow: hidden;
-            background-color: rgb(38, 147, 151);
+            background-color: #444;
         }
 
         .top-menu {
@@ -36,14 +40,14 @@
 
                 .top-menu li a {
                     display: block;
-                    color: white;
+                    color: #e0e0e0;
                     text-align: center;
                     padding: 14px 20px;
                     text-decoration: none;
                 }
 
                     .top-menu li a:hover {
-                        background-color: black;
+                        background-color: #777;
                     }
 
         .sonLinkler {
@@ -54,6 +58,7 @@
             display: flex;
         }
     </style>
+
 </head>
 
 <body>
@@ -71,8 +76,13 @@
             </div>
         </ul>
     </nav>
+
+
+
+
     <div>
         @RenderBody()
     </div>
 </body>
+
 </html>

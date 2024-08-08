@@ -1,11 +1,12 @@
-﻿@{
+﻿@model SellerCompanyIndexModel
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
 }
 
 <style>
 
-    .anaDiv {
+    /* .anaDiv {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -52,8 +53,55 @@
 
     a {
         text-decoration: none;
+    } */
+    .anaDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: #555;
+        min-height: 70vh;
     }
 
+    .ayiriciDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    .icDiv {
+        border: solid 1px #777; 
+        border-radius: 8px;
+        background-color: #444; 
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        text-align: center;
+        flex: 1;
+        min-width: 200px;
+        max-width: 300px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .icDiv:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .icDiv h1 {
+            color: #e0e0e0; 
+        }
+
+        .icDiv p {
+            color: #ccc; 
+        }
+
+    a {
+        text-decoration: none;
+    }
 </style>
 
 
@@ -62,37 +110,37 @@
     <div class="ayiriciDiv">
         <div class="icDiv">
             <a href="@Url.Action("Inbox","Message")">
-                <h1>Gelen Mesajlar(@ViewBag.NewMessages)</h1>
+                <h1>Gelen Mesajlar(@Model.newMessagesCount)</h1>
                 <p>Admin ve Teknikden Gelen Mesajlar</p>
             </a>
         </div>
         <div class="icDiv">
             <a href="@Url.Action("Orders","Order")">
-                <h1>Siparişler</h1>
+                <h1>Siparişler(@Model.newOrdersCount)</h1>
                 <p>Gelen siparişleri görüntüle</p>
             </a>
         </div>
         <div class="icDiv">
             <a href="@Url.Action("Returns","Return")">
-                <h1>İadeler</h1>
+                <h1>İadeler(@Model.newReturnsCount)</h1>
                 <p>İstenen kargoların bilgilerini öğren</p>
             </a>
         </div>
         <div class="icDiv">
             <a href="@Url.Action("Competitions","Competition")">
-                <h1>Yarışmalar</h1>
+                <h1>Yarışmalar(@Model.currentCompetitionCount)</h1>
                 <p>Yarışmalar için buraya tıklayabilirsin</p>
             </a>
         </div>
         <div class="icDiv">
             <a href="@Url.Action("FavoritedProducts","Product")">
-                <h1>Favorilere Alınan Ürünlerim</h1>
+                <h1>Favorilere Alınan Ürünlerim(@Model.favoritedProductsCount)</h1>
                 <p>Hangi ürünlerinin kaç defa favorilere alındığını burdan görebilirsin</p>
             </a>
         </div>
         <div class="icDiv">
             <a href="@Url.Action("Products","Product")">
-                <h1>Ürünlerim</h1>
+                <h1>Ürünlerim(@Model.productsCount)</h1>
                 <p>Tüm ürünlerini burdan görebilir ekleyebilir ,silebilir ve güncelleyebilirsin</p>
             </a>
         </div>
@@ -100,13 +148,13 @@
     <div class="ayiriciDiv">
         <div class="icDiv">
             <a href="@Url.Action("SocialResponsibilityTasks","SocialReponsibilityTask")">
-                <h1>Sosyal Sorumluluk Görevleri</h1>
+                <h1>Sosyal Sorumluluk Görevleri(@Model.socialResponsibiltyTasksCount)</h1>
                 <p>Katılmak istediğiniz geçerlilikte olan yarışmaları görebilir ve isterseniz katılabilirsiniz</p>
             </a>
         </div>
         <div class="icDiv">
             <a href="@Url.Action("CommentsAndReplies","Comment")">
-                <h1>Yorum ve Yorum Cevaplar</h1>
+                <h1>Yorum ve Yorum Cevaplar(@Model.commentsCount)</h1>
                 <p>Ürünlerinize yapılan yorumları görebilir cevaplayabilir şikayet edebilirsiniz</p>
             </a>
         </div>
@@ -118,7 +166,7 @@
         </div>
         <div class="icDiv">
             <a href="@Url.Action("RequestedCampaigns","Campaign")">
-                <h1>Sitemiz tarafından yapmanızı istedğimiz kampanylar</h1>
+                <h1>Sitemiz tarafından yapmanızı istedğimiz kampanylar(@Model.requestedCampaignsCount)</h1>
                 <p>Sitemiz tarafından önerilen ve kazanırsanız size avantajlar sağlayacak yarışmaları görebilirsiniz</p>
             </a>
         </div>
