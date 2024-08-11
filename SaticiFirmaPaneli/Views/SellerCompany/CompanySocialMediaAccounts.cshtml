@@ -1,0 +1,246 @@
+﻿@using DB.Models
+@model List<FirmaSosyalMedyalar>
+@{
+    ViewData["Title"] = "CompanySocialMediaAccounts";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+
+
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+    }
+
+    .complaints-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        font-size: 1em;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-width: 600px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        color: royalblue;
+    }
+
+        .complaints-table thead tr {
+            background-color: #444;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .complaints-table th,
+        .complaints-table td {
+            padding: 12px 15px;
+        }
+
+    ß .complaints-table tbody tr {
+        border-bottom: 1px solid black;
+    }
+
+    .complaints-table tbody tr:nth-of-type(even) {
+        background-color: #777;
+    }
+
+    .complaints-table tbody tr:last-of-type {
+        border-bottom: 2px solid #444;
+    }
+
+    .complaints-table tbody tr:hover {
+        background-color: aqua;
+    }
+
+    .complaints-table a {
+        color: blue;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+
+
+        .complaints-table a:hover {
+            color: darkblue;
+        }
+
+    .add-link-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+        .add-link-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: blue;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+            .add-link-container a:hover {
+                background-color: darkblue;
+            }
+
+    .pop-up {
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        /* background-color: rgba(0,0,0,0.4); */
+        display: none;
+    }
+
+    .popUp-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        color: black;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        animation: modalopen 0.5s;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    @@keyframes modalopen {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".delete-account").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+
+            if (confirm("Silmek istediğinizden emin misiniz")) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Hesap başarıyla silindi");
+                            location.reload();
+                        }
+                        else {
+                            alert(response.message || "Hesap silinemedi");
+                        }
+                    },
+                    error: function () {
+                        alert("Hesap silinemedi");
+                    }
+                });
+            }
+        });
+        var popUp = $("#adder");
+        var close = $(".close");
+        $("#open-adder").click(function (e) {
+            e.preventDefault();
+            popUp.show();
+        });
+        close.click(function () {
+            popUp.hide();
+        });
+        $(window).click(function (event) {
+            if (event.target == popUp[0]) {
+                popUp.hide();
+            }
+        });
+        $("#add-account").submit(function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var url = form.attr("action");
+            var data = form.serialize();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function (response) {
+                    if (response.success) {
+                        alert("Hesap Başarıyla Eklendi");
+                        $("#adder").hide();
+                        location.reload();
+                    }
+                    else {
+                        alert(response.message || "Bir hata oluştu");
+                    }
+                },
+                error: function () {
+                    alert("Bir hata oluştu");
+                }
+            });
+        });
+    });
+</script>
+
+<table class="complaints-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Platform</th>
+            <th>Adress</th>
+            <th>Eklenme Tarih</th>
+            <th>Sil</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var socialMedia in Model)
+        {
+            <tr>
+                <td>@socialMedia.FirmaSosyalMedyaId</td>
+                <td>@socialMedia.SosyalMedyaIsmi</td>
+                <td><a href=" @socialMedia.UrlAdresi">@socialMedia.UrlAdresi</a></td>
+                <td>@socialMedia.EklenmeTarihi</td>
+                <td><a class="delete-account" href="@Url.Action("DeleteCompanySocialMediaAccount","SellerCompany",new {accountId=@socialMedia.FirmaSosyalMedyaId})">Sil</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="add-link-container">
+    <a href="#" id="open-adder">Ekle</a>
+</div>
+
+<div id="adder" class="pop-up" style="display:none">
+    <div class="popUp-content">
+        <span class="close">&times;</span>
+        <h2>Hesap Ekle</h2>
+        <form id="add-account" action="@Url.Action("AddCompanySocialMediaAccount","SellerCompany")" method="post">
+            <label>Platform İsmi</label>
+            <input type="text" name="SosyalMedyaIsmi" required />
+            <label>Url Adresi</label>
+            <input type="text" name="UrlAdresi" required />
+            <button type="submit">Ekle</button>
+        </form>
+    </div>
+</div>

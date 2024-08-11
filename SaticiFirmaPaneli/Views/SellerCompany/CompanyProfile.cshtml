@@ -1,0 +1,198 @@
+﻿@using DB.Models
+@model Firma
+@{
+    ViewData["Title"] = "CompanyProfile";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+    }
+
+    .urun-detail {
+        background-color: #ffffff;
+        padding: 20px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        max-width: 600px;
+        margin: 20px auto;
+        color: black;
+        text-align: center;
+    }
+
+        .urun-detail img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .urun-detail h1 {
+            font-size: 24px;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+
+        .urun-detail p {
+            margin: 5px 0;
+        }
+
+    .button-container {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+        .button-container .btn {
+            padding: 10px 20px;
+            background-color: rgb(38, 147, 151);
+            color: #ffffff;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            flex: 1 1 calc(33.333% - 20px);
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+            .button-container .btn:hover {
+                background-color: rgb(19, 75, 77);
+            }
+
+    .pop-up {
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        /* background-color: rgba(0,0,0,0.4); */
+        display: none;
+    }
+
+    .popUp-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        color: black;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        animation: modalopen 0.5s;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    @@keyframes modalopen {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var popup = $("#updater");
+        var closer = $(".close");
+        $("#open-updater").click(function (e) {
+            e.preventDefault();
+            popup.show();
+        });
+        closer.click(function () {
+            popup.hide();
+        });
+        $(window).click(function (event) {
+            if (event.target == popup[0]) {
+                popup.hide();
+            }
+        });
+        $("#update-company").submit(function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var url = form.attr("action");
+            var data = form.serialize();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function (response) {
+                    if (response.success) {
+                        alert("Profil başarıyla güncellendi");
+                        $("#updater").hide();
+                        location.reload();
+                    }
+                    else {
+                        alert(response.message || "Bir hata oluştu");
+                    }
+                },
+                error: function () {
+                    alert("Bir hata oluştu");
+                }
+            });
+        });
+    });
+</script>
+<div class="urun-detail">
+    <h1>@Model.FirmaAd</h1>
+    <p><strong>Mail:</strong> @Model.Mail</p>
+    <p><strong>Coin Miktarı:</strong> @Model.CoinMiktari</p>
+    <p><strong>Adres:</strong> @Model.FirmaAdres</p>
+    <p><strong>Puan:</strong> @Model.Puan</p>
+    <p><strong>Tel:</strong> @Model.TelefonNumarasi</p>
+    <p><strong>Satış Sayısı:</strong> @Model.SatisSayisi</p>
+    <div class="button-container">
+        <a href="#" id="open-updater" class="btn">Güncelle</a>
+    </div>
+</div>
+
+<div id="updater" class="pop-up" style="display:none">
+    <div class="popUp-content">
+        <span class="close">&times;</span>
+        <h2>Güncelle</h2>
+        <form id="update-company" action="@Url.Action("UpdateCompany","SellerCompany")" method="post">
+            <input type="hidden" name="FirmaId" value="@Model.FirmaId" />
+            <label>Ad:</label>
+            <input type="text" name="FirmaAd" value="@Model.FirmaAd" required />
+            <br />
+            <label>Adres:</label>
+            <input type="text" name="FirmaAdres" value="@Model.FirmaAdres" required />
+            <br />
+            <label>Mail:</label>
+            <input type="email" name="Mail" value="@Model.Mail" required />
+            <br />
+            <label>Tel:</label>
+            <input type="text" name="TelefonNumarasi" value="@Model.TelefonNumarasi" required />
+            <button type="submit">Güncelle</button>
+        </form>
+    </div>
+</div>

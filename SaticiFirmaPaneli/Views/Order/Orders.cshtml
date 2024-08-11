@@ -1,0 +1,139 @@
+﻿@model List<NewOrdersModel>
+@{
+    ViewData["Title"] = "Orders";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+    }
+
+    .complaints-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        font-size: 1em;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-width: 600px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        color: royalblue;
+    }
+
+        .complaints-table thead tr {
+            background-color: #444;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .complaints-table th,
+        .complaints-table td {
+            padding: 12px 15px;
+        }
+
+    ß .complaints-table tbody tr {
+        border-bottom: 1px solid black;
+    }
+
+    .complaints-table tbody tr:nth-of-type(even) {
+        background-color: #777;
+    }
+
+    .complaints-table tbody tr:last-of-type {
+        border-bottom: 2px solid #444;
+    }
+
+    .complaints-table tbody tr:hover {
+        background-color: firebrick;
+    }
+
+    .complaints-table a {
+        color: blue;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+
+
+        .complaints-table a:hover {
+            color: darkblue;
+        }
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $(".approve").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            var data = $(this).data("prm");
+            if (confirm("Satışı onaylamak ister misiniz?")) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { orderId: data },
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Satış başarıyla gerçekleştirildi");
+                            location.reload();
+                        }
+                        else {
+                            alert(response.message || "Satış gerçekleştirilemedi");
+                        }
+                    },
+                    error: function () {
+                        alert("Satış gerçekleştirilemedi");
+                    }
+                });
+            }
+        });
+
+    });
+</script>
+
+<table class="complaints-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Kullanıcı</th>
+            <th>Ürünler</th>
+            <th>Gönderi Adresi</th>
+            <th>Fatura Adresi</th>
+            <th>Kupon Kodu</th>
+            <th>Toplam Fiyat</th>
+            <th>Oanyla</th>
+            <th>Reddet</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>@order.UserName</td>
+                <td>
+                    @for (int i = 0; i < order.ProductNames.Count; i++)
+                    {
+                        <div>
+                            @(order.ProductNames[i]),
+                        </div>
+                    }
+                </td>
+                <td>@order.ShippingAddress</td>
+                <td>@order.BillingAddress</td>
+                <td>@order.CouponCode</td>
+                <td>@order.TotalPrice</td>
+                <td><a href="@Url.Action("ApproveSale","Order")" class="approve" data-prm="@order.OrderId">Satışı Onayla</a></td>
+                <td><a href="@Url.Action("RejectSale","Order",new {orderId=order.OrderId})" class="reject">Satışı Reddet</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

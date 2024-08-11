@@ -1,0 +1,137 @@
+﻿@model List<CompanyCompetitionModel>
+@{
+    ViewData["Title"] = "Competitions";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+    }
+
+    .complaints-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        font-size: 1em;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-width: 600px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        color: royalblue;
+    }
+
+        .complaints-table thead tr {
+            background-color: #444;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .complaints-table th,
+        .complaints-table td {
+            padding: 12px 15px;
+        }
+
+    ß .complaints-table tbody tr {
+        border-bottom: 1px solid black;
+    }
+
+    .complaints-table tbody tr:nth-of-type(even) {
+        background-color: #777;
+    }
+
+    .complaints-table tbody tr:last-of-type {
+        border-bottom: 2px solid #444;
+    }
+
+    .complaints-table tbody tr:hover {
+        background-color: firebrick;
+    }
+
+    .complaints-table a {
+        color: blue;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+
+
+        .complaints-table a:hover {
+            color: darkblue;
+        }
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $(".join").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            var data = $(this).data("prm");
+
+            if (confirm("Yarışmaya katılmak ister misiniz?")) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { competitionId: data },
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Yarışmaya başarıyla katıldın");
+                            location.reload();
+                        }
+                        else {
+                            alert(response.message || "Bir hata oluştu");
+                        }
+                    },
+                    error: function () {
+                        alert("Bir hata oluştu");
+                    }
+                });
+            }
+        });
+    });
+
+
+</script>
+<table class="complaints-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Başlık</th>
+            <th>Açıklama</th>
+            <th>Başlangıç Tarih</th>
+            <th>Bitiş Tarih</th>
+            <th>Katıl</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var competition in Model)
+        {
+            <tr>
+                <td>@competition.CompanyCompetitionId</td>
+                <td>@competition.CompetitionTitle</td>
+                <td>@competition.CompetitionDescription</td>
+                <td>@competition.BeginDate</td>
+                <td>@competition.EndDate</td>
+                <td>
+                    @if (competition.JoinStatus == false)
+                    {
+                        <a class="join" data-prm="@competition.CompanyCompetitionId" href="@Url.Action("ParticipateCompetition", "Competition")">Katıl</a>
+                    }
+                    else
+                    {
+                        @:Katıldın
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

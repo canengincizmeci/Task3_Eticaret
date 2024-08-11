@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Diagnostics;
 using SaticiFirmaPaneli.Models;
+using Microsoft.VisualBasic;
 
 namespace SaticiFirmaPaneli.Controllers
 {
@@ -116,8 +117,8 @@ namespace SaticiFirmaPaneli.Controllers
             {
                 newMessagesCount = (await _context.AdmindenFirmayaMesajs.Where(p => p.OkunduBilgisi == false).CountAsync()) + (await _context.TeknikdenFirmayaMesajs.Where(p => (p.Aktiflik == true && p.OkunduBilgisi == false)).CountAsync()),
                 commentsCount = (await _context.Yorumlars.Where(p => (p.Urun.FirmaId == id && p.Aktiflik == true)).CountAsync()) + (await _context.KullaniciYorumCevaps.Where(p => (p.Aktiflik == true && p.Yorum.Urun.FirmaId == id)).CountAsync()),
-                currentCompetitionCount = await _context.FirmaYarismalars.Where(p => p.Aktiflik == true).CountAsync(),
-                newOrdersCount = (await _context.Siparislers.Where(p => (p.Onay == false && p.SiparisKalemlers.Any(l => l.Urun.FirmaId == id))).CountAsync()),
+                currentCompetitionCount = await _context.FirmaYarismalars.Where(p => (p.Aktiflik == true && p.BaslangicTarih < DateTime.Now && p.BitisTarih > DateTime.Now)).CountAsync(),
+                newOrdersCount = (await _context.Siparislers.Where(p => (p.Onay == null && p.SiparisKalemlers.Any(l => l.Urun.FirmaId == id))).CountAsync()),
                 socialResponsibiltyTasksCount = await _context.SosyalSorumlulukGorevis.Where(p => p.Aktiflik == true).CountAsync(),
                 newReturnsCount = (await _context.Iadelers.Where(p => (p.IadeTalep.Odeme.Siparis.SiparisKalemlers.Any(p => p.Urun.Firma.FirmaId == id))).CountAsync()),
                 productsCount = await _context.Uruns.Where(p => p.Aktiflik == true).CountAsync(),
@@ -130,6 +131,122 @@ namespace SaticiFirmaPaneli.Controllers
             //ViewBag.ExecutionTime = stopwatch.ElapsedMilliseconds;
             return View(modal);
         }
+        public async Task<ActionResult> CompanySocialMediaAccounts()
+        {
+            int? id = HttpContext.Session.GetInt32("sellerCompanyId");
+            if (!id.HasValue)
+                return RedirectToAction("Login", "SellerCompany");
+            var modal = await _context.FirmaSosyalMedyalars.Where(p => (p.FirmaId == id && p.Aktiflik == true)).ToListAsync();
+            return View(modal);
+        }
+        [HttpPost]
+        public async Task<ActionResult> AddCompanySocialMediaAccount(FirmaSosyalMedyalar accountInfo)
+        {
+            int? id = HttpContext.Session.GetInt32("sellerCompanyId");
+            if (!id.HasValue)
+                return RedirectToAction("Login", "SellerCompany");
 
+
+            await _context.FirmaSosyalMedyalars.AddAsync(new FirmaSosyalMedyalar
+            {
+                Aktiflik = true,
+                EklenmeTarihi = DateTime.Now,
+                FirmaId = id,
+                SosyalMedyaIsmi = accountInfo.SosyalMedyaIsmi,
+                UrlAdresi = accountInfo.UrlAdresi
+            });
+            await _context.SaveChangesAsync();
+            return Json(new { success = true });
+        }
+        [HttpPost]
+        public async Task<ActionResult> DeleteCompanySocialMediaAccount(int accountId)
+        {
+            int? id = HttpContext.Session.GetInt32("sellerCompanyId");
+            if (!id.HasValue)
+                return RedirectToAction("Login", "SellerCompany");
+
+            var account = await _context.FirmaSosyalMedyalars.FindAsync(accountId);
+            if (account == null)
+            {
+                return Json(new { success = false });
+
+            }
+            else
+            {
+                account.Aktiflik = false;
+                await _context.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+        }
+        [HttpGet]
+        public ActionResult ChangePassword()
+        {
+            int? id = HttpContext.Session.GetInt32("sellerCompanyId");
+            if (!id.HasValue)
+                return RedirectToAction("Login", "SellerCompany");
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> ChangePassword(string newPassword, string currentPassword)
+        {
+            int? id = HttpContext.Session.GetInt32("sellerCompanyId");
+            if (!id.HasValue)
+                return RedirectToAction("Login", "SellerCompany");
+
+            var company = await _context.Firmas.FindAsync(id);
+            if (company == null)
+            {
+                return Json(new { success = false, message = "Bir hata oluştu" });
+            }
+            else
+            {
+                if (currentPassword != company.Sifre)
+                {
+                    return Json(new { success = false, message = "Mevcut şifrenizi yanlış girdiniz" });
+
+                }
+                else
+                {
+                    company.Sifre = newPassword;
+                    await _context.SaveChangesAsync();
+                    return Json(new { success = true, message = "Şifre Başarıyla değiştirildi" });
+                }
+            }
+        }
+        public async Task<ActionResult> CompanyProfile()
+        {
+            int? id = HttpContext.Session.GetInt32("sellerCompanyId");
+            if (!id.HasValue)
+                return RedirectToAction("Login", "SellerCompany");
+
+            var modal = await _context.Firmas.FindAsync(id);
+
+
+
+            return View(modal);
+        }
+        [HttpPost]
+        public async Task<ActionResult> UpdateCompany(Firma _company)
+        {
+            int? id = HttpContext.Session.GetInt32("sellerCompanyId");
+            if (!id.HasValue)
+                return RedirectToAction("Login", "SellerCompany");
+
+            var company = await _context.Firmas.FindAsync(_company.FirmaId);
+            if (company == null)
+            {
+                return Json(new { success = false });
+            }
+            else
+            {
+                company.FirmaAd = _company.FirmaAd;
+                company.FirmaAdres = _company.FirmaAdres;
+                company.Mail = _company.Mail;
+                company.TelefonNumarasi = _company.TelefonNumarasi;
+                await _context.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+        }
     }
 }
