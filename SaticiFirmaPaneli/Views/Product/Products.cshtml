@@ -1,0 +1,135 @@
+﻿@model List<ProductModel>
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+    }
+
+    .complaints-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        font-size: 1em;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-width: 600px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        color: royalblue;
+    }
+
+        .complaints-table thead tr {
+            background-color: #444;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .complaints-table th,
+        .complaints-table td {
+            padding: 12px 15px;
+        }
+
+    ß .complaints-table tbody tr {
+        border-bottom: 1px solid black;
+    }
+
+    .complaints-table tbody tr:nth-of-type(even) {
+        background-color: #777;
+    }
+
+    .complaints-table tbody tr:last-of-type {
+        border-bottom: 2px solid #444;
+    }
+
+    .complaints-table tbody tr:hover {
+        background-color: aqua;
+    }
+
+    .complaints-table a {
+        color: blue;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+
+
+        .complaints-table a:hover {
+            color: darkblue;
+        }
+
+    .complaints-table img {
+        max-width: 100px;
+        height: auto;
+        display: block;
+        margin: 0 0;
+    }
+
+    .add-link-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+        .add-link-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: blue;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+            .add-link-container a:hover {
+                background-color: darkblue;
+            }
+</style>
+<div class="add-link-container">
+    <form action="@Url.Action("Products","Product")" method="post">
+        <label>
+            @Html.DropDownList("categoryId", (List<SelectListItem>)ViewBag.Ktg, "Kategori Seçin")
+        </label>
+        <button type="submit">Filtrele</button>
+    </form>
+</div>
+
+<table class="complaints-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Kategori</th>
+            <th>Ürün Ad</th>
+            <th>Resim</th>
+            <th>Açıklama</th>
+            <th>Fiyat</th>
+            <th>Detay</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ProductId</td>
+                <td>@product.CategoryName</td>
+                <td>@product.ProductName</td>
+                <td>
+                    <img src="@Url.Content("~/images/" + product.ProductImage)" />
+                </td>
+                <td>@product.Description</td>
+                <td>@product.Price</td>
+                <td><a href="@Url.Action("ProductDetails","Product",new{productId=product.ProductId})">Ürün Detayları</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="add-link-container">
+    <a href="@Url.Action("AddProduct","Product")">Ekle</a>
+</div>
+
+

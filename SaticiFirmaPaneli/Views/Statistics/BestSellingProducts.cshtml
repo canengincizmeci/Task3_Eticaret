@@ -1,0 +1,41 @@
+﻿@model List<BestSellingProductsModel>
+@{
+    ViewData["Title"] = "BestSellingProducts";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div>
+    <canvas id="bestSellingProductsChart"></canvas>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('bestSellingProductsChart').getContext('2d');
+
+        var productNames = @Html.Raw(Json.Serialize(Model.Select(m => m.ProductName)));
+        var salesCounts = @Html.Raw(Json.Serialize(Model.Select(m => m.SalesCount)));
+
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: productNames,
+                datasets: [{
+                    label: 'Sales Count',
+                    data: salesCounts,
+                    backgroundColor: 'rgba(75,192,192,0.2)',
+                    borderColor: 'rgba(75,192,192,1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>

@@ -116,12 +116,12 @@ namespace SaticiFirmaPaneli.Controllers
             SellerCompanyIndexModel modal = new SellerCompanyIndexModel()
             {
                 newMessagesCount = (await _context.AdmindenFirmayaMesajs.Where(p => p.OkunduBilgisi == false).CountAsync()) + (await _context.TeknikdenFirmayaMesajs.Where(p => (p.Aktiflik == true && p.OkunduBilgisi == false)).CountAsync()),
-                commentsCount = (await _context.Yorumlars.Where(p => (p.Urun.FirmaId == id && p.Aktiflik == true)).CountAsync()) + (await _context.KullaniciYorumCevaps.Where(p => (p.Aktiflik == true && p.Yorum.Urun.FirmaId == id)).CountAsync()),
+
                 currentCompetitionCount = await _context.FirmaYarismalars.Where(p => (p.Aktiflik == true && p.BaslangicTarih < DateTime.Now && p.BitisTarih > DateTime.Now)).CountAsync(),
                 newOrdersCount = (await _context.Siparislers.Where(p => (p.Onay == null && p.SiparisKalemlers.Any(l => l.Urun.FirmaId == id))).CountAsync()),
                 socialResponsibiltyTasksCount = await _context.SosyalSorumlulukGorevis.Where(p => p.Aktiflik == true).CountAsync(),
                 newReturnsCount = (await _context.Iadelers.Where(p => (p.IadeTalep.Odeme.Siparis.SiparisKalemlers.Any(p => p.Urun.Firma.FirmaId == id))).CountAsync()),
-                productsCount = await _context.Uruns.Where(p => p.Aktiflik == true).CountAsync(),
+                productsCount = await _context.Uruns.Where(p => (p.Aktiflik == true && p.FirmaId == id)).CountAsync(),
                 requestedCampaignsCount = (await _context.KategoriKampanyalars.Where(p => p.Aktiflik == true).CountAsync()) + (await _context.UrunKampanyalars.Where(p => p.Aktiflik == true).CountAsync()) + (await _context.FirmaKampanyalars.Where(p => (p.Aktiflik == true && p.FirmaId == id)).CountAsync()) + (await _context.GenelKampanyalars.Where(p => p.Aktiflik == true).CountAsync()),
                 favoritedProductsCount = await _context.Favorilers.Where(p => (p.Aktiflik == true && p.Urun.FirmaId == id)).CountAsync()
             };
@@ -247,6 +247,16 @@ namespace SaticiFirmaPaneli.Controllers
                 await _context.SaveChangesAsync();
                 return Json(new { success = true });
             }
+        }
+        public ActionResult Logout()
+        {
+            int? id = HttpContext.Session.GetInt32("sellerCompanyId");
+            if (!id.HasValue)
+                return RedirectToAction("Login", "SellerCompany");
+
+            HttpContext.Session.Clear();
+
+            return RedirectToAction("Login", "SellerCompany");
         }
     }
 }

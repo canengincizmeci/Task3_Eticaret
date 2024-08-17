@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "Statistics";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+<style>
+
+
+    .anaDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: #555;
+        min-height: 70vh;
+    }
+
+    .ayiriciDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    .icDiv {
+        border: solid 1px #777;
+        border-radius: 8px;
+        background-color: #444;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        text-align: center;
+        flex: 1;
+        min-width: 200px;
+        max-width: 300px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .icDiv:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .icDiv h1 {
+            color: #e0e0e0;
+        }
+
+        .icDiv p {
+            color: #ccc;
+        }
+
+    a {
+        text-decoration: none;
+    }
+</style>
+
+
+<div class="anaDiv">
+    <div class="icDiv">
+        <a href="@Url.Action("BestSellingProducts","Statistics")">
+            <h1>En çok satılan Ürünler</h1>
+            <p>En çok satan ürünler arasındaki sıralamayı görmek için tıkla</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("SalesByDateChart","Statistics")">
+            <h1>Tarih Satış Grafiğe</h1>
+            <p>Tarihlere göre satışlar grafiği</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("TopSellingCategories","Statistics")">
+            <h1>Kategori Satış Grafiği</h1>
+            <p>En çok satan kategorileri görmek için tıkla</p>
+        </a>
+    </div>
+
+    <div class="icDiv">
+        <a href="@Url.Action("MostViewedProducts","Statistics")">
+            <h1>Ürün Görüntülenme</h1>
+            <p>Hangi ürünün sayfasının ne kadar görüntülendiğini görmek için tıklayınız</p>
+        </a>
+    </div>
+</div>
+
+
+

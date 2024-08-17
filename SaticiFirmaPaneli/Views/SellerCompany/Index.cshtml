@@ -6,7 +6,7 @@
 
 <style>
 
-    
+
     .anaDiv {
         display: flex;
         flex-wrap: wrap;
@@ -26,9 +26,9 @@
     }
 
     .icDiv {
-        border: solid 1px #777; 
+        border: solid 1px #777;
         border-radius: 8px;
-        background-color: #444; 
+        background-color: #444;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin: 10px;
         padding: 20px;
@@ -45,11 +45,11 @@
         }
 
         .icDiv h1 {
-            color: #e0e0e0; 
+            color: #e0e0e0;
         }
 
         .icDiv p {
-            color: #ccc; 
+            color: #ccc;
         }
 
     a {
@@ -74,7 +74,7 @@
             </a>
         </div>
         <div class="icDiv">
-            <a href="@Url.Action("Returns","Return")">
+            <a href="@Url.Action("ReturnsIndex","Return")">
                 <h1>İadeler(@Model.newReturnsCount)</h1>
                 <p>İstenen kargoların bilgilerini öğren</p>
             </a>
@@ -100,25 +100,20 @@
     </div>
     <div class="ayiriciDiv">
         <div class="icDiv">
-            <a href="@Url.Action("SocialResponsibilityTasks","SocialReponsibilityTask")">
+            <a href="@Url.Action("SocialResponsibilityTasks","SocialResponsibilityTask")">
                 <h1>Sosyal Sorumluluk Görevleri(@Model.socialResponsibiltyTasksCount)</h1>
                 <p>Katılmak istediğiniz geçerlilikte olan yarışmaları görebilir ve isterseniz katılabilirsiniz</p>
             </a>
         </div>
+
         <div class="icDiv">
-            <a href="@Url.Action("CommentsAndReplies","Comment")">
-                <h1>Yorum ve Yorum Cevaplar(@Model.commentsCount)</h1>
-                <p>Ürünlerinize yapılan yorumları görebilir cevaplayabilir şikayet edebilirsiniz</p>
-            </a>
-        </div>
-        <div class="icDiv">
-            <a href="@Url.Action("Statics","Statics")">
+            <a href="@Url.Action("Statistics","Statistics")">
                 <h1>İstatistikler</h1>
                 <p>Satışların,ürünlerin ve firman hakkındaki istatistikleri görmek için tıklayabilirisin </p>
             </a>
         </div>
         <div class="icDiv">
-            <a href="@Url.Action("RequestedCampaigns","Campaign")">
+            <a href="@Url.Action("Campaigns","Campaign")">
                 <h1>Sitemiz tarafından yapmanızı istedğimiz kampanylar(@Model.requestedCampaignsCount)</h1>
                 <p>Sitemiz tarafından önerilen ve kazanırsanız size avantajlar sağlayacak yarışmaları görebilirsiniz</p>
             </a>

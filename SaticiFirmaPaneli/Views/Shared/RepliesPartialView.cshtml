@@ -1,0 +1,26 @@
+﻿@model List<ProductCommentReplyModel>
+
+
+<div class="replies">
+    @foreach (var reply in Model)
+    {
+        if (reply.UserId.HasValue)
+        {
+            <div class="reply">
+                <p><strong>@reply.UserName</strong>:@reply.Reply</p>
+                <p>@reply.Date</p>
+                <div class="action-buttons">
+                    <button class="reply-replyer-button" data-comment-id="@reply.CommentId" data-user-name="@reply.UserName">Cevap Ver</button>
+                    <button class="report-reply-button" data-reply-id="@reply.ReplyId" data-user-id="@reply.UserId">Şikayet Et</button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="reply">
+                <p><strong>@reply.CompanyName</strong>:@reply.Reply</p>
+                <p>@reply.Date</p>
+            </div>
+        }
+    }
+</div>

@@ -1,0 +1,109 @@
+﻿@model List<FavoritedProductsModel>
+@{
+    ViewData["Title"] = "FavoritedProducts";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+    }
+
+    .complaints-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        font-size: 1em;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-width: 600px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        color: royalblue;
+    }
+
+        .complaints-table thead tr {
+            background-color: #444;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .complaints-table th,
+        .complaints-table td {
+            padding: 12px 15px;
+        }
+
+    ß .complaints-table tbody tr {
+        border-bottom: 1px solid black;
+    }
+
+    .complaints-table tbody tr:nth-of-type(even) {
+        background-color: #777;
+    }
+
+    .complaints-table tbody tr:last-of-type {
+        border-bottom: 2px solid #444;
+    }
+
+    .complaints-table tbody tr:hover {
+        background-color: aqua;
+    }
+
+    .complaints-table a {
+        color: blue;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+
+
+        .complaints-table a:hover {
+            color: darkblue;
+        }
+
+    .add-link-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+        .add-link-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: blue;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+            .add-link-container a:hover {
+                background-color: darkblue;
+            }
+
+</style>
+
+
+<table class="complaints-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Ürün Ad</th>
+            <th>Detaylar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.FavoritedId</td>
+                <td>@product.ProductName</td>
+                <td><a class="delete-account" href="@Url.Action("ProductDetails","Product",new {accountId=product.ProductId})">Ürün Detayları</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+

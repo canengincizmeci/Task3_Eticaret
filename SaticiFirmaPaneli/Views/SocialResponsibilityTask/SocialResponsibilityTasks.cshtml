@@ -1,0 +1,159 @@
+﻿@model List<SocialResponsibilityTaskModel>
+@{
+    ViewData["Title"] = "SocialResponsibilityTasks";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+    }
+
+    .complaints-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        font-size: 1em;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-width: 600px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        color: royalblue;
+    }
+
+        .complaints-table thead tr {
+            background-color: #444;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .complaints-table th,
+        .complaints-table td {
+            padding: 12px 15px;
+        }
+
+    ß .complaints-table tbody tr {
+        border-bottom: 1px solid black;
+    }
+
+    .complaints-table tbody tr:nth-of-type(even) {
+        background-color: #777;
+    }
+
+    .complaints-table tbody tr:last-of-type {
+        border-bottom: 2px solid #444;
+    }
+
+    .complaints-table tbody tr:hover {
+        background-color: aqua;
+    }
+
+    .complaints-table a {
+        color: blue;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+
+
+        .complaints-table a:hover {
+            color: darkblue;
+        }
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+
+        $(".join").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+
+
+            Swal.fire({
+                title: "Emin misiniz?",
+                text: "Yarışmaya katılmaktan emin?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet, katıl!',
+                cancelButtonText: 'Hayır, iptal et'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Başarılı!',
+                                    'Göreve başarıyla katıldınız.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            }
+                            else {
+                                Swal.fire(
+                                    'Hata!',
+                                    response.message || "Bir hata oluştu.",
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function () {
+                            Swal.fire(
+                                'Hata!',
+                                'Bir hata oluştu.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+</script>
+
+<table class="complaints-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Görev Ad</th>
+            <th>Açıklama</th>
+            <th>Başlangıç Tarihi</th>
+            <th>Bitiş Tarihi</th>
+            <th>Katıl</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.TaskId</td>
+                <td>@task.TaskName</td>
+                <td>@task.TaskDescription</td>
+                <td>@task.StartDate</td>
+                <td>@task.EndDate</td>
+                @if (task.JoinStatus == true)
+                {
+                    <td>
+                        Katıldın
+                    </td>
+                }
+                else
+                {
+                    <td><a href="@Url.Action("JoinSocialResponsibility","SocialResponsibilityTask",new {taskId=task.TaskId})" class="join">Katıl</a></td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+

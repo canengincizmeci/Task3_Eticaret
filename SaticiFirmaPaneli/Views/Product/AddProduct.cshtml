@@ -1,0 +1,81 @@
+﻿@using DB.Models
+@model Kategori
+@{
+    ViewData["Title"] = "AddProduct";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+        color: black;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .container input[type="text"],
+        .container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .container button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: gray;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .container button:hover {
+                background-color: black;
+            }
+</style>
+<div class="container">
+    <form action="@Url.Action("AddProduct","Product")" method="post">
+        @Html.AntiForgeryToken()
+        <label>Ürün Ad:</label>
+        <input type="text" name="UrunAd" required />
+        <label>
+            @Html.DropDownListFor(m => m.KategoriId, (List<SelectListItem>)ViewBag.Ktg)
+        </label>
+        <label>Açıklama:</label>
+        <textarea rows="5" name="Aciklama" required></textarea>
+        <label>Stok:</label>
+        <input type="text" name="Stok" required />
+        <label>Fiyat:</label>
+        <input type="text" name="Fiyat" required />
+        <label>Urun Resim:</label>
+        <input type="file" name="UrunResim" required />
+        <button type="submit">Ekle</button>
+    </form>
+</div>
+

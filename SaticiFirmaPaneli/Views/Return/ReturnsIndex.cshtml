@@ -1,0 +1,174 @@
+﻿@model List<ReturnsModel>
+@{
+    ViewData["Title"] = "ReturnsIndex";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eae2f8;
+    }
+
+    .complaints-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        font-size: 1em;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-width: 600px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        color: royalblue;
+    }
+
+        .complaints-table thead tr {
+            background-color: #444;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .complaints-table th,
+        .complaints-table td {
+            padding: 12px 15px;
+        }
+
+    ß .complaints-table tbody tr {
+        border-bottom: 1px solid black;
+    }
+
+    .complaints-table tbody tr:nth-of-type(even) {
+        background-color: #777;
+    }
+
+    .complaints-table tbody tr:last-of-type {
+        border-bottom: 2px solid #444;
+    }
+
+    .complaints-table tbody tr:hover {
+        background-color: aqua;
+    }
+
+    .complaints-table a {
+        color: blue;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+
+
+        .complaints-table a:hover {
+            color: darkblue;
+        }
+
+    .complaints-table img {
+        max-width: 100px;
+        height: auto;
+        display: block;
+        margin: 0 0;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#return-shipper").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            Swal.fire({
+                icon: "warning",
+                title: "İadeyi başlatmak istediğinizden emin misiniz?",
+                text: "Bu işlemi geri alamazsınız",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Evet",
+                cancelButtonText: "Vazgeç"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    "İade Tamamlandı",
+                                    "Kargo Firmasına İstek Gönderildi"
+                                ).then(function () {
+                                    location.reload();
+                                });
+                            }
+                            else {
+                                Swal.fire(
+                                    "Hata",
+                                    response.message || "Bir hata oluştu",
+                                    "error"
+                                );
+                            }
+                        },
+                        error: function () {
+                            Swal.fire(
+                                "Hata",
+                                "Kargo Gönderilemedi",
+                                "error"
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+<table class="complaints-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Kullanıcı Adı</th>
+            <th>Ürünler</th>
+            <th>Şirketler</th>
+            <th>Şirket Adresleri</th>
+            <th>Fiyat</th>
+            <th>Kargoya Çıkart</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var _return in Model)
+        {
+            <tr>
+                <td>@_return.ReturnId</td>
+                <td>@_return.UserName</td>
+            
+                <td>
+                    @for (int i = 0; i < _return.ProductNames.Count; i++)
+                    {
+                        @($"{_return.ProductNames[i]},")
+                    }
+                </td>
+                <td>
+                    @for (int i = 0; i < _return.CompanyNames.Count; i++)
+                    {
+
+                        @($"{_return.CompanyNames[i]},")
+                    }
+                </td>
+                <td>
+                    @for (int i = 0; i < _return.CompanyAdresses.Count; i++)
+                    {
+
+                        @($"{_return.CompanyAdresses[i]},")
+                    }
+                </td>
+                <td>@_return.ReturnAmount</td>
+                <td><a id="return-shipper" href="@Url.Action("ShipTheReturn","Return",new{returnId=_return.ReturnId})">Kargoya Verildi</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

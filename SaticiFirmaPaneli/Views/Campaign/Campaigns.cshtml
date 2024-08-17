@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Campaigns";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+<style>
+
+
+    .anaDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: #555;
+        min-height: 70vh;
+    }
+
+    .ayiriciDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    .icDiv {
+        border: solid 1px #777;
+        border-radius: 8px;
+        background-color: #444;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        text-align: center;
+        flex: 1;
+        min-width: 200px;
+        max-width: 300px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .icDiv:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .icDiv h1 {
+            color: #e0e0e0;
+        }
+
+        .icDiv p {
+            color: #ccc;
+        }
+
+    a {
+        text-decoration: none;
+    }
+</style>
+
+<div class="anaDiv">
+    <div class="icDiv">
+        <a href="@Url.Action("CompanyCampaigns","Campaign")">
+            <h1>Firma Kampanyalar(@ViewBag.CompanyCampaignCount)</h1>
+            <p>Firmanıza kampanya tekliflerimiz</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("GeneralCampaigns","Campaign")">
+            <h1>Genel Kampanyalar(@ViewBag.GeneralCampaignCount)</h1>
+            <p>Genel kampanyalar</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("CategoryCampaigns","Campaign")">
+            <h1>Kategori Kampanyalar(@ViewBag.CategoryCampaignCount)</h1>
+            <p>Kategorilere özel kampanyalar</p>
+        </a>
+    </div>
+    <div class="icDiv">
+        <a href="@Url.Action("ProductCampaigns","Campaign")">
+            <h1>Ürün Kampanyalar(@ViewBag.ProductCampaignCount)</h1>
+            <p>Ürünlere özel kampanya fikirleri</p>
+        </a>
+    </div>
+</div>
+
+

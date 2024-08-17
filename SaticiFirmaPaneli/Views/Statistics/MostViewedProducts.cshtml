@@ -1,0 +1,39 @@
+﻿@model List<MostViewedProductsModel>
+@{
+    ViewData["Title"] = "MostViewedProducts";
+    Layout = "~/Views/Shared/SellerCompanyLayout.cshtml";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<canvas id="mostViewedProductsChart" width="400" height="200"></canvas>
+
+<script>
+
+    var productNames = @Html.Raw(Json.Serialize(Model.Select(p => p.ProductName)));
+
+    var productCounts = @Html.Raw(Json.Serialize(Model.Select(p => p.Count)));
+
+    var ctx = document.getElementById('mostViewedProductsChart').getContext('2d');
+
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: productNames,
+            datasets: [{
+                label: 'Görüntülenme Sayısı',
+                data: productCounts,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
