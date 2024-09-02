@@ -1,0 +1,46 @@
+﻿@using DB.Models
+@model List<SureliKuponlar>
+
+<style>
+    #coupon-container {
+        width: 20%;
+        text-align: center;
+        align-items: center;
+    }
+
+</style>
+
+<div id="coupon-container">
+    <a href="Coupon/Coupons" id="coupon-link">
+        <h1 id="coupon-heading">
+            @Model.FirstOrDefault()?.KuponBaslik
+        </h1>
+    </a>
+</div>
+
+<script>
+
+    var coupons = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(p => new
+        {
+            couponTitle = p.KuponBaslik,
+            couponId = p.KuponId
+        })));
+
+    var couponIndex = 0;
+
+    function updateCoupon() {
+        if (coupons.length > 0) {
+            document.getElementById("coupon-heading").textContent = coupons[couponIndex].couponTitle;
+            document.getElementById("coupon-link").href = "/Coupon/Coupons;
+            couponIndex = (couponIndex + 1) % coupons.length;
+        }
+    }
+
+    updateCoupon();
+    setInterval(updateCoupon, 5000);
+
+
+
+
+
+</script>

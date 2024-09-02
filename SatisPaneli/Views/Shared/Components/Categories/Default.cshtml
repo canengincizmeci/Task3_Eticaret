@@ -1,0 +1,32 @@
+﻿@model List<CategoriesViewComponentModel>
+
+<style>
+
+    .categoryBox {
+        width: 200px;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid orange;
+        background-color: orangered
+    }
+
+        .categoryBox:hover {
+            background-color: darkorange;
+            border: 1px solid orangered;
+        }
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+</style>
+
+
+@foreach (var category in Model)
+{
+    <a href="@Url.Action("VisitorIndex","Home",new {categoryId=category.CategoryId})">
+        <div class="categoryBox">
+            @category.CategoryName (@category.Count)
+        </div>
+    </a>
+}

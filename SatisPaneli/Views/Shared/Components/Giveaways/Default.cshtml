@@ -1,0 +1,61 @@
+﻿@using DB.Models
+@model List<Cekili>
+
+<style>
+    #giveaway-container {
+        width: 20%;
+        text-align: center;
+        align-items: center;
+    }
+
+</style>
+
+<div id="giveaway-container">
+    <a id="giveaway-link" href="#">
+        <h1 id="giveaway-heading">
+            @Model.FirstOrDefault()?.CekilisAd
+        </h1>
+    </a>
+</div>
+
+
+<script>
+    var giveaways = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(p => new
+        {
+        giveawayName = p.CekilisAd,
+        giveawayId = p.CekilisId
+        })));
+
+    var giveawayIndex = 0;
+
+    function updateGiveaway() {
+        if (giveaways.length > 0) {
+            document.getElementById("giveaway-heading").textContent = giveaways[giveawayIndex].giveawayName;
+            document.getElementById("giveaway-link").href = "/Giveaway/Giveaways";
+            giveawayIndex = (giveawayIndex + 1) % giveaways.length;
+        }
+    }
+
+    updateGiveaway();
+    setInterval(updateGiveaway, 5000);
+    // var giveaways = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(p => new
+    //     {
+    //         giveawayName = p.CekilisAd,
+    //         giveawayId = p.CekilisId
+    //     })));
+
+    // var currentIndex = 0;
+
+    // document.getElementById("giveaway-heading").textContent = giveaways[currentIndex].giveawayName;
+    // document.getElementById("giveaway-link").href = "/Giveaway/GiveawayDetails?giveawayId=" + giveaways[currentIndex].giveawayId;
+
+
+    // setInterval(function () {
+    //     currentIndex = (currentIndex + 1) % giveaways.length;
+
+    //     document.getElementById("giveaway-heading").textContent = giveaways[currentIndex].giveawayName;
+    //     document.getElementById("giveaway-link").href = "/Giveaway/GiveawayDetails?giveawayId=" + giveaways[currentIndex].giveawayId;
+    // }, 5000)
+
+
+</script>

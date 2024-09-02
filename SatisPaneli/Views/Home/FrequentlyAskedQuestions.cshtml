@@ -1,0 +1,95 @@
+﻿@using DB.Models
+@model List<SikcaSorulanlar>
+@{
+    ViewData["Title"] = "FrequentlyAskedQuestions";
+    Layout = "~/Views/Shared/VisitorLayout.cshtml";
+}
+
+<style>
+    .message {
+        text-align: center;
+        align-items: center;
+        align-content: center;
+    }
+
+        .message a {
+            text-decoration: none;
+            color: white;
+        }
+
+            .message a:hover {
+                color: black;
+            }
+
+    .heading-container {
+        text-align: center;
+        align-items: center;
+        align-content: center;
+        margin-bottom: 20px;
+    }
+
+    .faq {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .faq li {
+            margin-bottom: 15px;
+            padding: 10px;
+            /*  border: 1px solid #ddd;
+                                border-radius: 5px; */
+        }
+
+    .question {
+        font-weight: bold;
+        cursor: pointer;
+        display: block;
+        transition: color 0.3s ease;
+    }
+
+        .question:hover {
+            color: orangered;
+        }
+
+    .answer {
+        display: none;
+        margin-top: 10px;
+    }
+
+    .active .answer {
+        display: block;
+    }
+</style>
+
+<div class="heading-container">
+    <h1>Sıkça Sorulanlar</h1>
+</div>
+
+<div class="wrapper">
+    <ul class="faq">
+        @foreach (var question in Model)
+        {
+            <li>
+                <span class="question">-@question.Soru</span>
+                <div class="answer">
+                    <p><br />@question.Cevap</p>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+<div class="message">
+    <a href="@Url.Action("MessageToSupport","Message")">Daha fazlası için iletişime geçebilirsiniz...</a>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var questions = document.querySelectorAll(".question");
+        questions.forEach(function (question) {
+            question.addEventListener("click", function () {
+                var parentLi = this.parentElement;
+                parentLi.classList.toggle("active");
+            });
+        });
+    });
+</script>

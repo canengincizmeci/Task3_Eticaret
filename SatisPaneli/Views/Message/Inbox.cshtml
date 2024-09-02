@@ -1,0 +1,135 @@
+﻿@using DB.Models
+@model List<TeknikdenKullaniciyaMesaj>
+@{
+    ViewData["Title"] = "Inbox";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .mesaj-container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        background-color: orangered;
+    }
+
+    .mesaj-item {
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+    }
+
+    .mesaj-elemanAd {
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 5px;
+    }
+
+    .mesaj {
+        font-size: 16px;
+        color: white;
+        margin-bottom: 5px;
+    }
+
+    .mesaj-tarih {
+        font-size: 14px;
+        color: white;
+    }
+
+    .okundu-bilgisi {
+        font-size: 14px;
+        color: #ccc;
+        margin-bottom: 5px;
+    }
+
+
+
+    .markLastMessageAsRead {
+        color: darkblue;
+        font-size: 14px;
+        margin-bottom: 5px;
+        text-decoration: none;
+    }
+
+    hr {
+        margin: 10px 0;
+        border: none;
+        border-top: 1px solid #ccc;
+    }
+
+    a {
+        text-decoration: none;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".markLastMessageAsRead").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            var data = $(this).data("prm");
+            if (confirm("Mesajı okundu işaretlemek ister misiniz?")) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { messageId: data },
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Okundu olarak işaretlendi");
+                            location.reload();
+                        }
+                        else {
+                            alert(response.message || "Bir hata oluştu");
+                        }
+                    },
+                    error: function () {
+                        alert("Bir hata oluştu");
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<div class="container">
+    <div class="mesaj-container">
+        <h2>Mesajlar</h2>
+        @foreach (var message in Model)
+        {
+            <div class="mesaj-item">
+                <div class="mesaj-elemanAd">Teknik:</div>
+                <div class="mesaj">@message.MesajBaslik</div>
+                @if (message.Mesaj.ToString().Length < 50)
+                {
+                    <div class="mesaj">@message.Mesaj <a href="@Url.Action("MessagingDetailsFromSupport","Message" ,new {messageId=message.MesajId})"> Mesajlaşmaya Git</a></div>
+                }
+                else
+                {
+                    <div class="mesaj">@message.Mesaj.ToString().Substring(0, 50)...<a href="@Url.Action("MessagingDetailsFromSupport","Message" ,new {messageId=message.MesajId})"> Mesajlaşmaya Git</a>  </div>
+                }
+                <div class="mesaj-tarih">@message.Tarih</div>
+                @if (message.OkunduBilgisi == false)
+                {
+                    <a class="markLastMessageAsRead" data-prm="@message.MesajId" href="@Url.Action("ReadLastMessageFromSupport","Message")">Okundu İşaretle</a>
+
+
+                }
+                else
+                {
+                    <div class="okundu-bilgisi">Okundu</div>
+                }
+                <hr />
+            </div>
+        }
+    </div>
+</div>
+

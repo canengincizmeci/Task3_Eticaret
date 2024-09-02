@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "SupportApplication";
+    Layout = "~/Views/Shared/VisitorLayout.cshtml";
+}
+
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: orange;
+        color: black;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .container input[type="text"],
+        .container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid orangered;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .container button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: darkorange;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .container button:hover {
+                background-color: orangered;
+            }
+</style>
+
+<div class="container">
+    <form action="@Url.Action("SupportApplication","Application")" method="post">
+        @Html.AntiForgeryToken()
+        <label>Ad:</label>
+        <input type="text" name="Ad" required />
+        <label>Cinsiyet</label>
+        <select>
+            <option value="Erkek">Erkek</option>
+            <option value="Kadın">Kadın</option>
+        </select>
+        <label>Mezuniyet Durumu:</label>
+        <input type="text" name="MezuniyetDurumu" required />
+        <label>Mail:</label>
+        <input type="email" name="Mail" required />
+        <label>Tel:</label>
+        <input type="text" name="TelefonNumarasi" required />
+        <label>Soyad:</label>
+        <input type="text" name="Soyad" required />
+        <label>Tc No:</label>
+        <input type="text" name="TcNo" required />
+        <label>Doğum Tarihi:</label>
+        <input type="date" name="DogumTarihi" required />
+        <label>Açıklama:</label>
+        <textarea rows="5" name="FirmaAciklama" required></textarea>
+        <label>Özgeçmiş:</label>
+        <textarea rows="5" name="Ozgecmis" required></textarea>
+        <label>Adres:</label>
+        <textarea rows="5" name="FirmaAdres" required></textarea>
+        <button type="submit">Ekle</button>
+    </form>
+</div>

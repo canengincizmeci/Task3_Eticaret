@@ -1,0 +1,293 @@
+﻿@model List<VisitorCartModel>
+@{
+    ViewData["Title"] = "ViewCart";
+    Layout = "~/Views/Shared/VisitorLayout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        color: orangered;
+    }
+
+    .cart-container {
+        width: 80%;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+        .cart-header h2 {
+            margin: 0;
+        }
+
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #ddd;
+    }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item img {
+            max-width: 100px;
+            margin-right: 20px;
+        }
+
+    .cart-item-details {
+        flex: 1;
+    }
+
+        .cart-item-details h3 {
+            margin: 0 0 10px;
+        }
+
+        .cart-item-details p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+    .cart-item-price {
+        font-size: 1.2em;
+        color: #333;
+    }
+
+    .cart-total {
+        text-align: right;
+        font-size: 1.5em;
+        margin-top: 20px;
+    }
+
+    .cart-btn {
+        text-decoration: none;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: orangered;
+        margin-right: 10px;
+        font-size: 14px;
+    }
+
+        .cart-btn:hover {
+            background-color: #ff5722;
+        }
+
+    .cart-btn-delete-product {
+        text-decoration: none;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: orangered;
+        margin-right: 10px;
+        font-size: 14px;
+    }
+
+        .cart-btn-delete-product:hover {
+            background-color: #ff5722;
+        }
+
+    .cart-btn-add-product {
+        text-decoration: none;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: orangered;
+        margin-right: 10px;
+        font-size: 14px;
+    }
+
+        .cart-btn-add-product:hover {
+            background-color: #ff5722;
+        }
+
+    .cart-actions a {
+        display: inline-block;
+        margin: 10px 0;
+    }
+</style>
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+        var totalItems = 0;
+        var totalPrice = 0;
+
+        $('.cart-item').each(function () {
+            var price = parseFloat($(this).find('.product-price').text());
+            var count = parseInt($(this).find('.product-count').text());
+
+            var productTotal = price * count;
+            $(this).find('.total-product').text(productTotal.toFixed(2) + ' TL');
+
+            totalPrice += productTotal;
+
+            totalItems += count;
+        });
+
+        $('#total-items').text('Toplam Ürün: ' + totalItems);
+
+        $('.cart-total').text('Toplam Fiyat: ' + totalPrice.toFixed(2) + ' TL');
+
+
+        $(".cart-btn-add-product").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            Swal.fire({
+                icon: "warning",
+                title: "Üründen bir tane daha eklemek istedğinizden emin misiniz?",
+                text: "Ürün miktarı 1 artırılacak",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet',
+                cancelButtonText: "Vazgeç"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Artırıldı',
+                                    'Ürün Başarıyla Artırıldı',
+                                    'success'
+                                ).then(function () {
+                                    location.reload();
+                                });
+                            }
+                            else {
+                                Swal.fire(
+                                    'Hata',
+                                    response.message || "Ürün eklenirken bir hata oluştu",
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function () {
+                            Swal.fire(
+                                "Hata",
+                                "Ürün Eklenemedi",
+                                "error"
+                            );
+                        }
+                    });
+                }
+            });
+
+        });
+
+
+        $(".cart-btn-delete-product").click(function (e) {
+            e.preventDefault()
+            var url = $(this).attr("href");
+            Swal.fire({
+                icon: "warning",
+                title: "Ürünü sepetten çıkartmak istedğinizden emin misiniz?",
+                text: "Ürün Sepetten çıkartılacak",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet',
+                cancelButtonText: "Vazgeç"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Eklendi',
+                                    'Ürün Başarıyla Sepete Silindi',
+                                    'success'
+                                ).then(function () {
+                                    location.reload();
+                                });
+                            }
+                            else {
+                                Swal.fire(
+                                    'Hata',
+                                    response.message || "Ürün silinirken bir hata oluştu",
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function () {
+                            Swal.fire(
+                                "Hata",
+                                "Ürün Silinemedi",
+                                "error"
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+</script>
+<body>
+    <div class="cart-container">
+        <div class="cart-header">
+            <h2>Sepetin</h2>
+            <span id="total-items">Total Items:</span>
+        </div>
+
+        @foreach (var product in Model)
+        {
+            <div class="cart-item">
+                <img src="@Url.Content("~/images/"+product.ProductImage)" alt="Product Image">
+                <div class="cart-item-details">
+                    <h3>@product.ProductName</h3>
+                    <p>Kategori: @product.CategoryName</p>
+                    <p>Firma: <a href="@Url.Action("CompanyDetails","Company",new {companyId=product.CompanyId})">@product.CompanyName</a></p>
+                </div>
+                <div class="cart-item-price">
+                    <p class="product-price">@product.Price TL</p>
+                    <p class="product-count">@product.Count tane</p>
+                    Ürün Toplam: <span class="total-product"></span>
+                </div>
+
+
+                <div class="cart-actions">
+                    <a class="cart-btn-add-product" href="@Url.Action("AddProductToCart","Cart",new {productId=product.ProductId})">Arttır</a>
+                    <a class="cart-btn-delete-product" href="@Url.Action("DeleteProductFromCart","Cart",new {productId=product.ProductId})">Çıkart</a>
+                </div>
+            </div>
+        }
+
+        <div class="cart-total">
+            Total Price:
+        </div>
+        <div class="cart-actions">
+            <a class="cart-btn" href="@Url.Action("DeleteCart","Cart")">Sepeti Sil</a>
+            <a class="cart-btn" href="@Url.Action("Login","User")">Satın Almak için Giriş Yapınız</a>
+        </div>
+    </div>
+</body>

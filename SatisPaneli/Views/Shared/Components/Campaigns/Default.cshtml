@@ -1,0 +1,74 @@
+﻿@model CampaignsViewComponentModel
+
+<style>
+    #campaign-container {
+        width: 20%;
+        text-align: center;
+        align-items: center;
+    }
+
+</style>
+
+<div id="campaign-container">
+    <a id="campaign-link" href="@Url.Action("Campaigns","Campaign")">
+        <h1 id="campaign-heading">
+        </h1>
+    </a>
+</div>
+
+<script>
+
+    var categoryCampaigns = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.categoryCampaigns.Select(p => new
+        {
+            campaignTitle = p.KampanyaBaslik,
+            campaignId = p.KampanyaId,
+            campaignType = "category"
+        })));
+
+    var companyCampaigns = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.companyCampaigns.Select(p => new
+        {
+            campaignTitle = p.KampanyaBaslik,
+            campaignId = p.KampanyaId,
+            campaignType = "company"
+        })));
+    var generalCampaigns = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.generalCampaigns.Select(p => new
+        {
+            campaignTitle = p.KampanyaBaslik,
+            campaignId = p.KampanyaId,
+            campaignType = "general"
+        })));
+    var productCampaigns = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.productCampaigns.Select(p => new
+        {
+            campaignTitle = p.KampanyaBaslik,
+            campaignId = p.KapmanyaId,
+            campaignType = "product"
+        })));
+
+    var allCampaigns = [].concat(categoryCampaigns, companyCampaigns, generalCampaigns, productCampaigns);
+
+    var currentIndex = 0;
+
+    function showCampaign() {
+        if (allCampaigns.length > 0) {
+           
+
+            document.getElementById("campaign-heading").textContent = allCampaigns[currentIndex].campaignTitle;
+            if (allCampaigns[currentIndex].campaignType == "category") {
+                document.getElementById("campaign-link").href = "/Campaign/Campaigns"
+            }
+            else if (allCampaigns[currentIndex].campaignType == "company") {
+                document.getElementById("campaign-link").href = "/Campaign/Campaigns"
+            }
+            else if (allCampaigns[currentIndex].campaignType == "general") {
+                document.getElementById("campaign-link").href = "/Campaign/Campaigns"
+            }
+            else if (allCampaigns[currentIndex].campaignType == "product") {
+                document.getElementById("campaign-link").href = "/Campaign/Campaigns"
+            }
+            currentIndex = (currentIndex + 1) % allCampaigns.length;
+        }
+    }
+    showCampaign();
+    setInterval(showCampaign, 5000);
+
+</script>

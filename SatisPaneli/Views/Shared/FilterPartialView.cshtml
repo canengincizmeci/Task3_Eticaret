@@ -1,0 +1,69 @@
+﻿
+
+
+<style>
+    .filter-container {
+        /* display: flex;
+                    width: 30%;
+                    height: 50px;
+                    text-align: center;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto;
+                    padding: 10px; */
+        display: inline-block;
+        width: auto; /* Genişliği sabit yerine içeriğe göre ayarla */
+        text-align: center;
+        margin: 0;
+    }
+
+    select {
+        width: 100px;
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        text-align: center;
+        border-radius: 5px;
+        outline: none;
+        appearance: none;
+        background-color: white;
+        cursor: pointer;
+    }
+
+        select:focus {
+            border-color: #555;
+        }
+
+    option {
+        font-size: 16px;
+    }
+
+    button {
+        padding: 10px 20px;
+        margin-left: 10px;
+        background-color: #333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        button:hover {
+            background-color: #555;
+        }
+</style>
+
+<div class="filter-container">
+    <form action="@Url.Action("VisitorIndex","Home")" method="post">
+        <select id="filterBy" name="filterBy">
+            <option value="" disabled selected>Filtrele</option>
+            <option value="decreasing">Azalan Fiyat</option>
+            <option value="increasing">Artan Fiyat</option>
+            <option value="reverseOrder">Yeniden Eskiye</option>
+            <option value="ascendingOrder">Eskiden Yeniye</option>
+            <option value="bestSellers">Çok Satanlar</option>
+        </select>
+        <button type="submit">Filtrele</button>
+    </form>
+</div>

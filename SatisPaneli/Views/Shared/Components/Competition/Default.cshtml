@@ -1,0 +1,45 @@
+﻿@using DB.Models
+@model List<KullaniciYarismalar>
+
+<style>
+    #competition-container {
+        width: 20%;
+        text-align: center;
+        align-items: center;
+    }
+
+</style>
+
+<div id="competition-container">
+    <a id="competition-link" href="@Url.Action("Competitions","Competition")">
+        <h1 id="competition-heading">@Model.FirstOrDefault()?.YarismaBaslik</h1>
+    </a>
+</div>
+
+
+<script>
+
+
+    var competitions = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(p => new
+        {
+            competitionTitle = p.YarismaBaslik,
+            competitionId = p.KullaniciYarismaId
+        })));
+
+    var competitionIndex = 0;
+
+    function updateCompetition() {
+        if (competitions.length > 0) {
+            document.getElementById("competition-heading").textContent = competitions[competitionIndex].competitionTitle;
+            document.getElementById("competition-link").href = "/Competition/Competitios;
+            competitionIndex = (competitionIndex + 1) % competitions.length;
+        }
+    }
+
+    updateCompetition();
+    setInterval(updateCompetition, 5000);
+
+
+
+</script>
+

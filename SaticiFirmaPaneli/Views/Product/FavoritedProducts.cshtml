@@ -101,7 +101,7 @@
             <tr>
                 <td>@product.FavoritedId</td>
                 <td>@product.ProductName</td>
-                <td><a class="delete-account" href="@Url.Action("ProductDetails","Product",new {accountId=product.ProductId})">Ürün Detayları</a></td>
+                <td><a class="delete-account" href="@Url.Action("ProductDetails","Product",new {productId=product.ProductId})">Ürün Detayları</a></td>
             </tr>
         }
     </tbody>

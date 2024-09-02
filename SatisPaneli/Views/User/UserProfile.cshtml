@@ -1,0 +1,114 @@
+﻿@using DB.Models
+@model List<Kullanici>
+@{
+    ViewData["Title"] = "UserProfile";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .profile-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+        .profile-info h2 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .profile-info p {
+            color: #666;
+            margin: 5px 0;
+        }
+        .profile-details {
+            margin-top: 20px;
+        }
+        .profile-details h3 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        .profile-details .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .detail-row span {
+            color: #333;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <img class="profile-pic" src="https://via.placeholder.com/120" alt="User Picture">
+            <div class="profile-info">
+                <h2>John Doe</h2>
+                <p>Email: johndoe@example.com</p>
+                <p>Location: New York, USA</p>
+            </div>
+        </div>
+
+        <div class="profile-details">
+            <h3>User Information</h3>
+            <div class="detail-row">
+                <span>Full Name:</span>
+                <span>John Doe</span>
+            </div>
+            <div class="detail-row">
+                <span>Username:</span>
+                <span>johndoe123</span>
+            </div>
+            <div class="detail-row">
+                <span>Email:</span>
+                <span>johndoe@example.com</span>
+            </div>
+            <div class="detail-row">
+                <span>Phone:</span>
+                <span>+1 234 567 890</span>
+            </div>
+            <div class="detail-row">
+                <span>Date of Birth:</span>
+                <span>January 1, 1990</span>
+            </div>
+            <div class="detail-row">
+                <span>Location:</span>
+                <span>New York, USA</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+

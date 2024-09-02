@@ -1,0 +1,220 @@
+﻿@model List<MessagesWithSupportModel>
+@{
+    ViewData["Title"] = "MessagingDetailsFormSupport";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<style>
+    .message-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #444;
+    }
+
+    .message-card {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-card-admin {
+        background-color: #555;
+        border: 1px solid #666;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .message-card p {
+        margin: 5px 0;
+    }
+
+    .message-card .message-header {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .message-card .message-timestamp {
+        color: #888;
+        font-size: 0.9em;
+    }
+
+    .message-card .message-status {
+        color: #444;
+    }
+
+    .view-message-link {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 10px;
+        background-color: #0056b3;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+        .view-message-link:hover {
+            background-color: #003f8a;
+        }
+
+    .reply-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #555;
+        border: 1px solid #666;
+        border-radius: 8px;
+    }
+
+        .reply-form label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .reply-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        .reply-form button {
+            align-self: flex-end;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .reply-form button:hover {
+                background-color: #0056b3;
+            }
+
+    .add-link-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+        .add-link-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+            .add-link-container a:hover {
+                background-color: #0056b3;
+            }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".reply-form").submit(function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+            var data = form.serialize();
+            if (confirm("Mesaj Gönderilsin Mi?")) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Mesaj başarıyla gönderildi");
+                            location.reload();
+                        } else {
+                            alert(response.message || "Bir hata oluştu");
+                        }
+                    },
+                    error: function () {
+                        alert("Bir hata oluştu");
+                    }
+
+                });
+            }
+        });
+    });
+</script>
+
+
+<div class="message-container">
+    @foreach (var item in Model)
+    {
+        if (item.Role == true)
+        {
+            <div class="message-card-admin">
+                <div class="message-header">Sen:</div>
+                <div class="message-body">@item.Message</div>
+                <div class="message-timestamp">@item.Date</div>
+                <div class="message-status">
+                    @if (item.ReadStatus == false)
+                    {
+                        <span>Okunmadı</span>
+                    }
+                    else
+                    {
+                        <span>Okundu</span>
+                    }
+                </div>
+                <a href="@Url.Action("MessageDetailsFromSupport", "Message", new { messageId = item.MessageId , Role=true })" class="view-message-link">Mesajı Görüntüle</a>
+            </div>
+        }
+        else
+        {
+
+            <div class="message-card">
+                <div class="message-header">@item.SupportName</div>
+                <div class="message-body">@item.Message</div>
+                <div class="message-timestamp">@item.Date</div>
+                <div class="message-status">
+                    @if (item.ReadStatus == false)
+                    {
+                        <span>Okunmadı</span>
+                    }
+                    else
+                    {
+                        <span>Okundu</span>
+                    }
+                </div>
+                <a href="@Url.Action("MessageDetailsFromSupport", "Message", new { messageId = item.MessageId , Role=false })" class="view-message-link">Mesajı Görüntüle</a>
+            </div>
+        }
+    }
+
+
+
+    <form class="reply-form" action="@Url.Action("SendResponseToSupport","Message")" method="post">
+
+        <input type="hidden" name="TeknikElemanId" value="@ViewBag.SupportId" />
+        <input type="hidden" name="MesajId" value="@ViewBag.MessageId" />
+        <input type="hidden" name="MesajlasmaId" value="@ViewBag.MessaginId" />
+        <label for="baslik">Mesaj Başlık</label>
+        <input type="text" name="MesajBaslik" id="baslik" />
+        <label for="mesaj">Mesajlaşma içinde cevap ver</label>
+        <textarea id="mesaj" name="Mesaj" rows="5"></textarea>
+        <button type="submit">Gönder</button>
+    </form>
+</div>
+<div class="add-link-container">
+    <a href="@Url.Action("ComplaintAboutSupport","Message",new {supportId=ViewBag.SupportId})">Şikayet Et</a>
+</div>
+
+
+

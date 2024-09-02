@@ -100,7 +100,7 @@ namespace SaticiFirmaPaneli.Controllers
         public async Task<ActionResult> Index()
         {
 
-            HttpContext.Session.SetInt32("sellerCompanyId", 1);
+          
             int? id = HttpContext.Session.GetInt32("sellerCompanyId");
             if (!id.HasValue)
                 return RedirectToAction("Login", "SellerCompany");

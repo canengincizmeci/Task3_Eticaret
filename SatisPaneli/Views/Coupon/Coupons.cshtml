@@ -1,0 +1,53 @@
+﻿@model List<CouponModel>
+@{
+    ViewData["Title"] = "Coupons";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+    var rowClasses = new List<string>()
+    {
+        "table-primary",
+        "table-secondary",
+        "table-success",
+        "table-danger",
+        "table-warning",
+        "table-info",
+        "table-light",
+        "table-dark"
+    };
+    int classIndex = 0;
+}
+
+
+
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Kod</th>
+            <th>Açıklama</th>
+            <th>Başlangıç</th>
+            <th>Bitiş</th>
+            <td>İndirin Miktarı</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@rowClasses[classIndex]">
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.Start</td>
+                <td>@item.End</td>
+                <td>@item.DiscountAmount</td>
+            </tr>
+            classIndex++;
+            if (classIndex >= rowClasses.Count)
+            {
+                classIndex = 0;
+            }
+        }
+
+    </tbody>
+
+</table>

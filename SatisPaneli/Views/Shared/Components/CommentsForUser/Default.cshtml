@@ -1,0 +1,172 @@
+﻿@model ProductCommentAndRepliesModel
+
+<style>
+    .comments-container {
+        font-family: Arial, sans-serif;
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+        color: darkorange;
+    }
+
+    .comment {
+        padding: 15px;
+        margin-bottom: 15px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .username {
+        font-weight: bold;
+        color: orangered;
+    }
+
+    .date {
+        font-size: 0.9rem;
+        color: orangered;
+    }
+
+    .comment-body {
+        font-size: 1rem;
+        line-height: 1.5;
+        color: orangered;
+    }
+
+    .replies-section {
+        margin-top: 10px;
+        margin-left: 30px;
+        padding-left: 15px;
+        border-left: 3px solid #e0e0e0;
+    }
+
+    .reply {
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: #f1f1f1;
+        border-radius: 6px;
+    }
+
+    .reply-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    .company-name {
+        font-weight: bold;
+        color: orangered;
+    }
+
+    .reply-body {
+        font-size: 0.95rem;
+        line-height: 1.4;
+        color: orangered;
+    }
+
+    .no-comments {
+        font-style: italic;
+        color: orangered;
+    }
+
+    .action-buttons {
+        margin-top: 10px;
+    }
+
+    .btn {
+        background-color: darkorange;
+        color: #ffffff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 14px;
+        margin-right: 5px;
+    }
+
+        .btn:hover {
+            background-color: orangered;
+        }
+</style>
+
+<div class="comments-container">
+
+
+    @if (Model.commentsList != null && Model.commentsList.Any())
+    {
+        foreach (var comment in Model.commentsList)
+        {
+            <div class="comment">
+                <div class="comment-header">
+                    <span class="username">@comment.UserName</span>
+                    <span class="date">@comment.Date</span>
+                </div>
+                <div class="comment-body">
+                    <p>@comment.Comment</p>
+                </div>
+                <div class="action-buttons">
+                    <a href="#" class="btn">Cevap Ver</a>
+                    <a href="#" class="btn">Şikayet Et</a>
+                    <a href="#" class="btn">Mesaj Gönder</a>
+                </div>
+                @if (Model.repliesList != null && Model.repliesList.Any())
+                {
+                    var repliesForComment = Model.repliesList.Where(r => r.CommentId == comment.CommentId);
+                    if (repliesForComment.Any())
+                    {
+                        <div class="replies-section">
+                            @foreach (var reply in repliesForComment)
+                            {
+                                <div class="reply">
+                                    <div class="reply-header">
+                                        @if (reply.UserId is null)
+                                        {
+                                            <span class="company-name">@reply.CompanyName</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="company-name">@reply.UserName</span>
+
+                                        }
+                                        <span class="date">@reply.Date</span>
+                                    </div>
+                                    <div class="reply-body">
+                                        @if (reply.CompanyId is not null)
+                                        {
+                                            <p>@reply.Reply</p>
+                                            <a href="#" class="btn">Cevap Ver</a>
+                                            <a href="#" class="btn">Şikayet Et</a>
+
+                                        }
+                                        else
+                                        {
+                                            <p>@reply.Reply</p>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <p class="no-comments">Bu ürüne henüz yorum yapılmamış.</p>
+    }
+</div>

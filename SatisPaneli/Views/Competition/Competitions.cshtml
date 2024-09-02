@@ -1,0 +1,107 @@
+﻿@model List<CompetitionModel>
+@{
+    ViewData["Title"] = "Competitions";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+    var rowClasses = new List<string>()
+    {
+        "table-primary",
+        "table-secondary",
+        "table-success",
+        "table-danger",
+        "table-warning",
+        "table-info",
+        "table-light",
+        "table-dark"
+    };
+    int classIndex = 0;
+}
+<script>
+    $(document).ready(function () {
+        $(".connectAjax").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            Swal.fire({
+                icon: "warning",
+                title: "Yarışmaya katılmak istedğinizden emin misiniz?",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet',
+                cancelButtonText: "Vazgeç"
+            }).then((result) => {
+                if (result.isConfirmed) { 
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Katıldın',
+                                    'Yarışmaya Başarıyla Katıldın',
+                                    'success'
+                                ).then(function () {
+                                    location.reload();
+                                });
+                            }
+                            else {
+                                Swal.fire(
+                                    'Hata',
+                                    response.message || "Bir hata oluştu",
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function () {
+                            Swal.fire(
+                                "Hata",
+                                "Yarışmaya Katılamadın",
+                                "error"
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Başlık</th>
+            <th>Açıklama</th>
+            <th>Başlangıç</th>
+            <th>Bitiş</th>
+            <td>Katıl</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@rowClasses[classIndex]">
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.Start</td>
+                <td>@item.End</td>
+                @if (item.JoinStatus == true)
+                {
+                    <td>Katıldın</td>
+                }
+                else
+                {
+                    <td><a href="@Url.Action("JoinCompetition","Competition",new {competitionId=item.Id})" class="btn btn-success connectAjax">Katıl</a></td>
+                }
+            </tr>
+            classIndex++;
+            if (classIndex >= rowClasses.Count)
+            {
+                classIndex = 0;
+            }
+        }
+
+    </tbody>
+
+</table>
