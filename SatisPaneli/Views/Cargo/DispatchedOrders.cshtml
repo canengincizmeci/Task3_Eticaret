@@ -1,0 +1,43 @@
+﻿@using DB.Models
+@model List<GonderilenKargolar>
+@{
+    ViewData["Title"] = "DispatchedOrders";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+    var rowClasses = new List<string>()
+    {
+        "table-primary",
+        "table-secondary",
+        "table-success",
+        "table-danger",
+        "table-warning",
+        "table-info",
+        "table-light",
+        "table-dark"
+    };
+    int classIndex = 0;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Gönderim Tarihi</th>
+            <th>Teslimat Adresi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@rowClasses[classIndex]">
+                <td>@item.Tarih</td>
+                <td>@item.GidisAdresi</td>
+            </tr>
+            classIndex++;
+            if (classIndex >= rowClasses.Count)
+            {
+                classIndex = 0;
+            }
+        }
+    </tbody>
+</table>
+
+

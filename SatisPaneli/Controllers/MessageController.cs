@@ -84,6 +84,55 @@ namespace SatisPaneli.Controllers
             ViewBag.MessaginId = messagingId;
             return View(modal);
         }
-      
+        [HttpGet]
+        public async Task<ActionResult> MessageToSupport(int productId)
+        {
+            int? id = HttpContext.Session.GetInt32("userId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            var product = await _context.Uruns.FindAsync(productId);
+            string companyName = product!.Firma!.FirmaAd!;
+            ViewBag.CompanyName = companyName;
+            ViewBag.ProductId = productId;
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> MessageToSupport(KullanicidanTeknikDestegeMesaj message, int productId, string productName)
+        {
+            int? id = HttpContext.Session.GetInt32("userId");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            await _context.Mesajlasmas.AddAsync(new()
+            {
+                Tarih = DateTime.Now
+            });
+            await _context.SaveChangesAsync();
+            var messageging = await _context.Mesajlasmas.OrderByDescending(p => p.MesajlasmaId).FirstOrDefaultAsync();
+            var support = await _context.TeknikElemanlars.OrderBy(p => Guid.NewGuid()).FirstOrDefaultAsync();
+
+            await _context.KullanicidanTeknikDestegeMesajs.AddAsync(new()
+            {
+                Aktiflik = true,
+                KullaniciId = id,
+                Mesaj = $"{productName} hakkında şikayet ; {message.Mesaj}",
+                MesajBaslik = message.MesajBaslik,
+                MesajlasmaId = messageging!.MesajlasmaId,
+                Tarih = DateTime.Now,
+                OkunduBilgisi = false,
+                TeknikElemanId = support!.TeknikElemanId
+            });
+
+            await _context.SaveChangesAsync();
+
+
+            return RedirectToAction("ProductDetailsForUser", "Product", new { productId = productId });
+        }
+
     }
 }

@@ -84,10 +84,7 @@
         $(document).ready(function () {
             $.getJSON("@Url.Action("UserTotalCardItem", "Cart")", function (data) {
                 $("#productCount").text("Sepetim (" + data.productCount + ")");
-            }).fail(function () {
-
-                console.log("Error retrieving cart data.");
-            });
+            })
         });
     </script>
 </head>
@@ -107,8 +104,10 @@
             </li>
             </div>
             <div class="sonLinkler">
+            <li><a href="@Url.Action("ProductsToBeShipped","Cargo")">Kargolarım</a></li>
+            <li><a href="@Url.Action("Orders","Order")">Siparişlerim</a></li>
             <li>
-                <a href="@Url.Action("ViewCart", "Cart")">
+                <a href="@Url.Action("ViewUserCart", "Cart")">
                     <span id="productCount">0</span>
 
                 </a>

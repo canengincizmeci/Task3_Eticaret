@@ -1,0 +1,54 @@
+﻿@model List<CargoViewModel>
+@{
+    ViewData["Title"] = "ProductsToBeShipped";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+    var rowClasses = new List<string>()
+    {
+        "table-primary",
+        "table-secondary",
+        "table-success",
+        "table-danger",
+        "table-warning",
+        "table-info",
+        "table-light",
+        "table-dark"
+    };
+    int classIndex = 0;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Gönderi Adresi</th>
+            <th>Fatura Adresi</th>
+            <th>Kargo Durumu</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@rowClasses[classIndex]">
+                <td>@item.DeliveryAddress</td>
+                <td>@item.BillingAddress</td>
+                @if (item.CargoStatus == true)
+                {
+                    <td><a href="@Url.Action("InShipment","Cargo",new {sellingId=item.SellingId})">Takip Et</a></td>
+                }
+                else
+                {
+                    <td><a href="@Url.Action("CancelOrder","Cargo")">İptal Et</a></td>
+                }
+            </tr>
+            classIndex++;
+            if (classIndex >= rowClasses.Count)
+            {
+                classIndex = 0;
+            }
+        }
+    </tbody>
+</table>
+
+<div class="text-center">
+    <a class="btn btn-success" href="@Url.Action("InShipment","Cargo")">Yoldaki Kargolar</a>
+    <a class="btn btn-success" href="@Url.Action("DispatchedOrders","Cargo")">Gönderilmiş Kargolar</a>
+</div>

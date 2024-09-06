@@ -1,0 +1,78 @@
+﻿@using DB.Models
+@model Kategori
+@{
+    ViewData["Title"] = "Buy";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: orange;
+        color: black;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .container input[type="text"],
+        .container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid orangered;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .container button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: darkorange;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .container button:hover {
+                background-color: orangered;
+            }
+</style>
+
+<div class="container">
+    <h1>Sayın @ViewBag.UserName ödeme bilgileriniz</h1>
+    <form action="@Url.Action("Buy","Order")" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="OrderId" value="@ViewBag.OrderId" required />
+        <input type="hidden" name="CartId" value="@ViewBag.CartId" required />
+        <label>Kupon Kod:</label>
+        <input type="text" name="CouponCode" required />
+        <label>
+            @Html.DropDownListFor(m => m.KategoriId, (List<SelectListItem>)ViewBag.Crd, new { @required = "required" })
+        </label>
+        <label>
+            <input type="text" readonly value="@ViewBag.TotalPrice" />
+        </label>
+        <button type="submit">Ödemeyi Tamamla</button>
+    </form>
+</div>

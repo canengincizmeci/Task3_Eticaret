@@ -1,5 +1,5 @@
 ﻿@using DB.Models
-@model List<Kullanici>
+@model Kullanici
 @{
     ViewData["Title"] = "UserProfile";
     Layout = "~/Views/Shared/UserLayout.cshtml";
@@ -71,40 +71,27 @@
 
     <div class="profile-container">
         <div class="profile-header">
-            <img class="profile-pic" src="https://via.placeholder.com/120" alt="User Picture">
+            @* <img class="profile-pic" src=""> *@
             <div class="profile-info">
-                <h2>John Doe</h2>
-                <p>Email: johndoe@example.com</p>
-                <p>Location: New York, USA</p>
+                <h2>@Model.KullaniciAd</h2>
+                <p>Email:@Model.Mail</p>
+                <p>Location: @Model.Adres</p>
             </div>
         </div>
 
         <div class="profile-details">
-            <h3>User Information</h3>
+           
             <div class="detail-row">
                 <span>Full Name:</span>
                 <span>John Doe</span>
             </div>
+           
             <div class="detail-row">
-                <span>Username:</span>
-                <span>johndoe123</span>
+                <span>Adres:</span>
+                <span>@Model.Adres</span>
             </div>
-            <div class="detail-row">
-                <span>Email:</span>
-                <span>johndoe@example.com</span>
-            </div>
-            <div class="detail-row">
-                <span>Phone:</span>
-                <span>+1 234 567 890</span>
-            </div>
-            <div class="detail-row">
-                <span>Date of Birth:</span>
-                <span>January 1, 1990</span>
-            </div>
-            <div class="detail-row">
-                <span>Location:</span>
-                <span>New York, USA</span>
-            </div>
+           
+          
         </div>
     </div>
 

@@ -1,0 +1,44 @@
+﻿@using DB.Models
+@model List<KargoBildirimler>
+@{
+    ViewData["Title"] = "InShipment";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+    var rowClasses = new List<string>()
+    {
+        "table-primary",
+        "table-secondary",
+        "table-success",
+        "table-danger",
+        "table-warning",
+        "table-info",
+        "table-light",
+        "table-dark"
+    };
+    int classIndex = 0;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Durum</th>
+            <th>Açıklama</th>
+            <th>İade Et</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@rowClasses[classIndex]">
+                <td>@item.KargoBildirimBaslik</td>
+                <td>@item.KargoBildirim</td>
+                <td><a href="@Url.Action("ReturnRequestInShipment","Return",new{cargoId=item.KargoBildirimId})">İade Talebi</a></td>
+            </tr>
+            classIndex++;
+            if (classIndex >= rowClasses.Count)
+            {
+                classIndex = 0;
+            }
+        }
+    </tbody>
+</table>
+

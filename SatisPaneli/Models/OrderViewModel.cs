@@ -1,6 +1,6 @@
 ﻿namespace SatisPaneli.Models
 {
-    public class ViewUserCartModel
+    public class OrderViewModel
     {
         public int? ProductId { get; set; }
         public string? ProductName { get; set; }
@@ -14,6 +14,6 @@
         public int? Price { get; set; }
         public int? Count { get; set; }
         public int? TotalPrice { get; set; }
-        
+        public bool AllowCancelOrder { get; set; }
     }
 }

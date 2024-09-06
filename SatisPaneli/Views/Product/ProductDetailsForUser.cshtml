@@ -68,7 +68,59 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    $(document).ready(function () {
 
+        $("#buy-product").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            Swal.fire({
+                icon: "warning",
+                title: "Ürünü sepete eklemek istedğinizden emin misiniz?",
+                text: "Ürün Sepete eklenecek",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet',
+                cancelButtonText: "Vazgeç"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Eklendi',
+                                    'Ürün Başarıyla Sepete Eklendi',
+                                    'success'
+                                ).then(function () {
+                                    location.reload();
+                                });
+                            }
+                            else {
+                                Swal.fire(
+                                    'Hata',
+                                    response.message || "Ürün sepete eklenirken bir hata oluştu",
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function () {
+                            Swal.fire(
+                                "Hata",
+                                "Ürün Sepete Eklenemedi",
+                                "error"
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+
+</script>
 
 <div class="urun-detail">
     <img src="@Url.Content("~/images/" + Model.ProductImage)" alt="@Model.ProductName" />
@@ -89,9 +141,9 @@
     else
     {
         <div class="button-container">
-            <a href="@Url.Action("AddProductToCart","Cart",new {productId=Model.ProductId})" id="buy-product" class="btn">Satın Al</a>
-            <a href="@Url.Action("AddProductToCart","Cart",new {productId=Model.ProductId})" id="report-product" class="btn">Şikayet Et</a>
-            <a href="@Url.Action("AddProductToCart","Cart",new {productId=Model.ProductId})" id="report-product" class="btn">Mesaj Gönder</a>
+            <a href="@Url.Action("AddProductUserCard","Cart",new {productId=Model.ProductId})" id="buy-product" class="btn">Satın Al</a>
+            <a href="@Url.Action("ReportProduct","Product",new {productId=Model.ProductId})"  class="btn">Şikayet Et</a>
+
         </div>
     }
 </div>

@@ -186,19 +186,19 @@ namespace SatisPaneli.Controllers
                             var _product = await _context.Uruns.FindAsync(item);
                             _products.Add(_product!);
                         }
-                        var lastCard = await _context.Sepets.OrderByDescending(p => p.SepetId).FirstOrDefaultAsync(p => p.KullaniciId == id && p.Aktiflik == true);
+                        var lastCard = await _context.Sepets.OrderByDescending(p => p.SepetId).FirstOrDefaultAsync(p => p.KullaniciId == id && p.Aktiflik == null);
                         if (lastCard is null)
                         {
                             await _context.Sepets.AddAsync(new Sepet
                             {
                                 AcilmaTarih = DateTime.Now,
-                                Aktiflik = true,
+                                Aktiflik = null,
                                 KullaniciId = id,
                                 SonGuncelleme = DateTime.Now,
                                 UrunSayisi = productIds.Count
                             });
                             await _context.SaveChangesAsync();
-                            var _cart = await _context.Sepets.OrderByDescending(p => p.SepetId).FirstOrDefaultAsync(p => p.KullaniciId == id && p.Aktiflik == true);
+                            var _cart = await _context.Sepets.OrderByDescending(p => p.SepetId).FirstOrDefaultAsync(p => p.KullaniciId == id && p.Aktiflik == null);
                             foreach (var item in productIds)
                             {
                                 await _context.SepeteEklenmes.AddAsync(new SepeteEklenme
