@@ -1,5 +1,7 @@
-*.cshtml linguist-language=HTML
 
-*.csharp linguist-detectable=true  
- 
-*.js linguist-detectable=false  
+*.cs linguist-language=C#
+
+
+*.cshtml linguist-language=HTML+Razor
+
+
