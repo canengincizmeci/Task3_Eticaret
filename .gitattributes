@@ -5,3 +5,4 @@
 *.cshtml linguist-language=HTML+Razor
 
 
+*.html linguist-vendored
