@@ -1,8 +1,5 @@
-
 *.cs linguist-language=C#
-
-
-*.cshtml linguist-language=HTML+Razor
-
-
+*.cshtml linguist-language=C# linguist-detectable=false
 *.html linguist-vendored
+*.css linguist-vendored
+*.js linguist-vendored
